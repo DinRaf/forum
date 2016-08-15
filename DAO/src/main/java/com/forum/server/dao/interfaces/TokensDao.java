@@ -7,5 +7,8 @@ package com.forum.server.dao.interfaces;
  * @version 1.0
  */
 public interface TokensDao {
+    //TODO Реализовать методы
     boolean isExistsToken(String token);
+
+    void addToken(Integer userId, String token);
 }

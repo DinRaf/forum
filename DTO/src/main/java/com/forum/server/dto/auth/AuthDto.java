@@ -30,7 +30,9 @@ public class AuthDto implements Data {
     }
 
     private AuthDto(Builder builder) {
-
+        this.nickName = builder.nickName;
+        this.mail = builder.mail;
+        this.password = builder.password;
     }
 
     public static class Builder {
@@ -49,6 +51,10 @@ public class AuthDto implements Data {
         public Builder password(String data) {
             this.password = data;
             return this;
+        }
+
+        public AuthDto build() {
+            return new AuthDto(this);
         }
     }
 }

@@ -22,6 +22,26 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-web</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.forum.server</groupId>
+            <artifactId>security</artifactId>
+            <version>1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.forum.server</groupId>
+            <artifactId>dao</artifactId>
+            <version>1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.forum.server</groupId>
+            <artifactId>models</artifactId>
+            <version>1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-core</artifactId>
+            <version>RELEASE</version>
+        </dependency>
     </dependencies>
 
 

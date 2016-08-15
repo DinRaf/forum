@@ -13,9 +13,6 @@ import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatche
 @EnableWebMvc
 @Component
 public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
-
-
-
     @Override
     protected Class<?>[] getRootConfigClasses() {
         return new Class<?>[0];

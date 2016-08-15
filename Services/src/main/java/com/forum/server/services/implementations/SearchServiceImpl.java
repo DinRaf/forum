@@ -13,12 +13,12 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class SearchServiceImpl implements SearchService {
-
+    //TODO Реализовать методы
     public ThemesDto searchThemes(String keyword, Integer offset, int count, Integer sectionId, Integer subsectionId) {
         return null;
     }
 
-    public UsersShortDto searchUsers(String token, String keyword, Integer offset, int count) {
+    public UsersShortDto searchUsers(String token, String keyword, Integer offset, int count, String sorting, Boolean isOnline) {
         return null;
     }
 }

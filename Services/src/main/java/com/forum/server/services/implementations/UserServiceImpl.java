@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class UserServiceImpl implements UserService {
+    //TODO Реализовать методы
     public UserShortDto getUser(String token, int userId) {
         return null;
     }

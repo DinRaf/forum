@@ -13,9 +13,4 @@ import static org.springframework.web.bind.annotation.RequestMethod.GET;
  */
 @Controller
 public class StaticInfoController {
-
-    @RequestMapping(value = "/", method = GET)
-    public String hello() {
-        return "Hello bitches!!!";
-    }
 }

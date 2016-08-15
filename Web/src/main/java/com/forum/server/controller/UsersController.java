@@ -25,7 +25,6 @@ import static org.springframework.web.bind.annotation.RequestMethod.PUT;
  */
 @Controller
 public class UsersController {
-
     @Autowired
     private UserService userService;
 

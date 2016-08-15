@@ -22,7 +22,6 @@ import static org.springframework.web.bind.annotation.RequestMethod.GET;
  */
 @Controller
 public class SearchController {
-
     @Autowired
     private SearchService searchService;
 
@@ -37,11 +36,13 @@ public class SearchController {
     }
 
     @RequestMapping(value = "/users", method = GET)
-    public ResponseEntity<QueryResultDto> searchUsers(@RequestParam(value = "find") String keyword,
+    public ResponseEntity<QueryResultDto> searchUsers(@RequestParam(value = "find", required = false) String keyword,
+                                                      @RequestParam(value = "sort") String sorting,
+                                                      @RequestParam(value = "isOnline", required = false) Boolean isOnline,
                                                       @RequestParam(value = "offset", required = false) Integer offset,
                                                       @RequestParam(value = "count") int count,
                                                       @RequestHeader(name = "Auth-Token") String token) {
-        UsersShortDto result = searchService.searchUsers(token, keyword, offset, count);
+        UsersShortDto result = searchService.searchUsers(token, keyword, offset, count, sorting, isOnline);
         return buildResponseGet(result);
     }
 }

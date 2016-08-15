@@ -80,13 +80,6 @@ public class TokenAuthenticationFilter extends GenericFilterBean {
         String requestParamForUpload = request.getParameter("reason");
         System.out.println(requestParamForUpload);
         return !(((request.getRequestURI().endsWith("/users") || request.getRequestURI().endsWith("/login"))
-                && request.getMethod().equals("POST"))
-                || (request.getRequestURI().endsWith("/registration") && request.getMethod().equals("GET"))
-//
-                || (request.getRequestURI().contains("/hello") && request.getMethod().equals("GET"))
-//
-                || (request.getRequestURI().endsWith("/uploads/credentials")) && request.getMethod().equals("GET")
-                && requestParamForUpload != null && requestParamForUpload.equals("to_avatar_upload")
-                || (request.getRequestURI().endsWith("/reset")));
+                && request.getMethod().equals("POST")));
     }
 }

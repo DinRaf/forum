@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class ThemeServiceImpl implements ThemeService {
-
+    //TODO Реализовать методы
     public ThemeDto createTheme(String token, ThemeCreateDto theme) {
         return null;
     }
