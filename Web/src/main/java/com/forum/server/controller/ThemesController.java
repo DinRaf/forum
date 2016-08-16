@@ -7,10 +7,7 @@ import com.forum.server.services.interfaces.ThemeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import static com.forum.server.utils.ResponseBuilder.buildResponseDelete;
 import static com.forum.server.utils.ResponseBuilder.buildResponseGet;
@@ -29,7 +26,7 @@ public class ThemesController {
     private ThemeService themeService;
 
     @RequestMapping(value = "/themes", method = POST)
-    public ResponseEntity<QueryResultDto> createTheme(@RequestParam(name = "Auth-Token") String token,
+    public ResponseEntity<QueryResultDto> createTheme(@RequestHeader(name = "Auth-Token") String token,
                                                       @RequestBody ThemeCreateDto themeCreateDto) {
         ThemeDto theme = themeService.createTheme(token, themeCreateDto);
         return buildResponsePostAndPut(theme);
@@ -46,14 +43,14 @@ public class ThemesController {
     @RequestMapping(value = "/themes/{theme-id}", method = PUT)
     public ResponseEntity<QueryResultDto> updateTheme(@PathVariable("theme-id") int themeId,
                                                       @RequestParam(value = "title") String title,
-                                                      @RequestParam(name = "Auth-Token") String token) {
+                                                      @RequestHeader(name = "Auth-Token") String token) {
         ThemeDto theme = themeService.updateTheme(token, themeId, title);
         return buildResponseGet(theme);
     }
 
     @RequestMapping(value = "/themes/{theme-id}", method = DELETE)
     public ResponseEntity<QueryResultDto> deleteTheme(@PathVariable("theme-id") int themeId,
-                                                      @RequestParam(name = "Auth-Token") String token) {
+                                                      @RequestHeader(name = "Auth-Token") String token) {
         themeService.deleteTheme(token, themeId);
         return buildResponseDelete();
     }
