@@ -1,4 +1,6 @@
-package com.forum.server.models.user;
+package com.forum.server.models.message;
+
+import com.forum.server.models.theme.Theme;
 
 /**
  * Created by root on 29.08.16.
@@ -97,5 +99,7 @@ public class Message {
             this.rating = rating;
             return this;
         }
+
+        public Message build() {return new Message(this);}
     }
 }

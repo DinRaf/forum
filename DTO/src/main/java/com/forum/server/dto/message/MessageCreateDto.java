@@ -22,7 +22,7 @@ public class MessageCreateDto implements Data {
 
         private String message;
 
-        Builder message(String data){
+        public Builder message(String data){
             this.message = data;
             return this;
         }

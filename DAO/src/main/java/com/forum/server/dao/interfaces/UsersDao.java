@@ -1,5 +1,6 @@
 package com.forum.server.dao.interfaces;
 
+import com.forum.server.models.user.ShortUser;
 import com.forum.server.models.user.User;
 
 /**
@@ -9,6 +10,8 @@ import com.forum.server.models.user.User;
  * @version 1.0
  */
 public interface UsersDao {
+
+    ShortUser findShortUserByToken(String token);
 
     User findByToken(String token);
 

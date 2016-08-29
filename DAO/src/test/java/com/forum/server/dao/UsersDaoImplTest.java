@@ -36,6 +36,11 @@ public class UsersDaoImplTest {
     }
 
     @Test
+    public void findShortUserByToken() throws Exception {
+        assertNotNull(usersDao.findShortUserByToken(TOKEN));
+    }
+
+    @Test
     public void isExistsMail() throws Exception {
         assertTrue(usersDao.isExistsMail(MAIL));
     }

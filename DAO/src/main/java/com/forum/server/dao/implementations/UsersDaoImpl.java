@@ -1,6 +1,7 @@
 package com.forum.server.dao.implementations;
 
 import com.forum.server.dao.interfaces.UsersDao;
+import com.forum.server.models.user.ShortUser;
 import com.forum.server.models.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -24,6 +25,7 @@ public class UsersDaoImpl implements UsersDao {
     private static final String SQL_GET_HASH_BY_NICKNAME = "SELECT pass_hash FROM user_info WHERE user_id = (SELECT user_id FROM short_user WHERE nick_name = ?);";
     private static final String SQL_GET_HASH_BY_MAIL = "SELECT pass_hash FROM user_info WHERE mail = ?;";
     private static final String SQL_FIND_BY_TOKEN = "SELECT * FROM user_info INNER JOIN short_user ON user_info.user_id = short_user.user_id WHERE short_user.user_id = (SELECT user_id FROM auth WHERE token = ?);";
+    private static final String SQL_FIND_SHORT_USER_BY_TOKEN = "SELECT * FROM short_user WHERE user_id = (SELECT user_id FROM auth WHERE token = ?);";
     private static final String SQL_GET_ID_BY_MAIL = "SELECT user_id FROM user_info WHERE mail = ?;";
     private static final String SQL_GET_ID_BY_NICKNAME = "SELECT user_id FROM short_user WHERE nick_name = ?;";
     private static final String SQL_ADD_SHORT_USER = "INSERT INTO short_user (nick_name, rating, avatar, is_online) VALUES (?, ?, ?, ?);";
@@ -48,6 +50,20 @@ public class UsersDaoImpl implements UsersDao {
                 .ThemesCount(rs.getInt("themes_count"))
                 .HashPassword(rs.getString("pass_hash"))
                 .build();
+    }
+
+    private RowMapper<ShortUser> shortUserRowMapper() {
+        return (rs, i) -> new ShortUser.Builder()
+                .UserId(rs.getInt("user_id"))
+                .NickName(rs.getString("nick_name"))
+                .Rating(rs.getLong("rating"))
+                .Avatar(rs.getString("avatar"))
+                .IsOnline(rs.getBoolean("is_online"))
+                .build();
+    }
+
+    public ShortUser findShortUserByToken(String token) {
+        return jdbcTemplate.queryForObject(SQL_FIND_SHORT_USER_BY_TOKEN, shortUserRowMapper(), token);
     }
 
     public User findByToken(String token) {

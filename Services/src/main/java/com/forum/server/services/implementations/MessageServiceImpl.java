@@ -25,7 +25,7 @@ public class MessageServiceImpl implements MessageService {
         if (tokensDao.isExistsToken(token)) {
             throw new IncorrectTokenException("Token is incorrect");
         } else {
-            if (message == null) {
+            if (message.getMessage().equals("")) {
                 throw new MessageExeption("The message body is empty");
             }
         }
