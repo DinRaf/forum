@@ -38,42 +38,42 @@ public class RegistrationServiceImpl implements RegistrationService {
 
     @Override
     public String login(String identifier, String password) {
-//        if (identifier == null || password == null) {
-//            throw new AuthException("Identifier or password missing, expected both of them");
-//        } else if (identifier.contains("@")) {
-//            if (!usersDao.isExistsMail(identifier)) {
-//                throw new AuthException("Incorrect identifier or password");
-//            }
-//            String passwordHash = usersDao.getHashByMail(identifier);
-//            if (encoder.matches(password, passwordHash)) {
-//                String token = tokenGenerator.generateToken();
-//                Integer userId = usersDao.getIdByMail(identifier);
-//                if (userId == null) {
-//                    throw new AuthException("Incorrect identifier or password");
-//                }
-//                tokensDao.addToken(userId, token);
-//                return token;
-//            }
-//        } else {
-//            if (!usersDao.isExistsNickName(identifier)) {
-//                throw new AuthException("Incorrect identifier or password");
-//            }
-//            String passwordHash = usersDao.getHashByNickName(identifier);
-//            if (encoder.matches(password, passwordHash)) {
-//                String token = tokenGenerator.generateToken();
-//                Integer userId = usersDao.getIdByNickName(identifier);
-//                if (userId == null) {
-//                    throw new AuthException("Incorrect identifier or password");
-//                }
-//                tokensDao.addToken(userId, token);
-//                return token;
-//            }
-//        }
-//        throw new AuthException("Incorrect identifier or password");
-        return "lol";
+        if (identifier == null || password == null) {
+            throw new AuthException("Identifier or password missing, expected both of them");
+        } else if (identifier.contains("@")) {
+            if (!usersDao.isExistsMail(identifier)) {
+                throw new AuthException("Incorrect identifier or password");
+            }
+            String passwordHash = usersDao.getHashByMail(identifier);
+            if (encoder.matches(password, passwordHash)) {
+                String token = tokenGenerator.generateToken();
+                Integer userId = usersDao.getIdByMail(identifier);
+                if (userId == null) {
+                    throw new AuthException("Incorrect identifier or password");
+                }
+                tokensDao.addToken(userId, token);
+                return token;
+            }
+        } else {
+            if (!usersDao.isExistsNickName(identifier)) {
+                throw new AuthException("Incorrect identifier or password");
+            }
+            String passwordHash = usersDao.getHashByNickName(identifier);
+            if (encoder.matches(password, passwordHash)) {
+                String token = tokenGenerator.generateToken();
+                Integer userId = usersDao.getIdByNickName(identifier);
+                if (userId == null) {
+                    throw new AuthException("Incorrect identifier or password");
+                }
+                tokensDao.addToken(userId, token);
+                return token;
+            }
+        }
+        throw new AuthException("Incorrect identifier or password");
     }
 
     public String addUser(AuthDto authDto) {
+
         User user = conversionResultFactory.convert(authDto);
         usersDao.save(user);
         String token = tokenGenerator.generateToken();
