@@ -69,17 +69,17 @@ public class UsersDaoImplTest {
     public void save() throws Exception {
         User sasha = new User.Builder()
                 .NickName("Sanya")
-                .Rating(0)
+                .Rating(0l)
                 .Avatar(null)
                 .IsOnline(true)
                 .Mail("sanya@gmail.com")
-                .DateOfBirth(0)
+                .DateOfBirth(0l)
                 .Info(null)
                 .Rights("user")
-                .RegistrationTime(0)
-                .LastSession(0)
-                .MessagesCount(0)
-                .ThemesCount(0)
+                .RegistrationTime(0l)
+                .LastSession(0l)
+                .MessagesCount(0l)
+                .ThemesCount(0l)
                 .HashPassword("blol")
                 .build();
         usersDao.save(sasha);
