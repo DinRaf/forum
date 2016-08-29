@@ -10,5 +10,5 @@ public interface TokensDao {
     //TODO Реализовать методы
     boolean isExistsToken(String token);
 
-    void addToken(Integer userId, String token);
+    void addToken(long userId, String token);
 }

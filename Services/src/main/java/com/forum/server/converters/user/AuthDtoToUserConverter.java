@@ -27,9 +27,12 @@ public class AuthDtoToUserConverter implements Converter<AuthDto, User> {
                 .Mail(authDto.getMail())
                 .HashPassword(passHash)
                 .RegistrationTime(System.currentTimeMillis())
-                .MessagesCount(0)
-                .ThemesCount(0)
+                .LastSession(System.currentTimeMillis())
+                .MessagesCount(0l)
+                .ThemesCount(0l)
                 .IsOnline(true)
+                .Rating(0l)
+                .Rights("half-user")
                 .build();
     }
 }

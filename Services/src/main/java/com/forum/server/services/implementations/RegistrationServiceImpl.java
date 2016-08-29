@@ -90,15 +90,8 @@ public class RegistrationServiceImpl implements RegistrationService {
             throw new AuthException("Nickname is not correct");
         }
         User user = conversionResultFactory.convert(authDto);
-        user.setLastSession((int)System.currentTimeMillis());
-        user.setMessagesCount(0);
-        user.setRegistrationTime((int)System.currentTimeMillis());
-        user.setThemesCount(0);
-        user.setOnline(true);
-        user.setRating(0);
-        user.setRights("half-user");
         usersDao.save(user);
-        int userId = usersDao.getIdByNickName(user.getNickName());
+        long userId = usersDao.getIdByNickName(user.getNickName());
         String token = tokenGenerator.generateToken();
         tokensDao.addToken(userId, token);
         return token;

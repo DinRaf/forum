@@ -26,7 +26,7 @@ public class TokensDaoImpl implements TokensDao {
         return jdbcTemplate.queryForObject(SQL_IS_EXISTS_TOKEN, boolean.class, token);
     }
 
-    public void addToken(Integer userId, String token) {
+    public void addToken(long userId, String token) {
         jdbcTemplate.update(SQL_ADD_TOKEN, new Object[]{userId, token});
     }
 }
