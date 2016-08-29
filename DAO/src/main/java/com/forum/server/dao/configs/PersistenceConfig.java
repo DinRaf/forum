@@ -18,14 +18,18 @@ import javax.sql.DataSource;
 @Configuration
 @ComponentScan(basePackages = "com.forum.server")
 public class PersistenceConfig {
-    //TODO Настроить DataSource
+    private static final String DRIVER_CLASS_NAME = "org.postgresql.Driver";
+    private static final String URL = "jdbc:postgresql://localhost:5432/forum_db";
+    private static final String USER_NAME = "admin";
+    private static final String PASSWORD = "12345678";
+
     @Bean
     public DataSource DataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        dataSource.setDriverClassName("org.postgresql.Driver");
-        dataSource.setUrl("jdbc:postgresql://localhost:5432/forum");
-        dataSource.setUsername("lol");
-        dataSource.setPassword("lal");
+        dataSource.setDriverClassName(DRIVER_CLASS_NAME);
+        dataSource.setUrl(URL);
+        dataSource.setUsername(USER_NAME);
+        dataSource.setPassword(PASSWORD);
         return dataSource;
     }
 

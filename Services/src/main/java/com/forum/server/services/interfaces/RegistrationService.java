@@ -1,8 +1,6 @@
 package com.forum.server.services.interfaces;
 
 import com.forum.server.dto.auth.AuthDto;
-import com.forum.server.dto.response.QueryResultDto;
-import org.springframework.http.ResponseEntity;
 
 /**
  * 07.08.16

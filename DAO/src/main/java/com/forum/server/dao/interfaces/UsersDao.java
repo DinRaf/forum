@@ -9,7 +9,7 @@ import com.forum.server.models.user.User;
  * @version 1.0
  */
 public interface UsersDao {
-    //TODO Реализовать методы
+
     User findByToken(String token);
 
     boolean isExixstsMail(String identifier);
@@ -18,7 +18,7 @@ public interface UsersDao {
 
     Integer findIdByMail(String identifier);
 
-    boolean isExixstsNickName(String identifier);
+    boolean isExistsNickName(String identifier);
 
     String getHashByNickName(String identifier);
 

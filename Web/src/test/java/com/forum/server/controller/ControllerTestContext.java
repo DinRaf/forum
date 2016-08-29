@@ -24,8 +24,8 @@ public class ControllerTestContext {
     }
 
     @Bean
-    public MessagesService messagesService() {
-        return Mockito.mock(MessagesService.class);
+    public MessageService messagesService() {
+        return Mockito.mock(MessageService.class);
     }
 
     @Bean
