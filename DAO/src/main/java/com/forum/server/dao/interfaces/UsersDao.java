@@ -12,17 +12,17 @@ public interface UsersDao {
 
     User findByToken(String token);
 
-    boolean isExixstsMail(String identifier);
+    boolean isExistsMail(String identifier);
 
     String getHashByMail(String identifier);
 
-    Integer findIdByMail(String identifier);
+    Integer getIdByMail(String identifier);
 
     boolean isExistsNickName(String identifier);
 
     String getHashByNickName(String identifier);
 
-    Integer findIdByNickName(String identifier);
+    Integer getIdByNickName(String identifier);
 
     void save(User user);
 }

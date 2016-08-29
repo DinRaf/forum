@@ -13,12 +13,17 @@ public class User extends ShortUser{
     private String info;
     private long registrationTime;
     private Integer lastSession;
-    private int MessagesCount;
-    private int ThemesCount;
+    private int messagesCount;
+    private int themesCount;
     private String hashPassword;
+    private String rights;
 
     public String getName() {
         return name;
+    }
+
+    public String getRights() {
+        return rights;
     }
 
     public String getMail() {
@@ -42,11 +47,11 @@ public class User extends ShortUser{
     }
 
     public int getMessagesCount() {
-        return MessagesCount;
+        return messagesCount;
     }
 
     public int getThemesCount() {
-        return ThemesCount;
+        return themesCount;
     }
 
     public String getHashPassword() {
@@ -59,6 +64,15 @@ public class User extends ShortUser{
     public User(Builder builder) {
         super(builder);
         this.name = builder.name;
+        this.mail = builder.mail;
+        this.dateOfBirth = builder.dateOfBirth;
+        this.info = builder.info;
+        this.registrationTime = builder.registrationTime;
+        this.lastSession = builder.lastSession;
+        this.messagesCount = builder.messagesCount;
+        this.themesCount = builder.themesCount;
+        this.hashPassword = builder.hashPassword;
+        this.rights = builder.rights;
     }
 
 
@@ -73,8 +87,9 @@ public class User extends ShortUser{
         private int messagesCount;
         private int themesCount;
         private String hashPassword;
-        
-        
+        private String rights;
+
+
         @Override
         public Builder UserId(int userId) {
             super.UserId(userId);
@@ -146,6 +161,11 @@ public class User extends ShortUser{
 
         public Builder HashPassword(String hashPassword) {
             this.hashPassword = hashPassword;
+            return this;
+        }
+
+        public Builder Rights(String rights) {
+            this.rights = rights;
             return this;
         }
 
