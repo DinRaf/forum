@@ -18,6 +18,31 @@ public class User extends ShortUser{
     private String hashPassword;
     private String rights;
 
+    public User setRegistrationTime(long registrationTime) {
+        this.registrationTime = registrationTime;
+        return this;
+    }
+
+    public User setLastSession(Integer lastSession) {
+        this.lastSession = lastSession;
+        return this;
+    }
+
+    public User setMessagesCount(int messagesCount) {
+        this.messagesCount = messagesCount;
+        return this;
+    }
+
+    public User setThemesCount(int themesCount) {
+        this.themesCount = themesCount;
+        return this;
+    }
+
+    public User setRights(String rights) {
+        this.rights = rights;
+        return this;
+    }
+
     public String getName() {
         return name;
     }
@@ -61,7 +86,7 @@ public class User extends ShortUser{
     protected User() {
     }
 
-    public User(Builder builder) {
+    private User(Builder builder) {
         super(builder);
         this.name = builder.name;
         this.mail = builder.mail;

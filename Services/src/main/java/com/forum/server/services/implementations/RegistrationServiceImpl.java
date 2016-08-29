@@ -8,10 +8,14 @@ import com.forum.server.models.user.User;
 import com.forum.server.security.exceptions.AuthException;
 import com.forum.server.security.generators.TokenGenerator;
 import com.forum.server.services.interfaces.RegistrationService;
+import com.forum.server.services.ustils.EmailValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * 08.08.16
@@ -25,12 +29,15 @@ public class RegistrationServiceImpl implements RegistrationService {
     private UsersDao usersDao;
 
     @Autowired
+    private EmailValidator emailValidator;
+
+    @Autowired
     private TokenGenerator tokenGenerator;
 
     @Autowired
     private TokensDao tokensDao;
 
-//    @Autowired
+    //    @Autowired
     private PasswordEncoder encoder = new BCryptPasswordEncoder();
 
     @Autowired
@@ -73,11 +80,46 @@ public class RegistrationServiceImpl implements RegistrationService {
     }
 
     public String addUser(AuthDto authDto) {
-
+        if (!passwordMeetsRequirements(authDto.getPassword())) {
+            throw new AuthException("Password is not correct");
+        }
+        if (!emailValidator.validate(authDto.getMail())) {
+            throw new AuthException("E-Mail is not correct");
+        }
+        if (!nicknameMeetsRequirements(authDto.getNickName())) {
+            throw new AuthException("Nickname is not correct");
+        }
         User user = conversionResultFactory.convert(authDto);
+        user.setLastSession((int)System.currentTimeMillis());
+        user.setMessagesCount(0);
+        user.setRegistrationTime((int)System.currentTimeMillis());
+        user.setThemesCount(0);
+        user.setOnline(true);
+        user.setRating(0);
+        user.setRights("half-user");
         usersDao.save(user);
+        int userId = usersDao.getIdByNickName(user.getNickName());
         String token = tokenGenerator.generateToken();
-        tokensDao.addToken(user.getUserId(), token);
+        tokensDao.addToken(userId, token);
         return token;
+    }
+
+
+    private boolean passwordMeetsRequirements(String password) {
+        return password.length() >= 6;
+    }
+
+    private boolean nicknameMeetsRequirements(String nickname) {
+        if ((nickname.length() < 4) && (nickname.length() > 64)) {
+            return false;
+        }
+        for (int i = 0; i < nickname.length(); i++) {
+            if (!((nickname.charAt(i) >= 'a' && nickname.charAt(i) <= 'z') ||
+                    (nickname.charAt(i) >= '0' && nickname.charAt(i) <= '9') ||
+                    (nickname.charAt(i) >= 'A' && nickname.charAt(i) <= 'Z') ||
+                    nickname.charAt(i) == '.' || nickname.charAt(i) == '_' || nickname.charAt(i) == '-'))
+            return false;
+            }
+        return true;
     }
 }

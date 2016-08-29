@@ -10,6 +10,17 @@ public class ShortUser {
     private int userId;
     private String nickName;
     private Integer rating;
+
+    public ShortUser setRating(Integer rating) {
+        this.rating = rating;
+        return this;
+    }
+
+    public ShortUser setOnline(boolean online) {
+        isOnline = online;
+        return this;
+    }
+
     private String avatar;
     private boolean isOnline;
 
@@ -35,7 +46,7 @@ public class ShortUser {
 
     protected ShortUser() {}
 
-    public ShortUser(Builder builder) {
+    protected ShortUser(Builder builder) {
         this.userId = builder.userId;
         this.nickName = builder.nickName;
         this.rating = builder.rating;
