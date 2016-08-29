@@ -26,6 +26,9 @@ public class UsersDaoImpl implements UsersDao {
     private static final String SQL_FIND_BY_TOKEN = "SELECT * FROM user_info INNER JOIN short_user ON user_info.user_id = short_user.user_id WHERE short_user.user_id = (SELECT user_id FROM auth WHERE token = ?);";
     private static final String SQL_GET_ID_BY_MAIL = "SELECT user_id FROM user_info WHERE mail = ?;";
     private static final String SQL_GET_ID_BY_NICKNAME = "SELECT user_id FROM short_user WHERE nick_name = ?;";
+    private static final String SQL_ADD_SHORT_USER = "INSERT INTO short_user (nick_name, rating, avatar, is_online) VALUES (?, ?, ?, ?);";
+    private static final String SQL_ADD_USER_INFO = "INSERT INTO user_info (user_id, mail, birth_date, info, rights, registration_time, last_session, messages_count, themes_count, pass_hash) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+
 
 
     private RowMapper<User> userRowMapper() {
@@ -76,6 +79,21 @@ public class UsersDaoImpl implements UsersDao {
     }
 
     public void save(User user) {
-
+        jdbcTemplate.update(SQL_ADD_SHORT_USER,
+                new Object[]{user.getNickName(),
+                        user.getRating(),
+                        user.getAvatar(),
+                        user.isOnline()});
+        jdbcTemplate.update(SQL_ADD_USER_INFO,
+                new Object[]{getIdByNickName(user.getNickName()),
+                        user.getMail(),
+                        user.getDateOfBirth(),
+                        user.getInfo(),
+                        user.getRights(),
+                        user.getRegistrationTime(),
+                        user.getLastSession(),
+                        user.getMessagesCount(),
+                        user.getThemesCount(),
+                        user.getHashPassword()});
     }
 }

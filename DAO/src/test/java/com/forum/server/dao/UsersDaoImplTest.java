@@ -2,6 +2,7 @@ package com.forum.server.dao;
 
 import com.forum.server.dao.configs.PersistenceConfig;
 import com.forum.server.dao.interfaces.UsersDao;
+import com.forum.server.models.user.User;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,7 +67,22 @@ public class UsersDaoImplTest {
 
     @Test
     public void save() throws Exception {
-
+        User sasha = new User.Builder()
+                .NickName("Sanya")
+                .Rating(0)
+                .Avatar(null)
+                .IsOnline(true)
+                .Mail("sanya@gmail.com")
+                .DateOfBirth(0)
+                .Info(null)
+                .Rights("user")
+                .RegistrationTime(0)
+                .LastSession(0)
+                .MessagesCount(0)
+                .ThemesCount(0)
+                .HashPassword("blol")
+                .build();
+        usersDao.save(sasha);
     }
 
 }
