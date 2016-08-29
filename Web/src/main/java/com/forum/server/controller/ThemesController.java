@@ -33,7 +33,7 @@ public class ThemesController {
     }
 
     @RequestMapping(value = "/themes/{theme-id}", method = GET)
-    public ResponseEntity<QueryResultDto> getTheme(@PathVariable("theme-id") int themeId,
+    public ResponseEntity<QueryResultDto> getTheme(@PathVariable("theme-id") long themeId,
                                                    @RequestParam(value = "offset", required = false) Integer offset,
                                                    @RequestParam(value = "count") int count) {
         ThemeDto theme = themeService.getTheme(themeId, offset, count);
@@ -41,7 +41,7 @@ public class ThemesController {
     }
 
     @RequestMapping(value = "/themes/{theme-id}", method = PUT)
-    public ResponseEntity<QueryResultDto> updateTheme(@PathVariable("theme-id") int themeId,
+    public ResponseEntity<QueryResultDto> updateTheme(@PathVariable("theme-id") long themeId,
                                                       @RequestParam(value = "title") String title,
                                                       @RequestHeader(name = "Auth-Token") String token) {
         ThemeDto theme = themeService.updateTheme(token, themeId, title);
@@ -49,7 +49,7 @@ public class ThemesController {
     }
 
     @RequestMapping(value = "/themes/{theme-id}", method = DELETE)
-    public ResponseEntity<QueryResultDto> deleteTheme(@PathVariable("theme-id") int themeId,
+    public ResponseEntity<QueryResultDto> deleteTheme(@PathVariable("theme-id") long themeId,
                                                       @RequestHeader(name = "Auth-Token") String token) {
         themeService.deleteTheme(token, themeId);
         return buildResponseDelete();

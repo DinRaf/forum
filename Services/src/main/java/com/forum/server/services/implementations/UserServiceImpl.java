@@ -14,11 +14,11 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserServiceImpl implements UserService {
     //TODO Реализовать методы
-    public UserShortDto getUser(String token, int userId) {
+    public UserShortDto getUser(String token, long userId) {
         return null;
     }
 
-    public UserDto updateUser(String token, int userId, UserDto userInfo) {
+    public UserDto updateUser(String token, long userId, UserDto userInfo) {
         return null;
     }
 }

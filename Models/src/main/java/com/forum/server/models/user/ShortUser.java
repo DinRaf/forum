@@ -7,11 +7,11 @@ package com.forum.server.models.user;
  * @version 1.0
  */
 public class ShortUser {
-    private int userId;
+    private long userId;
     private String nickName;
-    private Integer rating;
+    private Long rating;
 
-    public ShortUser setRating(Integer rating) {
+    public ShortUser setRating(Long rating) {
         this.rating = rating;
         return this;
     }
@@ -24,7 +24,7 @@ public class ShortUser {
     private String avatar;
     private boolean isOnline;
 
-    public int getUserId() {
+    public long getUserId() {
         return userId;
     }
 
@@ -32,7 +32,7 @@ public class ShortUser {
         return nickName;
     }
 
-    public Integer getRating() {
+    public Long getRating() {
         return rating;
     }
 
@@ -54,14 +54,14 @@ public class ShortUser {
         this.isOnline = builder.isOnline;
     }
 
-    public abstract static class Builder {
-        private int userId;
+    public static class Builder {
+        private long userId;
         private String nickName;
-        private Integer rating;
+        private Long rating;
         private String avatar;
         private boolean isOnline;
 
-        public Builder UserId(int userId) {
+        public Builder UserId(long userId) {
             this.userId = userId;
             return this;
         }
@@ -71,7 +71,7 @@ public class ShortUser {
             return this;
         }
 
-        public Builder Rating(Integer rating) {
+        public Builder Rating(Long rating) {
             this.rating = rating;
             return this;
         }

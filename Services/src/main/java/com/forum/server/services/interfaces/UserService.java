@@ -11,7 +11,7 @@ import com.forum.server.dto.user.UserShortDto;
  */
 public interface UserService {
 
-    UserShortDto getUser(String token, int userId);
+    UserShortDto getUser(String token, long userId);
 
-    UserDto updateUser(String token, int userId, UserDto userInfo);
+    UserDto updateUser(String token, long userId, UserDto userInfo);
 }

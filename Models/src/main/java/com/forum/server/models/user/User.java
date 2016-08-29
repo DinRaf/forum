@@ -9,12 +9,12 @@ package com.forum.server.models.user;
 public class User extends ShortUser{
     private String name;
     private String mail;
-    private Integer dateOfBirth;
+    private Long dateOfBirth;
     private String info;
     private long registrationTime;
-    private Integer lastSession;
-    private int messagesCount;
-    private int themesCount;
+    private long lastSession;
+    private long messagesCount;
+    private long themesCount;
     private String hashPassword;
     private String rights;
 
@@ -23,17 +23,17 @@ public class User extends ShortUser{
         return this;
     }
 
-    public User setLastSession(Integer lastSession) {
+    public User setLastSession(long lastSession) {
         this.lastSession = lastSession;
         return this;
     }
 
-    public User setMessagesCount(int messagesCount) {
+    public User setMessagesCount(long messagesCount) {
         this.messagesCount = messagesCount;
         return this;
     }
 
-    public User setThemesCount(int themesCount) {
+    public User setThemesCount(long themesCount) {
         this.themesCount = themesCount;
         return this;
     }
@@ -55,7 +55,7 @@ public class User extends ShortUser{
         return mail;
     }
 
-    public Integer getDateOfBirth() {
+    public Long getDateOfBirth() {
         return dateOfBirth;
     }
 
@@ -67,15 +67,15 @@ public class User extends ShortUser{
         return registrationTime;
     }
 
-    public Integer getLastSession() {
+    public Long getLastSession() {
         return lastSession;
     }
 
-    public int getMessagesCount() {
+    public long getMessagesCount() {
         return messagesCount;
     }
 
-    public int getThemesCount() {
+    public long getThemesCount() {
         return themesCount;
     }
 
@@ -105,18 +105,18 @@ public class User extends ShortUser{
     public static class Builder extends ShortUser.Builder{
         private String name;
         private String mail;
-        private Integer dateOfBirth;
+        private Long dateOfBirth;
         private String info;
         private long registrationTime;
-        private Integer lastSession;
-        private int messagesCount;
-        private int themesCount;
+        private long lastSession;
+        private long messagesCount;
+        private long themesCount;
         private String hashPassword;
         private String rights;
 
 
         @Override
-        public Builder UserId(int userId) {
+        public Builder UserId(long userId) {
             super.UserId(userId);
             return this;
         }
@@ -128,7 +128,7 @@ public class User extends ShortUser{
         }
 
         @Override
-        public Builder Rating(Integer rating) {
+        public Builder Rating(Long rating) {
             super.Rating(rating);
             return this;
         }
@@ -155,7 +155,7 @@ public class User extends ShortUser{
             return this;
         }
 
-        public Builder DateOfBirth(Integer dateOfBirth) {
+        public Builder DateOfBirth(Long dateOfBirth) {
             this.dateOfBirth = dateOfBirth;
             return this;
         }
@@ -170,16 +170,16 @@ public class User extends ShortUser{
             return this;
         }
 
-        public Builder LastSession(Integer lastSession) {
+        public Builder LastSession(long lastSession) {
             this.lastSession = lastSession;
             return this;
         }
 
-        public Builder MessagesCount(int messagesCount) {
+        public Builder MessagesCount(long messagesCount) {
             this.messagesCount = messagesCount;
             return this;
         }
-        public Builder ThemesCount(int themesCount) {
+        public Builder ThemesCount(long themesCount) {
             this.themesCount = themesCount;
             return this;
         }

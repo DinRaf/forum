@@ -18,15 +18,15 @@ public class ThemeServiceImpl implements ThemeService {
         return null;
     }
 
-    public ThemeDto getTheme(int themeId, Integer offset, int count) {
+    public ThemeDto getTheme(long themeId, Integer offset, int count) {
         return null;
     }
 
-    public ThemeDto updateTheme(String token, int themeId, String title) {
+    public ThemeDto updateTheme(String token, long themeId, String title) {
         return null;
     }
 
-    public void deleteTheme(String token, int themeId) {
+    public void deleteTheme(String token, long themeId) {
 
     }
 }

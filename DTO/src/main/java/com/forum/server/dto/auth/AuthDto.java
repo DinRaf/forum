@@ -14,16 +14,16 @@ public class AuthDto implements Data {
     private String mail;
     private String password;
 
-    public String getNickName() {
-        return nickName;
-    }
-
     public String getMail() {
         return mail;
     }
 
     public String getPassword() {
         return password;
+    }
+
+    public String getNickName() {
+        return nickName;
     }
 
     protected AuthDto() {
@@ -35,7 +35,7 @@ public class AuthDto implements Data {
         this.password = builder.password;
     }
 
-    public static class Builder {
+    private static class Builder {
         private String nickName;
         private String mail;
         private String password;

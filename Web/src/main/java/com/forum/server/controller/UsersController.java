@@ -29,14 +29,14 @@ public class UsersController {
     private UserService userService;
 
     @RequestMapping(value = "/users/{user-id}", method = GET)
-    public ResponseEntity<QueryResultDto> getUser(@PathVariable("user-id") int userId,
+    public ResponseEntity<QueryResultDto> getUser(@PathVariable("user-id") long userId,
                                                   @RequestHeader(name = "Auth-Token") String token) {
         UserShortDto user = userService.getUser(token, userId);
         return buildResponseGet(user);
     }
 
     @RequestMapping(value = "/users/{user-id}", method = PUT)
-    public ResponseEntity<QueryResultDto> updateUser(@PathVariable("user-id") int userId,
+    public ResponseEntity<QueryResultDto> updateUser(@PathVariable("user-id") long userId,
                                                      @RequestHeader(name = "Auth-Token") String token,
                                                      @RequestBody UserDto userInfo) {
         UserDto user = userService.updateUser(token, userId, userInfo);

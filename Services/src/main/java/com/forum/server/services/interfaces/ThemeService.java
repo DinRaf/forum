@@ -13,9 +13,9 @@ public interface ThemeService {
 
     ThemeDto createTheme(String token, ThemeCreateDto theme);
 
-    ThemeDto getTheme(int themeId, Integer offset, int count);
+    ThemeDto getTheme(long themeId, Integer offset, int count);
 
-    ThemeDto updateTheme(String token, int themeId, String title);
+    ThemeDto updateTheme(String token, long themeId, String title);
 
-    void deleteTheme(String token, int themeId);
+    void deleteTheme(String token, long themeId);
 }
