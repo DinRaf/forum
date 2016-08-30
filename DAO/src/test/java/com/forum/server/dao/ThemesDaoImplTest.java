@@ -21,16 +21,35 @@ import static org.junit.Assert.*;
 @ContextConfiguration(classes = PersistenceConfig.class)
 public class ThemesDaoImplTest {
 
+    private static final long THEME_ID = 1;
+    private static final long USER_ID = 1;
+    private static final long SECTION_ID = 1;
+    private static final long SUBSECTION_ID = 1;
+    private static final long THEME_DATE= 43;
+    private static final long MESSAGES_COUNT= 0;
+    private static final String TITLE = "Spring JPA";
+    private static final boolean STATUS = true;
+
     @Autowired
     private ThemesDao themesDao;
 
     @Test
     public void save() throws Exception {
+        Theme theme = new Theme.Builder()
+                .UserId(USER_ID)
+                .SectionId(SECTION_ID)
+                .SubsectionId(SUBSECTION_ID)
+                .Title(TITLE)
+                .Date(System.currentTimeMillis())
+                .MessagesCount(MESSAGES_COUNT)
+                .Status(STATUS)
+                .build();
+        themesDao.save(theme);
     }
 
     @Test
     public void getIdByDateAndUserId() throws Exception {
-        assertEquals(1l, themesDao.getIdByDateAndUserId(1, 1));
+        assertEquals(THEME_ID, themesDao.getIdByDateAndUserId(USER_ID, THEME_DATE));
     }
 
 }

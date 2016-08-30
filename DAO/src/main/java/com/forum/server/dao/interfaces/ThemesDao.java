@@ -9,7 +9,6 @@ import com.forum.server.models.theme.Theme;
  * @version 1.0
  */
 public interface ThemesDao {
-    //TODO Реализовать методы
     void save(Theme theme);
 
     long getIdByDateAndUserId(long theme, long userId);

@@ -4,6 +4,7 @@ import com.forum.server.dao.interfaces.ThemesDao;
 import com.forum.server.models.theme.Theme;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Repository;
 
 /**
  * 30.08.16
@@ -11,6 +12,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
  * @author Dinar Rafikov (First Software Engineering Platform)
  * @version 1.0
  */
+@Repository
 public class ThemesDaoImpl implements ThemesDao {
 
     @Autowired
