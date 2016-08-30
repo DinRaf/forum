@@ -17,7 +17,7 @@ public class MessagesDto implements Data {
     private List<MessageDto> messages;
 
     @JsonValue
-    public List<MessageDto> getThemes() {
+    public List<MessageDto> getMessages() {
         return messages;
     }
 
