@@ -26,7 +26,8 @@ public class ThemesDaoImpl implements ThemesDao {
     private NamedParameterJdbcTemplate namedJdbcTemplate;
 
     private static final String SQL_GET_ID_BY_DATE_AND_USER_ID = "SELECT theme_id FROM theme WHERE user_id = :userId AND date = :date;";
-    private static final String SQL_ADD_THEME = "INSERT INTO theme (user_id, section_id, subsection_id, title, date, message_count, status) VALUES (?, ?, ?, ?, ?, ?, ?);";
+    private static final String SQL_ADD_THEME = "INSERT INTO theme (user_id, section_id, subsection_id, title, date, messages_count, status) VALUES (?, ?, ?, ?, ?, ?, ?);";
+    private static final String SQL_NUMBER_OF_MESSAGES_IN_THEME = "SELECT messages_count FROM theme WHERE theme_id = ?;" ;
 
     public void save(Theme theme) {
         jdbcTemplate.update(SQL_ADD_THEME,
@@ -44,5 +45,10 @@ public class ThemesDaoImpl implements ThemesDao {
         params.put("userId", userId);
         params.put("date", date);
         return namedJdbcTemplate.queryForObject(SQL_GET_ID_BY_DATE_AND_USER_ID, params, long.class);
+    }
+
+
+    public long findTheNumberOfMessagesInTheme(long themeId) {
+        return jdbcTemplate.queryForObject(SQL_NUMBER_OF_MESSAGES_IN_THEME, long.class, themeId);
     }
 }

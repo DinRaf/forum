@@ -52,4 +52,8 @@ public class ThemesDaoImplTest {
         assertEquals(THEME_ID, themesDao.getIdByDateAndUserId(USER_ID, THEME_DATE));
     }
 
+    @Test
+    public void findTheNumberOfMessagesInTheme(){
+        assertEquals(MESSAGES_COUNT, themesDao.findTheNumberOfMessagesInTheme(THEME_ID));
+    }
 }

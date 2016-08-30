@@ -12,4 +12,6 @@ public interface ThemesDao {
     void save(Theme theme);
 
     long getIdByDateAndUserId(long userId, long date);
+
+    long findTheNumberOfMessagesInTheme(long themeId);
 }

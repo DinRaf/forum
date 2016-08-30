@@ -1,9 +1,12 @@
 package com.forum.server.services.implementations;
 
+import com.forum.server.converters.ConversionResultFactory;
+import com.forum.server.dao.interfaces.MessagesDao;
 import com.forum.server.dao.interfaces.TokensDao;
 import com.forum.server.dto.message.MessageCreateDto;
 import com.forum.server.dto.message.MessageDto;
 import com.forum.server.dto.theme.ThemeDto;
+import com.forum.server.models.message.Message;
 import com.forum.server.security.exceptions.IncorrectTokenException;
 import com.forum.server.security.exceptions.MessageExeption;
 import com.forum.server.services.interfaces.MessageService;
@@ -22,17 +25,28 @@ public class MessageServiceImpl implements MessageService {
     @Autowired
     private TokensDao tokensDao;
 
-    public ThemeDto createMessage(String token, long themeId, MessageCreateDto message, long count) {
+    @Autowired
+    private MessagesDao messagesDao;
+
+    @Autowired
+    private ConversionResultFactory conversionResultFactory;
+
+    public ThemeDto createMessage(String token, long themeId, MessageCreateDto messageCreateDto, long count) {
         if (tokensDao.isExistsToken(token)) {
             throw new IncorrectTokenException("Token is incorrect");
         } else {
-            if (message.getMessage().equals("")) {
+            if (messageCreateDto.getMessage().equals("")) {
                 throw new MessageExeption("The message body is empty");
             }
         }
-        if (message.getMessage().length() > 16000) {
+        if (messageCreateDto.getMessage().length() > 16000) {
             throw new MessageExeption("Message is too large");
         }
+
+        Message message = conversionResultFactory.convert(messageCreateDto.getMessage());
+        messagesDao.save(message);
+
+
         return new ThemeDto.Builder().build();
     }
 
