@@ -19,7 +19,6 @@ import com.forum.server.services.interfaces.ThemeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
 
@@ -67,12 +66,14 @@ public class ThemeServiceImpl implements ThemeService {
         message.setMessageId(messagesDao.getIdByUserIdAndDate(userId, message.getDate()));
         ShortUserDto userDto = conversionResultFactory.convert(user);
         return new ThemeDto.Builder()
+                .ThemeId(themeId)
                 .Date(theme.getDate())
                 .AuthorId(userId)
                 .Status(theme.isStatus())
                 .MessagesCount(1l)
                 .Title(theme.getTitle())
                 .Messages(new MessagesDto(new LinkedList<>((Collection<? extends MessageDto>) new MessageDto.Builder()
+                        .MessageId(message.getMessageId())
                         .Author(userDto)
                         .Date(message.getDate())
                         .Message(message.getBody())
@@ -87,7 +88,7 @@ public class ThemeServiceImpl implements ThemeService {
         return null;
     }
 
-    public ThemeDto updateTheme(String token, long themeId, String title) {
+    public ThemeDto updateTheme(String token, long themeId, String title, String offset, String count) {
         return null;
     }
 

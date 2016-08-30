@@ -38,7 +38,7 @@ public class ShortUserDto implements Data {
     protected ShortUserDto() {
     }
 
-    private ShortUserDto(Builder builder) {
+    protected ShortUserDto(Builder builder) {
         this.userId = builder.userId;
         this.nickName = builder.nickName;
         this.rating = builder.rating;

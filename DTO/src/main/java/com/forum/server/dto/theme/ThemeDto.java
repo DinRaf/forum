@@ -10,12 +10,17 @@ import com.forum.server.dto.message.MessagesDto;
  * @version 1.0
  */
 public class ThemeDto implements Data{
+    private long themeId;
     private String title;
     private long authorId;
     private long date;
     private long messagesCount;
     private MessagesDto messages;
     private boolean status;
+
+    public long getThemeId() {
+        return themeId;
+    }
 
     public String getTitle() {
         return title;
@@ -45,6 +50,7 @@ public class ThemeDto implements Data{
     }
 
     private ThemeDto(Builder builder) {
+        this.themeId = builder.themeId;
         this.title = builder.title;
         this.authorId = builder.authorId;
         this.date = builder.date;
@@ -54,12 +60,18 @@ public class ThemeDto implements Data{
     }
 
     public static class Builder {
+        private long themeId;
         private String title;
         private long authorId;
         private long date;
         private long messagesCount;
         private MessagesDto messages;
         private boolean status;
+
+        public Builder ThemeId(long themeId) {
+            this.themeId = themeId;
+            return this;
+        }
 
         public Builder Title(String title) {
             this.title = title;

@@ -7,6 +7,7 @@ import com.forum.server.dto.user.ShortUserDto;
  * Created by aisalin on 15.08.16.
  */
 public class MessageDto implements Data{
+    private long messageId;
     private ShortUserDto author;
     private String message;
     private long date;
@@ -37,6 +38,7 @@ public class MessageDto implements Data{
     }
 
     private MessageDto(Builder builder) {
+        this.messageId = builder.messageId;
         this.author = builder.author;
         this.message = builder.message;
         this.date = builder.date;
@@ -45,11 +47,17 @@ public class MessageDto implements Data{
     }
 
     public static class Builder {
+        private long messageId;
         private ShortUserDto author;
         private String message;
         private long date;
         private long rating;
         private FixMessageDto updated;
+
+        public Builder MessageId(long messageId) {
+            this.messageId = messageId;
+            return this;
+        }
 
         public Builder Author(ShortUserDto author) {
             this.author = author;
