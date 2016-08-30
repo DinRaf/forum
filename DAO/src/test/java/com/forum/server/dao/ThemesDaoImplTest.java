@@ -21,11 +21,11 @@ import static org.junit.Assert.*;
 @ContextConfiguration(classes = PersistenceConfig.class)
 public class ThemesDaoImplTest {
 
-    private static final long THEME_ID = 1;
-    private static final long USER_ID = 1;
+    private static final long THEME_ID = 9;
+    private static final long USER_ID = 11;
     private static final long SECTION_ID = 1;
     private static final long SUBSECTION_ID = 1;
-    private static final long THEME_DATE= 43;
+    private static final long THEME_DATE= 1472576342674L;
     private static final long MESSAGES_COUNT= 0;
     private static final String TITLE = "Spring JPA";
     private static final boolean STATUS = true;

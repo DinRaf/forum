@@ -11,5 +11,5 @@ import com.forum.server.models.theme.Theme;
 public interface ThemesDao {
     void save(Theme theme);
 
-    long getIdByDateAndUserId(long theme, long userId);
+    long getIdByDateAndUserId(long userId, long date);
 }

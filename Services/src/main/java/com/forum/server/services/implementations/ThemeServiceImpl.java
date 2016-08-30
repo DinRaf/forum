@@ -58,7 +58,7 @@ public class ThemeServiceImpl implements ThemeService {
         long userId = user.getUserId();
         theme.setUserId(userId);
         themesDao.save(theme);
-        long themeId = themesDao.getIdByDateAndUserId(theme.getDate(), userId);
+        long themeId = themesDao.getIdByDateAndUserId(userId, theme.getDate());
         Message message = conversionResultFactory.convert(themeCreateDto.getMessage());
         message.setUserId(userId);
         message.setThemeId(themeId);
