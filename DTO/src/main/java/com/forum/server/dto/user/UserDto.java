@@ -6,5 +6,5 @@ package com.forum.server.dto.user;
  * @author Dinar Rafikov (First Software Engineering Platform)
  * @version 1.0
  */
-public class UserDto extends UserShortDto {
+public class UserDto extends ShortUserDto {
 }

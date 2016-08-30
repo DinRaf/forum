@@ -1,4 +1,4 @@
-package com.forum.server.converters.user;
+package com.forum.server.converters.theme;
 
 import com.forum.server.dto.theme.ThemeCreateDto;
 import com.forum.server.models.theme.Theme;

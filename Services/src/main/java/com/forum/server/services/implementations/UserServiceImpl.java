@@ -1,7 +1,7 @@
 package com.forum.server.services.implementations;
 
 import com.forum.server.dto.user.UserDto;
-import com.forum.server.dto.user.UserShortDto;
+import com.forum.server.dto.user.ShortUserDto;
 import com.forum.server.services.interfaces.UserService;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserServiceImpl implements UserService {
     //TODO Реализовать методы
-    public UserShortDto getUser(String token, long userId) {
+    public ShortUserDto getUser(String token, long userId) {
         return null;
     }
 

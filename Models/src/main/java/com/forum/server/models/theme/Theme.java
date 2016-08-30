@@ -16,9 +16,8 @@ public class Theme {
     private long messagesCount;
     private boolean status;
 
-    public Theme setUserId(long userId) {
+    public void setUserId(long userId) {
         this.userId = userId;
-        return this;
     }
 
     public long getThemeId() {

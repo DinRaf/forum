@@ -1,7 +1,5 @@
 package com.forum.server.models.message;
 
-import com.forum.server.models.theme.Theme;
-
 /**
  * Created by root on 29.08.16.
  */
@@ -14,7 +12,29 @@ public class Message {
     private String body;
     private long update;
     private long rating;
+    private long updaterId;
+    private String updaterNickname;
 
+    public void setMessageId(long messageId) {
+        this.messageId = messageId;
+    }
+
+    public void setUserId(long userId) {
+        this.userId = userId;
+    }
+
+    public void setThemeId(long themeId) {
+        this.themeId = themeId;
+    }
+
+    public long getUpdaterId() {
+        return updaterId;
+    }
+
+    public String getUpdaterNickname() {
+        return updaterNickname;
+    }
+    
     public long getMessageId() {
         return messageId;
     }
@@ -53,6 +73,8 @@ public class Message {
         this.body = builder.body;
         this.update = builder.update;
         this.rating = builder.rating;
+        this.updaterId = builder.updaterId;
+        this.updaterNickname = builder.updaterNickname;
     }
 
     public static class Builder {
@@ -64,9 +86,21 @@ public class Message {
         private String body;
         private long update;
         private long rating;
+        private long updaterId;
+        private String updaterNickname;
 
         public Builder MessageId(long messageId) {
             this.messageId = messageId;
+            return this;
+        }
+
+        public Builder UpdaterId(long updaterId) {
+            this.updaterId = updaterId;
+            return this;
+        }
+
+        public Builder UpdaterNickname(String updaterNickname) {
+            this.updaterNickname = updaterNickname;
             return this;
         }
 

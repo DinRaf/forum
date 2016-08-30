@@ -1,17 +1,27 @@
 package com.forum.server.services.implementations;
 
 import com.forum.server.converters.ConversionResultFactory;
+import com.forum.server.dao.interfaces.MessagesDao;
 import com.forum.server.dao.interfaces.ThemesDao;
 import com.forum.server.dao.interfaces.TokensDao;
 import com.forum.server.dao.interfaces.UsersDao;
+import com.forum.server.dto.message.FixMessageDto;
+import com.forum.server.dto.message.MessageDto;
+import com.forum.server.dto.message.MessagesDto;
 import com.forum.server.dto.theme.ThemeCreateDto;
 import com.forum.server.dto.theme.ThemeDto;
+import com.forum.server.dto.user.ShortUserDto;
+import com.forum.server.models.message.Message;
 import com.forum.server.models.theme.Theme;
 import com.forum.server.models.user.ShortUser;
 import com.forum.server.security.exceptions.AuthException;
 import com.forum.server.services.interfaces.ThemeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.LinkedList;
 
 /**
  * 08.08.16
@@ -32,6 +42,9 @@ public class ThemeServiceImpl implements ThemeService {
     private ThemesDao themesDao;
 
     @Autowired
+    private MessagesDao messagesDao;
+
+    @Autowired
     private ConversionResultFactory conversionResultFactory;
 
     //TODO Реализовать методы
@@ -46,12 +59,28 @@ public class ThemeServiceImpl implements ThemeService {
         long userId = user.getUserId();
         theme.setUserId(userId);
         themesDao.save(theme);
-        long themeId = themesDao.getIdByDateAndUserId(theme, userId);
-
-
-
-        //FIXME ДОПИСАТЬ!!!
-        throw new AuthException("Title or message not found");
+        long themeId = themesDao.getIdByDateAndUserId(theme.getDate(), userId);
+        Message message = conversionResultFactory.convert(themeCreateDto.getMessage());
+        message.setUserId(userId);
+        message.setThemeId(themeId);
+        messagesDao.save(message);
+        message.setMessageId(messagesDao.getIdByUserIdAndDate(userId, message.getDate()));
+        ShortUserDto userDto = conversionResultFactory.convert(user);
+        return new ThemeDto.Builder()
+                .Date(theme.getDate())
+                .AuthorId(userId)
+                .Status(theme.isStatus())
+                .MessagesCount(1l)
+                .Title(theme.getTitle())
+                .Messages(new MessagesDto(new LinkedList<>((Collection<? extends MessageDto>) new MessageDto.Builder()
+                        .Author(userDto)
+                        .Date(message.getDate())
+                        .Message(message.getBody())
+                        .Rating(message.getRating())
+                        .Updated(new FixMessageDto.Builder()
+                                .build())
+                        .build())))
+                .build();
     }
 
     public ThemeDto getTheme(long themeId, Integer offset, int count) {

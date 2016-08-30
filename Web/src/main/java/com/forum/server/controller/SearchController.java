@@ -2,7 +2,7 @@ package com.forum.server.controller;
 
 import com.forum.server.dto.response.QueryResultDto;
 import com.forum.server.dto.theme.ThemesDto;
-import com.forum.server.dto.user.UsersShortDto;
+import com.forum.server.dto.user.ShortUsersDto;
 import com.forum.server.services.interfaces.SearchService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -42,7 +42,7 @@ public class SearchController {
                                                       @RequestParam(value = "offset", required = false) Integer offset,
                                                       @RequestParam(value = "count") int count,
                                                       @RequestHeader(name = "Auth-Token") String token) {
-        UsersShortDto result = searchService.searchUsers(token, keyword, offset, count, sorting, isOnline);
+        ShortUsersDto result = searchService.searchUsers(token, keyword, offset, count, sorting, isOnline);
         return buildResponseGet(result);
     }
 }

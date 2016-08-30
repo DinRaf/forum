@@ -2,7 +2,7 @@ package com.forum.server.controller;
 
 import com.forum.server.dto.response.QueryResultDto;
 import com.forum.server.dto.user.UserDto;
-import com.forum.server.dto.user.UserShortDto;
+import com.forum.server.dto.user.ShortUserDto;
 import com.forum.server.services.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -31,7 +31,7 @@ public class UsersController {
     @RequestMapping(value = "/users/{user-id}", method = GET)
     public ResponseEntity<QueryResultDto> getUser(@PathVariable("user-id") long userId,
                                                   @RequestHeader(name = "Auth-Token") String token) {
-        UserShortDto user = userService.getUser(token, userId);
+        ShortUserDto user = userService.getUser(token, userId);
         return buildResponseGet(user);
     }
 

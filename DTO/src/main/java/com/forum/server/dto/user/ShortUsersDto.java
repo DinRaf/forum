@@ -13,15 +13,15 @@ import java.util.List;
  * @version 1.0
  */
 @JsonFormat(shape = JsonFormat.Shape.ARRAY)
-public class UsersShortDto implements Data {
-    private List<UsersShortDto> users;
+public class ShortUsersDto implements Data {
+    private List<ShortUsersDto> users;
 
     @JsonValue
-    public List<UsersShortDto> getThemes() {
+    public List<ShortUsersDto> getThemes() {
         return users;
     }
 
-    public UsersShortDto(List<UsersShortDto> users) {
+    public ShortUsersDto(List<ShortUsersDto> users) {
         this.users = users;
     }
 }

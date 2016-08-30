@@ -1,7 +1,7 @@
 package com.forum.server.services.implementations;
 
 import com.forum.server.dto.theme.ThemesDto;
-import com.forum.server.dto.user.UsersShortDto;
+import com.forum.server.dto.user.ShortUsersDto;
 import com.forum.server.services.interfaces.SearchService;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +18,7 @@ public class SearchServiceImpl implements SearchService {
         return null;
     }
 
-    public UsersShortDto searchUsers(String token, String keyword, Integer offset, int count, String sorting, Boolean isOnline) {
+    public ShortUsersDto searchUsers(String token, String keyword, Integer offset, int count, String sorting, Boolean isOnline) {
         return null;
     }
 }

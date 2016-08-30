@@ -12,5 +12,5 @@ public interface ThemesDao {
     //TODO Реализовать методы
     void save(Theme theme);
 
-    long getIdByDateAndUserId(Theme theme, long userId);
+    long getIdByDateAndUserId(long theme, long userId);
 }
