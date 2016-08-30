@@ -52,4 +52,11 @@ public class ResponseBuilder {
         QueryResultDto queryResultDto = new QueryResultDto(meta, null);
         return new ResponseEntity<>(queryResultDto, headers, OK);
     }
+
+    public static ResponseEntity<QueryResultDto> buildResponseRating() {
+        HttpHeaders headers = AdditionalUtil.createHttpHeaders();
+        QueryResultInfoDto meta = new QueryResultInfoDto("201", "success");
+        QueryResultDto queryResultDto = new QueryResultDto(meta, null);
+        return new ResponseEntity<>(queryResultDto, headers, OK);
+    }
 }

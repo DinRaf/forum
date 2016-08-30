@@ -9,7 +9,6 @@ import com.forum.server.dto.message.FixMessageDto;
 import com.forum.server.dto.message.MessageDto;
 import com.forum.server.dto.message.MessagesDto;
 import com.forum.server.dto.theme.ThemeCreateDto;
-import com.forum.server.dto.theme.ThemeDto;
 import com.forum.server.dto.user.ShortUserDto;
 import com.forum.server.models.message.Message;
 import com.forum.server.models.theme.Theme;
@@ -47,7 +46,7 @@ public class ThemeServiceImpl implements ThemeService {
     private ConversionResultFactory conversionResultFactory;
 
     //TODO Реализовать методы
-    public ThemeDto createTheme(String token, ThemeCreateDto themeCreateDto) {
+    public com.forum.server.dto.theme.ThemeDto createTheme(String token, ThemeCreateDto themeCreateDto) {
         if (!tokensDao.isExistsToken(token)) {
             throw new AuthException("Incorrect token");
         } else if (themeCreateDto.getTitle().equals("") || themeCreateDto.getMessage().equals("")) {
@@ -65,7 +64,7 @@ public class ThemeServiceImpl implements ThemeService {
         messagesDao.save(message);
         message.setMessageId(messagesDao.getIdByUserIdAndDate(userId, message.getDate()));
         ShortUserDto userDto = conversionResultFactory.convert(user);
-        return new ThemeDto.Builder()
+        return new com.forum.server.dto.theme.ThemeDto.Builder()
                 .ThemeId(themeId)
                 .Date(theme.getDate())
                 .AuthorId(userId)
@@ -84,11 +83,11 @@ public class ThemeServiceImpl implements ThemeService {
                 .build();
     }
 
-    public ThemeDto getTheme(long themeId, Integer offset, int count) {
+    public com.forum.server.dto.theme.ThemeDto getTheme(long themeId, Integer offset, int count) {
         return null;
     }
 
-    public ThemeDto updateTheme(String token, long themeId, String title, String offset, String count) {
+    public com.forum.server.dto.theme.ThemeDto updateTheme(String token, long themeId, String title, String offset, String count) {
         return null;
     }
 

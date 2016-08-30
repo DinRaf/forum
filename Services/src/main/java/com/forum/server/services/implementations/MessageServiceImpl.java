@@ -3,6 +3,7 @@ package com.forum.server.services.implementations;
 import com.forum.server.dao.interfaces.TokensDao;
 import com.forum.server.dto.message.MessageCreateDto;
 import com.forum.server.dto.message.MessageDto;
+import com.forum.server.dto.theme.ThemeDto;
 import com.forum.server.security.exceptions.IncorrectTokenException;
 import com.forum.server.security.exceptions.MessageExeption;
 import com.forum.server.services.interfaces.MessageService;
@@ -21,7 +22,7 @@ public class MessageServiceImpl implements MessageService {
     @Autowired
     private TokensDao tokensDao;
 
-    public MessageDto createMessage(String token, int themeId, MessageCreateDto message) {
+    public ThemeDto createMessage(String token, long themeId, MessageCreateDto message, long count) {
         if (tokensDao.isExistsToken(token)) {
             throw new IncorrectTokenException("Token is incorrect");
         } else {
@@ -32,18 +33,17 @@ public class MessageServiceImpl implements MessageService {
         if (message.getMessage().length() > 16000) {
             throw new MessageExeption("Message is too large");
         }
-        return new MessageDto();
+        return new ThemeDto.Builder().build();
     }
 
-    public MessageDto updateMessage(String token, int themeId, int messageId, MessageDto message) {
+    public ThemeDto updateMessage(String token, long themeId, long messageId, MessageDto message) {
         return null;
     }
 
-    public MessageDto updateMessageRating(int themeId, int messageId, boolean grade) {
-        return null;
+    public void updateMessageRating(long themeId, long messageId, boolean grade, long count, long offset) {
     }
 
-    public void deleteMessage(String token, int themeId, int messageId) {
+    public void deleteMessage(String token, long themeId, long messageId) {
 
     }
 }

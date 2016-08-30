@@ -2,6 +2,7 @@ package com.forum.server.services.interfaces;
 
 import com.forum.server.dto.message.MessageCreateDto;
 import com.forum.server.dto.message.MessageDto;
+import com.forum.server.dto.theme.ThemeDto;
 
 
 /**
@@ -9,11 +10,11 @@ import com.forum.server.dto.message.MessageDto;
  */
 public interface MessageService {
 
-    MessageDto createMessage(String token, int themeId, MessageCreateDto message);
+    ThemeDto createMessage(String token, long themeId, MessageCreateDto messageCreateDto, long count);
 
-    MessageDto updateMessage(String token, int themeId, int messageId, MessageDto message);
+    ThemeDto updateMessage(String token, long themeId, long messageId, MessageDto message);
 
-    MessageDto updateMessageRating(int themeId, int messageId, boolean grade);
+    void updateMessageRating(long themeId, long messageId, boolean grade, long count, long offset);
 
-    void deleteMessage(String token, int themeId, int messageId);
+    void deleteMessage(String token, long themeId, long messageId);
 }
