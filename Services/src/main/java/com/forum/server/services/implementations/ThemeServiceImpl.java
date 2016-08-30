@@ -19,8 +19,8 @@ import com.forum.server.services.interfaces.ThemeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
-import java.util.LinkedList;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 08.08.16
@@ -65,6 +65,16 @@ public class ThemeServiceImpl implements ThemeService {
         messagesDao.save(message);
         message.setMessageId(messagesDao.getIdByUserIdAndDate(userId, message.getDate()));
         ShortUserDto userDto = conversionResultFactory.convert(user);
+        List<MessageDto> messageDtos = new ArrayList<>();
+        messageDtos.add(new MessageDto.Builder()
+                .MessageId(message.getMessageId())
+                .Author(userDto)
+                .Date(message.getDate())
+                .Message(message.getBody())
+                .Rating(message.getRating())
+                .Updated(new FixMessageDto.Builder()
+                        .build())
+                .build());
         return new ThemeDto.Builder()
                 .ThemeId(themeId)
                 .Date(theme.getDate())
@@ -72,15 +82,7 @@ public class ThemeServiceImpl implements ThemeService {
                 .Status(theme.isStatus())
                 .MessagesCount(1l)
                 .Title(theme.getTitle())
-                .Messages(new MessagesDto(new LinkedList<>((Collection<? extends MessageDto>) new MessageDto.Builder()
-                        .MessageId(message.getMessageId())
-                        .Author(userDto)
-                        .Date(message.getDate())
-                        .Message(message.getBody())
-                        .Rating(message.getRating())
-                        .Updated(new FixMessageDto.Builder()
-                                .build())
-                        .build())))
+                .Messages(new MessagesDto(messageDtos))
                 .build();
     }
 

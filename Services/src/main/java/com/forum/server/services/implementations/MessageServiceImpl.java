@@ -32,18 +32,19 @@ public class MessageServiceImpl implements MessageService {
     private ConversionResultFactory conversionResultFactory;
 
     public ThemeDto createMessage(String token, long themeId, MessageCreateDto messageCreateDto, long count) {
+        String messageText = messageCreateDto.getMessage();
         if (tokensDao.isExistsToken(token)) {
             throw new IncorrectTokenException("Token is incorrect");
         } else {
-            if (messageCreateDto.getMessage().equals("")) {
+            if (messageText.equals("")) {
                 throw new MessageExeption("The message body is empty");
             }
         }
-        if (messageCreateDto.getMessage().length() > 16000) {
+        if (messageText.length() > 16000) {
             throw new MessageExeption("Message is too large");
         }
 
-        Message message = conversionResultFactory.convert(messageCreateDto.getMessage());
+        Message message = conversionResultFactory.convert(messageText);
         messagesDao.save(message);
 
 
