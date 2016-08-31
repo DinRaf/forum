@@ -1,15 +1,18 @@
 package com.forum.server.converters;
 
 import com.forum.server.converters.message.MessageTextToMessageConverter;
+import com.forum.server.converters.staticInfo.InfoToInfoDtoConverter;
 import com.forum.server.converters.theme.ThemeToThemeDtoConverter;
 import com.forum.server.converters.user.AuthDtoToUserConverter;
 import com.forum.server.converters.theme.ThemeCreateDtoToThemeConverter;
 import com.forum.server.converters.user.ShortUserToShortUserDtoConverter;
 import com.forum.server.dto.auth.AuthDto;
+import com.forum.server.dto.staticInfo.InfoDto;
 import com.forum.server.dto.theme.ThemeCreateDto;
 import com.forum.server.dto.theme.ThemeDto;
 import com.forum.server.dto.user.ShortUserDto;
 import com.forum.server.models.message.Message;
+import com.forum.server.models.staticInfo.Info;
 import com.forum.server.models.theme.Theme;
 import com.forum.server.models.user.ShortUser;
 import com.forum.server.models.user.User;
@@ -47,5 +50,10 @@ public class ConversionResultFactory {
     public ThemeDto convert(Theme theme) {
         ThemeToThemeDtoConverter converter = new ThemeToThemeDtoConverter();
         return converter.convert(theme);
+    }
+
+    public InfoDto convert(Info info) {
+        InfoToInfoDtoConverter converter = new InfoToInfoDtoConverter();
+        return converter.convert(info);
     }
 }

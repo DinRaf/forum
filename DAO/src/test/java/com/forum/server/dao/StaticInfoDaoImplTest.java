@@ -2,6 +2,7 @@ package com.forum.server.dao;
 
 import com.forum.server.dao.configs.PersistenceConfig;
 import com.forum.server.dao.interfaces.StaticInfoDao;
+import com.forum.server.models.staticInfo.Info;
 import com.forum.server.models.staticInfo.Section;
 import com.forum.server.models.staticInfo.Subsection;
 import org.junit.Test;
@@ -25,6 +26,7 @@ import static org.junit.Assert.*;
 public class StaticInfoDaoImplTest {
 
     private static final long SECTION_ID = 1l;
+    private static final String IDENTIFIER = "about";
 
     @Autowired
     private StaticInfoDao staticInfoDao;
@@ -39,6 +41,17 @@ public class StaticInfoDaoImplTest {
     public void getSubections() throws Exception {
         List<Subsection> subsections = staticInfoDao.getSubsections(SECTION_ID);
         assertNotNull(subsections);
+    }
+
+    @Test
+    public void getInfo() throws Exception {
+        Info info = staticInfoDao.getInfo(IDENTIFIER);
+        assertNotNull(info);
+    }
+
+    @Test
+    public void isExistsInfo() throws Exception {
+        assertTrue(staticInfoDao.isExistsInfo(IDENTIFIER));
     }
 
 }

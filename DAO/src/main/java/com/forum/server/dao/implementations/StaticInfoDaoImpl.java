@@ -1,6 +1,7 @@
 package com.forum.server.dao.implementations;
 
 import com.forum.server.dao.interfaces.StaticInfoDao;
+import com.forum.server.models.staticInfo.Info;
 import com.forum.server.models.staticInfo.Section;
 import com.forum.server.models.staticInfo.Subsection;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,8 @@ public class StaticInfoDaoImpl implements StaticInfoDao {
 
     private static final String SQL_GET_SECTIONS = "SELECT * FROM section;";
     private static final String SQL_GET_SUBSECTIONS_BY_SECTION_ID = "SELECT * FROM subsection where section_id = ?;";
+    private static final String SQL_GET_INFO_BY_IDENTIFIER = "SELECT * FROM info WHERE identifier = ?;";
+    private static final String SQL_IS_EXISTS_INFO = "SELECT CASE WHEN EXISTS(SELECT identifier FROM info WHERE identifier = ?)THEN TRUE ELSE FALSE END;";
 
     private RowMapper<Section> sectionRowMapper() {
         return (rs, i) -> new Section.Builder()
@@ -42,6 +45,13 @@ public class StaticInfoDaoImpl implements StaticInfoDao {
                 .build();
     }
 
+    private RowMapper<Info> infoRowMapper() {
+        return (rs, i) -> new Info.Builder()
+                .Title("title")
+                .Text("texts")
+                .build();
+    }
+
     public List<Section> getSections() {
         return jdbcTemplate.query(SQL_GET_SECTIONS, sectionRowMapper());
     }
@@ -49,5 +59,15 @@ public class StaticInfoDaoImpl implements StaticInfoDao {
     @Override
     public List<Subsection> getSubsections(long sectionId) {
         return jdbcTemplate.query(SQL_GET_SUBSECTIONS_BY_SECTION_ID, subsectionRowMapper(), sectionId);
+    }
+
+    @Override
+    public boolean isExistsInfo(String identifier) {
+        return jdbcTemplate.queryForObject(SQL_IS_EXISTS_INFO, boolean.class, identifier);
+    }
+
+    @Override
+    public Info getInfo(String identifier) {
+        return jdbcTemplate.queryForObject(SQL_GET_INFO_BY_IDENTIFIER, infoRowMapper(), identifier);
     }
 }

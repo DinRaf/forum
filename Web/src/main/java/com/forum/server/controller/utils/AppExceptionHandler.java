@@ -3,9 +3,7 @@ package com.forum.server.controller.utils;
 import com.forum.server.controller.*;
 import com.forum.server.dto.response.QueryErrorDto;
 import com.forum.server.dto.response.QueryResultInfoErrorDto;
-import com.forum.server.security.exceptions.AuthException;
-import com.forum.server.security.exceptions.IncorrectTokenException;
-import com.forum.server.security.exceptions.TokenAuthenticationHeaderNotFound;
+import com.forum.server.security.exceptions.*;
 import com.forum.server.utils.AdditionalUtil;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -27,13 +25,6 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
         ThemesController.class, UsersController.class
 })
 public class AppExceptionHandler extends ResponseEntityExceptionHandler {
-//    @ExceptionHandler(ResourceNotFoundException.class)
-//    public ResponseEntity<Object> commentNotFound(Exception e, WebRequest request) {
-//        QueryResultInfoErrorDto errorDto = createErrorDto("404", e.getMessage());
-//        HttpHeaders httpHeaders = AdditionalUtil.createHttpHeaders();
-//        return handleExceptionInternal(e, new QueryErrorDto(errorDto), httpHeaders, HttpStatus.NOT_FOUND, request);
-//    }
-
     @ExceptionHandler({AuthException.class, IncorrectTokenException.class})
     public ResponseEntity<Object> incorrectAuthData(Exception e, WebRequest request) {
         QueryResultInfoErrorDto errorDto = createErrorDto("403", e.getMessage());
@@ -48,21 +39,21 @@ public class AppExceptionHandler extends ResponseEntityExceptionHandler {
         return handleExceptionInternal(e, new QueryErrorDto(errorDto), httpHeaders, HttpStatus.UNAUTHORIZED, request);
     }
 
-//    @ExceptionHandler(TaskNotFoundException.class)
-//    public ResponseEntity<Object> taskNotFound(Exception e, WebRequest request) {
-//        QueryResultInfoErrorDto errorDto = createErrorDto("404", e.getMessage());
-//        HttpHeaders httpHeaders = AdditionalUtil.createHttpHeaders();
-//        return handleExceptionInternal(e, new QueryErrorDto(errorDto), httpHeaders, HttpStatus.NOT_FOUND, request);
-//    }
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<Object> taskNotFound(Exception e, WebRequest request) {
+        QueryResultInfoErrorDto errorDto = createErrorDto("404", e.getMessage());
+        HttpHeaders httpHeaders = AdditionalUtil.createHttpHeaders();
+        return handleExceptionInternal(e, new QueryErrorDto(errorDto), httpHeaders, HttpStatus.NOT_FOUND, request);
+    }
 
     public QueryResultInfoErrorDto createErrorDto(String code, String message) {
         return new QueryResultInfoErrorDto(code, "fail", message);
     }
 
-//    @ExceptionHandler(RequiredFieldsAreNotFilled.class)
-//    public ResponseEntity<Object> methodNotAllowed(Exception e, WebRequest request) {
-//        QueryResultInfoErrorDto errorDto = createErrorDto("405", e.getMessage());
-//        HttpHeaders httpHeaders = AdditionalUtil.createHttpHeaders();
-//        return handleExceptionInternal(e, new QueryErrorDto(errorDto), httpHeaders, HttpStatus.METHOD_NOT_ALLOWED, request);
-//    }
+    @ExceptionHandler(RequiredFieldsAreNotFilled.class)
+    public ResponseEntity<Object> methodNotAllowed(Exception e, WebRequest request) {
+        QueryResultInfoErrorDto errorDto = createErrorDto("405", e.getMessage());
+        HttpHeaders httpHeaders = AdditionalUtil.createHttpHeaders();
+        return handleExceptionInternal(e, new QueryErrorDto(errorDto), httpHeaders, HttpStatus.METHOD_NOT_ALLOWED, request);
+    }
 }

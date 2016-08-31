@@ -1,5 +1,6 @@
 package com.forum.server.services.interfaces;
 
+import com.forum.server.dto.staticInfo.InfoDto;
 import com.forum.server.dto.staticInfo.SectionsDto;
 import com.forum.server.dto.staticInfo.SubsectionsDto;
 
@@ -13,4 +14,6 @@ public interface StaticInfoService {
     SectionsDto getSections();
 
     SubsectionsDto getSubsections(long sectionId);
+
+    InfoDto getInfo(String identifier);
 }
