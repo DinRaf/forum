@@ -10,6 +10,15 @@ public class ShortUser {
     private long userId;
     private String nickName;
     private Long rating;
+    private String rights;
+
+    public void setRights(String rights) {
+        this.rights = rights;
+    }
+
+    public String getRights() {
+        return rights;
+    }
 
     public ShortUser setRating(Long rating) {
         this.rating = rating;
@@ -52,6 +61,7 @@ public class ShortUser {
         this.rating = builder.rating;
         this.avatar = builder.avatar;
         this.isOnline = builder.isOnline;
+        this.rights = builder.rights;
     }
 
     public static class Builder {
@@ -60,6 +70,12 @@ public class ShortUser {
         private Long rating;
         private String avatar;
         private boolean isOnline;
+        private String rights;
+
+        public Builder Rights(String rights) {
+            this.rights = rights;
+            return this;
+        }
 
         public Builder UserId(long userId) {
             this.userId = userId;

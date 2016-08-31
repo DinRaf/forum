@@ -2,6 +2,7 @@ package com.forum.server.dao.interfaces;
 
 import com.forum.server.models.user.ShortUser;
 import com.forum.server.models.user.User;
+import com.forum.server.models.user.UserUpdate;
 
 /**
  * 09.08.16
@@ -30,4 +31,12 @@ public interface UsersDao {
     ShortUser getUserByThemeId(long themeId);
 
     void save(User user);
+
+    User getUserById(long userId);
+
+    boolean isExistsId(long userId);
+
+    long findIdByToken(String token);
+
+    void update(UserUpdate convert, long userId);
 }

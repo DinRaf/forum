@@ -3,6 +3,8 @@ package com.forum.server.converters.user;
 import com.forum.server.dto.user.ShortUserDto;
 import com.forum.server.models.user.ShortUser;
 import org.springframework.core.convert.converter.Converter;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 /**
  * 30.08.16
@@ -20,6 +22,7 @@ public class ShortUserToShortUserDtoConverter implements Converter<ShortUser, Sh
                 .Online(shortUser.isOnline())
                 .Rating(shortUser.getRating())
                 .UserId(shortUser.getUserId())
+                .Rights(shortUser.getRights())
                 .build();
     }
 }

@@ -32,6 +32,9 @@ public class MessageUpdate {
         return updaterNickName;
     }
 
+    protected MessageUpdate() {
+    }
+
     private MessageUpdate(Builder builder){
         this.update = builder.update;
         this.updaterId = builder.updaterId;
@@ -58,5 +61,7 @@ public class MessageUpdate {
             this.updaterNickName = updaterNickName;
             return this;
         }
+
+        public MessageUpdate build() { return new MessageUpdate(this); }
     }
 }

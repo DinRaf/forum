@@ -22,10 +22,9 @@ public class AuthDtoToUserConverter implements Converter<AuthDto, User> {
 
     @Override
     public User convert(AuthDto authDto) {
-        String passHash = encoder.encode(authDto.getPassword());
         return new User.Builder().NickName(authDto.getNickName())
                 .Mail(authDto.getMail())
-                .HashPassword(passHash)
+                .HashPassword(encoder.encode(authDto.getPassword()))
                 .RegistrationTime(System.currentTimeMillis())
                 .LastSession(System.currentTimeMillis())
                 .MessagesCount(0l)

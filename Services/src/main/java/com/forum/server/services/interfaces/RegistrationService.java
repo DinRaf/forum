@@ -1,6 +1,7 @@
 package com.forum.server.services.interfaces;
 
 import com.forum.server.dto.auth.AuthDto;
+import com.forum.server.dto.auth.LoginDto;
 
 /**
  * 07.08.16
@@ -10,7 +11,7 @@ import com.forum.server.dto.auth.AuthDto;
  */
 public interface RegistrationService {
 
-    String login(String identifier, String password);
+    LoginDto login(String identifier, String password);
 
-    String addUser(AuthDto authDto);
+    LoginDto addUser(AuthDto authDto);
 }

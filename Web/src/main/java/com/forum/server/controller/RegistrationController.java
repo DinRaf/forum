@@ -1,6 +1,7 @@
 package com.forum.server.controller;
 
 import com.forum.server.dto.auth.AuthDto;
+import com.forum.server.dto.auth.LoginDto;
 import com.forum.server.dto.response.QueryResultDto;
 import com.forum.server.services.interfaces.RegistrationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,14 +28,14 @@ public class RegistrationController {
     @RequestMapping(value = "/login", method = POST)
     public ResponseEntity<QueryResultDto> login(@RequestHeader(name = "identifier") String identifier,
                                                 @RequestHeader(name = "password") String password) {
-        String token = registrationService.login(identifier, password);
+        LoginDto token = registrationService.login(identifier, password);
         return buildResponseLogin(token);
     }
 
     @RequestMapping(value = "/users", method = POST)
     public ResponseEntity<QueryResultDto> addUser(@RequestBody AuthDto authDto) {
 
-        String token = registrationService.addUser(authDto);
+        LoginDto token = registrationService.addUser(authDto);
         return buildResponseLogin(token);
     }
 }

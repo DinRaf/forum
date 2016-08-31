@@ -1,6 +1,8 @@
 package com.forum.server.utils;
 
 import com.forum.server.dto.Data;
+import com.forum.server.dto.auth.LoginDto;
+import com.forum.server.dto.auth.UserIdDto;
 import com.forum.server.dto.response.QueryResultDto;
 import com.forum.server.dto.response.QueryResultInfoDto;
 import org.springframework.http.HttpHeaders;
@@ -37,13 +39,13 @@ public class ResponseBuilder {
         return new ResponseEntity<>(queryResultDto, headers, CREATED);
     }
 
-    public static ResponseEntity<QueryResultDto> buildResponseLogin(String token) {
+    public static ResponseEntity<QueryResultDto> buildResponseLogin(LoginDto token) {
         HttpHeaders headers = AdditionalUtil.createHttpHeaders();
-        headers.add("Auth-Token", token);
+        headers.add("Auth-Token", token.getToken());
         QueryResultInfoDto responseInfo = new QueryResultInfoDto("201", "success");
-        QueryResultDto queryResultDto = new QueryResultDto(responseInfo, null);
-        ResponseEntity<QueryResultDto> responseEntity = new ResponseEntity<>(queryResultDto, headers, CREATED);
-        return responseEntity;
+        UserIdDto userIdDto = new UserIdDto.Builder().setUserId(token.getUserId()).build();
+        QueryResultDto queryResultDto = new QueryResultDto(responseInfo, userIdDto);
+        return new ResponseEntity<>(queryResultDto, headers, CREATED);
     }
 
     public static ResponseEntity<QueryResultDto> buildResponseDelete() {

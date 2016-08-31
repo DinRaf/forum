@@ -46,9 +46,6 @@ public class MessageServiceImpl implements MessageService {
     private ThemesDao themesDao;
 
     @Autowired
-    private  MessageUpdate messageUpdate;
-
-    @Autowired
     private ConversionListResultFactory conversionListResultFactory;
 
     public ThemeDto createMessage(String token, long themeId, MessageCreateDto messageCreateDto, long count) {
@@ -99,21 +96,20 @@ public class MessageServiceImpl implements MessageService {
         }
         long authorId = messagesDao.getAuthorIdByMessageId(messageId);
         ShortUser updater = usersDao.findByToken(token);
+        long updaterId = updater.getUserId();
 
-        if (authorId != updater.getUserId()){
+        if (authorId != updaterId){
             throw new AuthException("Forbidden");
         }
-
-        messageUpdate.setUpdate(System.currentTimeMillis());
-        messageUpdate.setUpdaterId(updater.getUserId());
-        messageUpdate.setUpdaterNickName(updater.getNickName());
-        messagesDao.saveUpdate(messageUpdate);
-
-        MessagesDto messagesDto = conversionListResultFactory.convertMessages(messagesDao.getMessagesWithLimitOffset(themeId, count, offset));
-
-        Theme theme = themesDao.getThemeByThemeId(themeId);
-        ThemeDto themeDto = conversionResultFactory.convert(theme);
-        themeDto.setMessages(messagesDto);
+        messagesDao.saveUpdate(new MessageUpdate.Builder()
+                .Update(System.currentTimeMillis())
+                .UpdaterId(updaterId)
+                .UpdaterNickName(updater.getNickName())
+                .build());
+        ThemeDto themeDto = conversionResultFactory.convert(themesDao.getThemeByThemeId(themeId));
+        themeDto.setMessages(conversionListResultFactory
+                .convertMessages(messagesDao
+                        .getMessagesWithLimitOffset(themeId, count, offset)));
         return themeDto;
     }
 

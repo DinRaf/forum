@@ -38,6 +38,11 @@ public class UsersDaoImplTest {
     }
 
     @Test
+    public void getUserById() throws Exception {
+        assertNotNull(usersDao.getUserById(ID));
+    }
+
+    @Test
     public void findShortUserByToken() throws Exception {
         assertNotNull(usersDao.findShortUserByToken(TOKEN));
     }
@@ -45,6 +50,11 @@ public class UsersDaoImplTest {
     @Test
     public void isExistsMail() throws Exception {
         assertTrue(usersDao.isExistsMail(MAIL));
+    }
+
+    @Test
+    public void isExistsID() throws Exception {
+        assertTrue(usersDao.isExistsId(ID));
     }
 
     @Test

@@ -16,39 +16,25 @@ public class User extends ShortUser{
     private long messagesCount;
     private long themesCount;
     private String hashPassword;
-    private String rights;
 
-    public User setRegistrationTime(long registrationTime) {
+    public void setRegistrationTime(long registrationTime) {
         this.registrationTime = registrationTime;
-        return this;
     }
 
-    public User setLastSession(long lastSession) {
+    public void setLastSession(long lastSession) {
         this.lastSession = lastSession;
-        return this;
     }
 
-    public User setMessagesCount(long messagesCount) {
+    public void setMessagesCount(long messagesCount) {
         this.messagesCount = messagesCount;
-        return this;
     }
 
-    public User setThemesCount(long themesCount) {
+    public void setThemesCount(long themesCount) {
         this.themesCount = themesCount;
-        return this;
-    }
-
-    public User setRights(String rights) {
-        this.rights = rights;
-        return this;
     }
 
     public String getName() {
         return name;
-    }
-
-    public String getRights() {
-        return rights;
     }
 
     public String getMail() {
@@ -97,7 +83,6 @@ public class User extends ShortUser{
         this.messagesCount = builder.messagesCount;
         this.themesCount = builder.themesCount;
         this.hashPassword = builder.hashPassword;
-        this.rights = builder.rights;
     }
 
 
@@ -112,8 +97,6 @@ public class User extends ShortUser{
         private long messagesCount;
         private long themesCount;
         private String hashPassword;
-        private String rights;
-
 
         @Override
         public Builder UserId(long userId) {
@@ -189,8 +172,9 @@ public class User extends ShortUser{
             return this;
         }
 
+        @Override
         public Builder Rights(String rights) {
-            this.rights = rights;
+            super.Rights(rights);
             return this;
         }
 

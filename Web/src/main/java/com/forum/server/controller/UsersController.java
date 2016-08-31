@@ -3,6 +3,7 @@ package com.forum.server.controller;
 import com.forum.server.dto.response.QueryResultDto;
 import com.forum.server.dto.user.UserDto;
 import com.forum.server.dto.user.ShortUserDto;
+import com.forum.server.dto.user.UserUpdateDto;
 import com.forum.server.services.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -38,8 +39,8 @@ public class UsersController {
     @RequestMapping(value = "/users/{user-id}", method = PUT)
     public ResponseEntity<QueryResultDto> updateUser(@PathVariable("user-id") long userId,
                                                      @RequestHeader(name = "Auth-Token") String token,
-                                                     @RequestBody UserDto userInfo) {
-        UserDto user = userService.updateUser(token, userId, userInfo);
+                                                     @RequestBody UserUpdateDto userInfo) {
+        ShortUserDto user = userService.updateUser(token, userId, userInfo);
         return buildResponsePostAndPut(user);
     }
 }

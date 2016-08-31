@@ -14,6 +14,11 @@ public class ShortUserDto implements Data {
     private long rating;
     private boolean isOnline;
     private String avatar;
+    private String rights;
+
+    public String getRights() {
+        return rights;
+    }
 
     public long getUserId() {
         return userId;
@@ -44,6 +49,8 @@ public class ShortUserDto implements Data {
         this.rating = builder.rating;
         this.isOnline = builder.isOnline;
         this.avatar = builder.avatar;
+        this.rights = builder.rights;
+
     }
 
     public static class Builder {
@@ -52,6 +59,12 @@ public class ShortUserDto implements Data {
         private long rating;
         private boolean isOnline;
         private String avatar;
+        private String rights;
+
+        public Builder Rights(String rights) {
+            this.rights = rights;
+            return this;
+        }
 
         public Builder UserId(long userId) {
             this.userId = userId;

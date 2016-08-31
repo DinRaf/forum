@@ -4,6 +4,7 @@ import com.forum.server.converters.ConversionResultFactory;
 import com.forum.server.dao.interfaces.TokensDao;
 import com.forum.server.dao.interfaces.UsersDao;
 import com.forum.server.dto.auth.AuthDto;
+import com.forum.server.dto.auth.LoginDto;
 import com.forum.server.models.user.User;
 import com.forum.server.security.exceptions.AuthException;
 import com.forum.server.security.generators.TokenGenerator;
@@ -41,7 +42,7 @@ public class RegistrationServiceImpl implements RegistrationService {
     private ConversionResultFactory conversionResultFactory;
 
     @Override
-    public String login(String identifier, String password) {
+    public LoginDto login(String identifier, String password) {
         if (identifier == null || password == null) {
             throw new AuthException("Identifier or password missing, expected both of them");
         } else if (identifier.contains("@")) {
@@ -56,7 +57,10 @@ public class RegistrationServiceImpl implements RegistrationService {
                     throw new AuthException("Incorrect identifier or password");
                 }
                 tokensDao.addToken(userId, token);
-                return token;
+                return new LoginDto.Builder()
+                        .Token(token)
+                        .UserId(userId)
+                        .build();
             }
         } else {
             if (!usersDao.isExistsNickName(identifier)) {
@@ -70,13 +74,16 @@ public class RegistrationServiceImpl implements RegistrationService {
                     throw new AuthException("Incorrect identifier or password");
                 }
                 tokensDao.addToken(userId, token);
-                return token;
+                return new LoginDto.Builder()
+                        .Token(token)
+                        .UserId(userId)
+                        .build();
             }
         }
         throw new AuthException("Incorrect identifier or password");
     }
 
-    public String addUser(AuthDto authDto) {
+    public LoginDto addUser(AuthDto authDto) {
         if (!passwordMeetsRequirements(authDto.getPassword())) {
             throw new AuthException("Password is not correct");
         }
@@ -97,15 +104,18 @@ public class RegistrationServiceImpl implements RegistrationService {
         long userId = usersDao.getIdByNickName(user.getNickName());
         String token = tokenGenerator.generateToken();
         tokensDao.addToken(userId, token);
-        return token;
+        return new LoginDto.Builder()
+                .Token(token)
+                .UserId(userId)
+                .build();
     }
 
 
-    private boolean passwordMeetsRequirements(String password) {
+    public static boolean passwordMeetsRequirements(String password) {
         return password.length() >= 6;
     }
 
-    private boolean nicknameMeetsRequirements(String nickname) {
+    public static boolean nicknameMeetsRequirements(String nickname) {
         if (nickname == null || (nickname.length() < 4) && (nickname.length() > 64)) {
             return false;
         }
