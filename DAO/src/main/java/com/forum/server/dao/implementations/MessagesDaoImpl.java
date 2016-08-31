@@ -30,7 +30,7 @@ public class MessagesDaoImpl implements MessagesDao {
     public void save(Message message) {
         jdbcTemplate.update(SQL_ADD_MESSAGE,
                 new Object[] {
-                        message.getUserId(),
+                        message.getUser().getUserId(),
                         message.getThemeId(),
                         message.getDate(),
                         message.getBody(),
@@ -48,7 +48,9 @@ public class MessagesDaoImpl implements MessagesDao {
         return namedJdbcTemplate.queryForObject(SQL_GET_MESSAGE_ID_BY_USER_ID_AND_DATE, params, long.class);
     }
 
-    public List<Message> getMessagesWithOffset(long count) {
+    public List<Message> getMessagesWithOffset(long themeId, long offset, long messagesCount) {
         return null;
     }
+
+
 }

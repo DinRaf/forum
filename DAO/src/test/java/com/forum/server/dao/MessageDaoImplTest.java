@@ -3,6 +3,7 @@ package com.forum.server.dao;
 import com.forum.server.dao.configs.PersistenceConfig;
 import com.forum.server.dao.interfaces.MessagesDao;
 import com.forum.server.models.message.Message;
+import com.forum.server.models.user.ShortUser;
 import com.forum.server.models.user.User;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -30,8 +31,11 @@ public class MessageDaoImplTest {
 
     @Test
     public void save() throws Exception {
+        ShortUser user = new ShortUser.Builder()
+                .UserId(USER_ID)
+                .build();
          Message message = new Message.Builder()
-                 .UserId(USER_ID)
+                 .User(user)
                  .ThemeId(THEME_ID)
                  .Date(System.currentTimeMillis())
                  .Body("Name can't be useless")

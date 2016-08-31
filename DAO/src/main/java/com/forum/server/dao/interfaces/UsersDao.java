@@ -27,5 +27,7 @@ public interface UsersDao {
 
     Integer getIdByNickName(String identifier);
 
+    ShortUser getUserByThemeId(long themeId);
+
     void save(User user);
 }

@@ -1,12 +1,14 @@
 package com.forum.server.models.message;
 
+import com.forum.server.models.user.ShortUser;
+
 /**
  * Created by root on 29.08.16.
  */
 public class Message {
 
     private long messageId;
-    private long userId;
+    private ShortUser user;
     private long themeId;
     private long date;
     private String body;
@@ -19,8 +21,8 @@ public class Message {
         this.messageId = messageId;
     }
 
-    public void setUserId(long userId) {
-        this.userId = userId;
+    public void setUser(ShortUser user) {
+        this.user = user;
     }
 
     public void setThemeId(long themeId) {
@@ -39,8 +41,8 @@ public class Message {
         return messageId;
     }
 
-    public long getUserId() {
-        return userId;
+    public ShortUser getUser() {
+        return user;
     }
 
     public long getThemeId() {
@@ -67,7 +69,7 @@ public class Message {
 
     private Message(Builder builder) {
         this.messageId = builder.messageId;
-        this.userId = builder.userId;
+        this.user = builder.user;
         this.themeId = builder.themeId;
         this.date = builder.date;
         this.body = builder.body;
@@ -80,7 +82,7 @@ public class Message {
     public static class Builder {
 
         private long messageId;
-        private long userId;
+        private ShortUser user;
         private long themeId;
         private long date;
         private String body;
@@ -104,8 +106,8 @@ public class Message {
             return this;
         }
 
-        public Builder UserId(long userId) {
-            this.userId = userId;
+        public Builder User(ShortUser user) {
+            this.user = user;
             return this;
         }
 

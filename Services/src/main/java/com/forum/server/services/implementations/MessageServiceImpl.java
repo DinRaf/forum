@@ -1,17 +1,25 @@
 package com.forum.server.services.implementations;
 
+import com.forum.server.converters.ConversionListResultFactory;
 import com.forum.server.converters.ConversionResultFactory;
 import com.forum.server.dao.interfaces.MessagesDao;
+import com.forum.server.dao.interfaces.ThemesDao;
 import com.forum.server.dao.interfaces.TokensDao;
+import com.forum.server.dao.interfaces.UsersDao;
 import com.forum.server.dto.message.MessageCreateDto;
 import com.forum.server.dto.message.MessageDto;
+import com.forum.server.dto.message.MessagesDto;
 import com.forum.server.dto.theme.ThemeDto;
 import com.forum.server.models.message.Message;
+import com.forum.server.models.user.ShortUser;
+import com.forum.server.models.user.User;
 import com.forum.server.security.exceptions.IncorrectTokenException;
 import com.forum.server.security.exceptions.MessageExeption;
 import com.forum.server.services.interfaces.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * 24.08.16
@@ -31,6 +39,12 @@ public class MessageServiceImpl implements MessageService {
     @Autowired
     private ConversionResultFactory conversionResultFactory;
 
+    @Autowired
+    private ThemesDao themesDao;
+
+    @Autowired
+    private ConversionListResultFactory conversionListResultFactory;
+
     public ThemeDto createMessage(String token, long themeId, MessageCreateDto messageCreateDto, long count) {
         String messageText = messageCreateDto.getMessage();
         if (tokensDao.isExistsToken(token)) {
@@ -46,9 +60,18 @@ public class MessageServiceImpl implements MessageService {
 
         Message message = conversionResultFactory.convert(messageText);
         messagesDao.save(message);
-
+        long messagesCount = themesDao.findTheNumberOfMessagesInTheme(themeId);
+        long offset = findOffset(messagesCount, count);
+        List<Message> messages = messagesDao.getMessagesWithOffset(themeId, offset, messagesCount);
+        MessagesDto messagesDto = conversionListResultFactory.convert(messages);
+        UsersDao usersDao;
+        ShortUser author = usersDao.
 
         return new ThemeDto.Builder().build();
+    }
+
+    private long findOffset(long messagesCount, long count) {
+        return messagesCount % count;
     }
 
     public ThemeDto updateMessage(String token, long themeId, long messageId, MessageDto message) {

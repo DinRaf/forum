@@ -9,6 +9,8 @@ import org.springframework.core.convert.converter.Converter;
  * @author Dinar Rafikov (First Software Engineering Platform)
  * @version 1.0
  */
+
+
 public class MessageTextToMessageConverter implements Converter<String, Message> {
 
     @Override

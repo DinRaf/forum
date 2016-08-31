@@ -3,6 +3,7 @@ package com.forum.server.dao.implementations;
 import com.forum.server.dao.interfaces.UsersDao;
 import com.forum.server.models.user.ShortUser;
 import com.forum.server.models.user.User;
+import com.sun.xml.internal.fastinfoset.tools.FI_DOM_Or_XML_DOM_SAX_SAXEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -30,7 +31,7 @@ public class UsersDaoImpl implements UsersDao {
     private static final String SQL_GET_ID_BY_NICKNAME = "SELECT user_id FROM short_user WHERE nick_name = ?;";
     private static final String SQL_ADD_SHORT_USER = "INSERT INTO short_user (nick_name, rating, avatar, is_online) VALUES (?, ?, ?, ?);";
     private static final String SQL_ADD_USER_INFO = "INSERT INTO user_info (user_id, mail, birth_date, info, rights, registration_time, last_session, messages_count, themes_count, pass_hash) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
-
+    private static final String SQL_GET_USER_BY_THEME_ID = "SELECT * FROM short_user WHERE user_id = (SELECT user_id FROM theme WHERE theme_id = ?) ;";
 
 
     private RowMapper<User> userRowMapper() {
@@ -92,6 +93,10 @@ public class UsersDaoImpl implements UsersDao {
 
     public Integer getIdByNickName(String identifier) {
         return jdbcTemplate.queryForObject(SQL_GET_ID_BY_NICKNAME, Integer.class, identifier);
+    }
+
+    public ShortUser getUserByThemeId(long themeId) {
+        return jdbcTemplate.queryForObject(SQL_GET_USER_BY_THEME_ID, shortUserRowMapper(), themeId);
     }
 
     public void save(User user) {

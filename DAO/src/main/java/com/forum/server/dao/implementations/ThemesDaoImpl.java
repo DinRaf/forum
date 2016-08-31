@@ -51,4 +51,6 @@ public class ThemesDaoImpl implements ThemesDao {
     public long findTheNumberOfMessagesInTheme(long themeId) {
         return jdbcTemplate.queryForObject(SQL_NUMBER_OF_MESSAGES_IN_THEME, long.class, themeId);
     }
+
+
 }
