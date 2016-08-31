@@ -27,6 +27,7 @@ public class MessagesDaoImpl implements MessagesDao {
 
     private static final String SQL_ADD_MESSAGE = "INSERT INTO message (user_id, theme_id, date, body, update, rating, updater_id, updater_nick_name) VALUES (?, ?, ?, ?, ?, ?, ?, ?) ;";
     private static final String SQL_GET_MESSAGE_ID_BY_USER_ID_AND_DATE = "SELECT message_id FROM message WHERE user_id = :userId AND message.date = :date;";
+    private static final String SQL_GET_MESSAGES_WITH_OFFSET = "SELECT * FROM message INNER JOIN short_user ON message.user_id = short_user.user_id WHERE theme_id = :themeId ORDER BY message_id OFFSET :offset;";
 
     private RowMapper<Message> messageRowMapper(){
         return (rs, rowNum) -> {
@@ -72,9 +73,11 @@ public class MessagesDaoImpl implements MessagesDao {
         return namedJdbcTemplate.queryForObject(SQL_GET_MESSAGE_ID_BY_USER_ID_AND_DATE, params, long.class);
     }
 
-    public List<Message> getMessagesWithOffset(long themeId, long offsetFromEnd) {
-
-        return null;
+    public List<Message> getMessagesWithOffset(long themeId, long offset) {
+        Map<String, Number> params = new HashMap<>();
+        params.put("themeId", themeId);
+        params.put("offset", offset);
+        return namedJdbcTemplate.query(SQL_GET_MESSAGES_WITH_OFFSET, params, messageRowMapper());
     }
 
 

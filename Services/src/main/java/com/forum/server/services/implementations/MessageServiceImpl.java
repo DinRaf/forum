@@ -64,17 +64,14 @@ public class MessageServiceImpl implements MessageService {
         Message message = conversionResultFactory.convert(messageText);
         messagesDao.save(message);
         long messagesCount = themesDao.findTheNumberOfMessagesInTheme(themeId);
-        long offsetFromEnd = findOffsetFromEnd(messagesCount, count);
-        List<Message> messages = messagesDao.getMessagesWithOffset(themeId, offsetFromEnd);
+        long offset = messagesCount - findOffsetFromEnd(messagesCount, count);
+        List<Message> messages = messagesDao.getMessagesWithOffset(themeId, offset);
         MessagesDto messagesDto = conversionListResultFactory.convertMessages(messages);
-        ShortUser author = usersDao.getUserByThemeId(themeId);
         //TODO Проверить статус пользователя по токену
         Theme theme = themesDao.getThemeByThemeId(themeId);
         ThemeDto themeDto = conversionResultFactory.convert(theme);
-
-        return new ThemeDto.Builder()
-
-                .build();
+        themeDto.setMessages(messagesDto);
+        return themeDto;
     }
 
     private long findOffsetFromEnd(long messagesCount, long count) {

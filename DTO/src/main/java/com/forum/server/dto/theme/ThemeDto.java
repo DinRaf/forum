@@ -59,6 +59,10 @@ public class ThemeDto implements Data{
         this.status = builder.status;
     }
 
+    public void setMessages(MessagesDto messages) {
+        this.messages = messages;
+    }
+
     public static class Builder {
         private long themeId;
         private String title;

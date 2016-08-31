@@ -8,14 +8,11 @@ import com.forum.server.models.user.User;
 import com.forum.server.security.exceptions.AuthException;
 import com.forum.server.security.generators.TokenGenerator;
 import com.forum.server.services.interfaces.RegistrationService;
-import com.forum.server.services.ustils.EmailValidator;
+import com.forum.server.services.utils.EmailValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * 08.08.16

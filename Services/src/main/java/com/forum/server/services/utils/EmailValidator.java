@@ -1,4 +1,4 @@
-package com.forum.server.services.ustils;
+package com.forum.server.services.utils;
 
 import org.springframework.stereotype.Component;
 

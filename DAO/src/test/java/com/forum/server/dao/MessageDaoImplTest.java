@@ -28,6 +28,7 @@ public class MessageDaoImplTest {
     private static final long THEME_ID = 1;
     private static final long DATE = 25082016;
     private static final long MESSAGE_ID = 1;
+    private static final long OFFSET = 2;
 
     @Test
     public void save() throws Exception {
@@ -47,5 +48,10 @@ public class MessageDaoImplTest {
     @Test
     public void getIdByUserIdAndDate(){
         assertEquals(MESSAGE_ID, messagesDao.getIdByUserIdAndDate(USER_ID, DATE));
+    }
+
+    @Test
+    public void getMessagesWithOffset(){
+        assertNotNull(messagesDao.getMessagesWithOffset(THEME_ID, OFFSET));
     }
 }
