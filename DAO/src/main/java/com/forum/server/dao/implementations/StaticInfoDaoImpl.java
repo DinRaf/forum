@@ -27,6 +27,7 @@ public class StaticInfoDaoImpl implements StaticInfoDao {
     private static final String SQL_GET_SUBSECTIONS_BY_SECTION_ID = "SELECT * FROM subsection where section_id = ?;";
     private static final String SQL_GET_INFO_BY_IDENTIFIER = "SELECT * FROM info WHERE identifier = ?;";
     private static final String SQL_IS_EXISTS_INFO = "SELECT CASE WHEN EXISTS(SELECT identifier FROM info WHERE identifier = ?)THEN TRUE ELSE FALSE END;";
+    private static final String SQL_IS_EXISTS_SECTION_ID = "SELECT CASE WHEN EXISTS(SELECT subsection_id FROM subsection WHERE section_id = ?)THEN TRUE ELSE FALSE END;";
 
     private RowMapper<Section> sectionRowMapper() {
         return (rs, i) -> new Section.Builder()
@@ -47,8 +48,8 @@ public class StaticInfoDaoImpl implements StaticInfoDao {
 
     private RowMapper<Info> infoRowMapper() {
         return (rs, i) -> new Info.Builder()
-                .Title("title")
-                .Text("texts")
+                .Title(rs.getString("title"))
+                .Text(rs.getString("text"))
                 .build();
     }
 
@@ -69,5 +70,9 @@ public class StaticInfoDaoImpl implements StaticInfoDao {
     @Override
     public Info getInfo(String identifier) {
         return jdbcTemplate.queryForObject(SQL_GET_INFO_BY_IDENTIFIER, infoRowMapper(), identifier);
+    }
+
+    public boolean isExistsSectionId(long sectionId) {
+        return jdbcTemplate.queryForObject(SQL_IS_EXISTS_SECTION_ID, boolean.class, sectionId);
     }
 }

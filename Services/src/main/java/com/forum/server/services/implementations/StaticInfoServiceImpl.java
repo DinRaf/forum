@@ -34,6 +34,9 @@ public class StaticInfoServiceImpl implements StaticInfoService {
     }
 
     public SubsectionsDto getSubsections(long sectionId) {
+        if (!staticInfoDao.isExistsSectionId(sectionId)) {
+            throw new NotFoundException("Section not found");
+        }
         return conversionListResultFactory.convertSubsections(staticInfoDao.getSubsections(sectionId));
     }
 

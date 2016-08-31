@@ -20,4 +20,6 @@ public interface StaticInfoDao {
     boolean isExistsInfo(String identifier);
 
     Info getInfo(String info);
+
+    boolean isExistsSectionId(long sectionId);
 }

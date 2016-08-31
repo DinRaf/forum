@@ -54,4 +54,9 @@ public class StaticInfoDaoImplTest {
         assertTrue(staticInfoDao.isExistsInfo(IDENTIFIER));
     }
 
+    @Test
+    public void isExistsSectionID() throws Exception {
+        assertTrue(staticInfoDao.isExistsSectionId(SECTION_ID));
+    }
+
 }
