@@ -62,6 +62,9 @@ public class MessageServiceImpl implements MessageService {
         }
 
         Message message = conversionResultFactory.convert(messageText);
+        //TODO Подумать на целесобразностью
+        message.setUser(usersDao.findShortUserByToken(token));
+        message.setThemeId(themeId);
         messagesDao.save(message);
         long messagesCount = themesDao.findTheNumberOfMessagesInTheme(themeId);
         long offset = messagesCount - findOffsetFromEnd(messagesCount, count);
