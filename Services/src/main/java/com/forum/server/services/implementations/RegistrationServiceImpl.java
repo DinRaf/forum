@@ -83,11 +83,17 @@ public class RegistrationServiceImpl implements RegistrationService {
         if (!passwordMeetsRequirements(authDto.getPassword())) {
             throw new AuthException("Password is not correct");
         }
-        if (!emailValidator.validate(authDto.getMail())) {
-            throw new AuthException("E-Mail is not correct");
+        String identifier = authDto.getMail();
+        if (identifier == null || !emailValidator.validate(identifier)) {
+            throw new AuthException("E-Mail is not correct or missing");
+        } else if (usersDao.isExistsMail(identifier)) {
+            throw new AuthException("E-Mail already exists");
         }
+        identifier = authDto.getNickName();
         if (!nicknameMeetsRequirements(authDto.getNickName())) {
             throw new AuthException("Nickname is not correct");
+        } else if (usersDao.isExistsNickName(identifier)) {
+            throw new AuthException("Nickname already exists");
         }
         User user = conversionResultFactory.convert(authDto);
         usersDao.save(user);
@@ -103,7 +109,7 @@ public class RegistrationServiceImpl implements RegistrationService {
     }
 
     private boolean nicknameMeetsRequirements(String nickname) {
-        if ((nickname.length() < 4) && (nickname.length() > 64)) {
+        if (nickname == null || (nickname.length() < 4) && (nickname.length() > 64)) {
             return false;
         }
         for (int i = 0; i < nickname.length(); i++) {

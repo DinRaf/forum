@@ -13,7 +13,6 @@ import com.forum.server.dto.theme.ThemeDto;
 import com.forum.server.models.message.Message;
 import com.forum.server.models.theme.Theme;
 import com.forum.server.models.user.ShortUser;
-import com.forum.server.models.user.User;
 import com.forum.server.security.exceptions.IncorrectTokenException;
 import com.forum.server.security.exceptions.MessageExeption;
 import com.forum.server.services.interfaces.MessageService;
@@ -67,7 +66,7 @@ public class MessageServiceImpl implements MessageService {
         long messagesCount = themesDao.findTheNumberOfMessagesInTheme(themeId);
         long offsetFromEnd = findOffsetFromEnd(messagesCount, count);
         List<Message> messages = messagesDao.getMessagesWithOffset(themeId, offsetFromEnd);
-        MessagesDto messagesDto = conversionListResultFactory.convert(messages);
+        MessagesDto messagesDto = conversionListResultFactory.convertMessages(messages);
         ShortUser author = usersDao.getUserByThemeId(themeId);
         //TODO Проверить статус пользователя по токену
         Theme theme = themesDao.getThemeByThemeId(themeId);
