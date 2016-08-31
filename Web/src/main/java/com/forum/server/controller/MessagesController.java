@@ -38,10 +38,12 @@ public class MessagesController {
 
     @RequestMapping(value = "/themes/{theme-id}/{message-id}", method = PUT)
     public ResponseEntity<QueryResultDto> updateMessage(@PathVariable("theme-id") long themeId,
+                                                        @RequestParam("offset") long offset,
+                                                        @RequestParam("count") long count,
                                                         @PathVariable("message-id") long messageId,
-                                                        @RequestBody MessageDto message,
+                                                        @RequestBody MessageCreateDto message,
                                                         @RequestHeader(name = "Auth-Token") String token) {
-        ThemeDto updatedMessage = messageService.updateMessage(token, themeId, messageId, message);
+        ThemeDto updatedMessage = messageService.updateMessage(token, themeId, messageId, message, count, offset);
         return buildResponsePostAndPut(updatedMessage);
     }
 

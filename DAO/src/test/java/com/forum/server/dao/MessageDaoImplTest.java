@@ -24,11 +24,12 @@ public class MessageDaoImplTest {
     @Autowired
     private MessagesDao messagesDao;
 
-    private static final long USER_ID = 1;
+    private static final long USER_ID = 11;
     private static final long THEME_ID = 1;
     private static final long DATE = 25082016;
-    private static final long MESSAGE_ID = 1;
+    private static final long MESSAGE_ID = 7;
     private static final long OFFSET = 2;
+    private static final long COUNT = 3;
 
     @Test
     public void save() throws Exception {
@@ -51,7 +52,32 @@ public class MessageDaoImplTest {
     }
 
     @Test
-    public void getMessagesWithOffset(){
+    public void getMessagesWithOffset() {
         assertNotNull(messagesDao.getMessagesWithOffset(THEME_ID, OFFSET));
+    }
+
+    @Test
+    public void getMessagesWithLimitOffset() {
+        assertNotNull(messagesDao.getMessagesWithLimitOffset(THEME_ID, COUNT, OFFSET));
+    }
+
+    @Test
+    public void messageIsExists() {
+        assertTrue(messagesDao.messageIsExists(MESSAGE_ID));
+    }
+
+    @Test
+    public void deleteMessageById() {
+        messagesDao.deleteMessageById(MESSAGE_ID);
+    }
+
+    @Test
+    public void deleteMessageMarkByMessageId() {
+        messagesDao.deleteMessageMarkByMessageId(MESSAGE_ID);
+    }
+
+    @Test
+    public void getAuthorIdByMessageId() {
+        assertEquals(USER_ID, messagesDao.getAuthorIdByMessageId(MESSAGE_ID));
     }
 }

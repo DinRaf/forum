@@ -11,10 +11,10 @@ import com.forum.server.dto.message.MessageDto;
 import com.forum.server.dto.message.MessagesDto;
 import com.forum.server.dto.theme.ThemeDto;
 import com.forum.server.models.message.Message;
+import com.forum.server.models.message.MessageUpdate;
 import com.forum.server.models.theme.Theme;
 import com.forum.server.models.user.ShortUser;
-import com.forum.server.security.exceptions.IncorrectTokenException;
-import com.forum.server.security.exceptions.MessageExeption;
+import com.forum.server.security.exceptions.*;
 import com.forum.server.services.interfaces.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -44,6 +44,9 @@ public class MessageServiceImpl implements MessageService {
 
     @Autowired
     private ThemesDao themesDao;
+
+    @Autowired
+    private  MessageUpdate messageUpdate;
 
     @Autowired
     private ConversionListResultFactory conversionListResultFactory;
@@ -84,14 +87,47 @@ public class MessageServiceImpl implements MessageService {
         return messagesCount % count;
     }
 
-    public ThemeDto updateMessage(String token, long themeId, long messageId, MessageDto message) {
-        return null;
+    public ThemeDto updateMessage(String token, long themeId, long messageId, MessageCreateDto updatedMessageDto, long offset, long count) {
+        if (!tokensDao.isExistsToken(token)) {
+            throw new IncorrectTokenException("Token is incorrect");
+        }
+        String messageText = updatedMessageDto.getMessage();
+        if (messageText.equals("")) {
+            throw new RequiredFieldsAreNotFilled("Message is empty");
+        } else if (messageText.length() > 16000) {
+            throw new MessageExeption("Message is too large");
+        }
+        long authorId = messagesDao.getAuthorIdByMessageId(messageId);
+        ShortUser updater = usersDao.findByToken(token);
+
+        if (authorId != updater.getUserId()){
+            throw new AuthException("Forbidden");
+        }
+
+        messageUpdate.setUpdate(System.currentTimeMillis());
+        messageUpdate.setUpdaterId(updater.getUserId());
+        messageUpdate.setUpdaterNickName(updater.getNickName());
+        messagesDao.saveUpdate(messageUpdate);
+
+        MessagesDto messagesDto = conversionListResultFactory.convertMessages(messagesDao.getMessagesWithLimitOffset(themeId, count, offset));
+
+        Theme theme = themesDao.getThemeByThemeId(themeId);
+        ThemeDto themeDto = conversionResultFactory.convert(theme);
+        themeDto.setMessages(messagesDto);
+        return themeDto;
     }
 
     public void updateMessageRating(long themeId, long messageId, boolean grade, long count, long offset) {
+
     }
 
     public void deleteMessage(String token, long themeId, long messageId) {
+        if (!messagesDao.messageIsExists(messageId)){
+            throw new NotFoundException("The message isn't exists");
+        }
 
+        messagesDao.deleteMessageMarkByMessageId(messageId);
+        messagesDao.deleteMessageById(messageId);
     }
+
 }

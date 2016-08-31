@@ -25,7 +25,7 @@ public class MessageToMessageDtoConverter implements Converter<Message, MessageD
                 .MessageId(message.getMessageId())
                 .Author(userDto)
                 .Message(message.getBody())
-                .Date(System.currentTimeMillis())
+                .Date(message.getDate())
                 .Rating(message.getRating())
                 .Updated(fixMessageDto)
                 .build();

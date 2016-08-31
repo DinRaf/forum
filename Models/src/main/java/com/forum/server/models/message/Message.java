@@ -29,6 +29,18 @@ public class Message {
         this.themeId = themeId;
     }
 
+    public void setUpdaterId(long updaterId) {
+        this.updaterId = updaterId;
+    }
+
+    public void setUpdate(long update) {
+        this.update = update;
+    }
+
+    public void setUpdaterNickname(String updaterNickname) {
+        this.updaterNickname = updaterNickname;
+    }
+
     public long getUpdaterId() {
         return updaterId;
     }
