@@ -3,6 +3,7 @@ package com.forum.server.dao;
 import com.forum.server.dao.configs.PersistenceConfig;
 import com.forum.server.dao.interfaces.ThemesDao;
 import com.forum.server.models.theme.Theme;
+import com.forum.server.models.user.ShortUser;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,8 +36,12 @@ public class ThemesDaoImplTest {
 
     @Test
     public void save() throws Exception {
-        Theme theme = new Theme.Builder()
+        ShortUser user = new ShortUser.Builder()
                 .UserId(USER_ID)
+                .build();
+
+        Theme theme = new Theme.Builder()
+                .User(user)
                 .SectionId(SECTION_ID)
                 .SubsectionId(SUBSECTION_ID)
                 .Title(TITLE)
@@ -55,5 +60,10 @@ public class ThemesDaoImplTest {
     @Test
     public void findTheNumberOfMessagesInTheme(){
         assertEquals(MESSAGES_COUNT, themesDao.findTheNumberOfMessagesInTheme(THEME_ID));
+    }
+
+    @Test
+    public void getThemeByThemeId(){
+        assertNotNull(themesDao.getThemeByThemeId(THEME_ID));
     }
 }

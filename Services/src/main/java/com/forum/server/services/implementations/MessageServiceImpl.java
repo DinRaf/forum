@@ -11,6 +11,7 @@ import com.forum.server.dto.message.MessageDto;
 import com.forum.server.dto.message.MessagesDto;
 import com.forum.server.dto.theme.ThemeDto;
 import com.forum.server.models.message.Message;
+import com.forum.server.models.theme.Theme;
 import com.forum.server.models.user.ShortUser;
 import com.forum.server.models.user.User;
 import com.forum.server.security.exceptions.IncorrectTokenException;
@@ -37,6 +38,9 @@ public class MessageServiceImpl implements MessageService {
     private MessagesDao messagesDao;
 
     @Autowired
+    private UsersDao usersDao;
+
+    @Autowired
     private ConversionResultFactory conversionResultFactory;
 
     @Autowired
@@ -61,16 +65,20 @@ public class MessageServiceImpl implements MessageService {
         Message message = conversionResultFactory.convert(messageText);
         messagesDao.save(message);
         long messagesCount = themesDao.findTheNumberOfMessagesInTheme(themeId);
-        long offset = findOffset(messagesCount, count);
-        List<Message> messages = messagesDao.getMessagesWithOffset(themeId, offset, messagesCount);
+        long offsetFromEnd = findOffsetFromEnd(messagesCount, count);
+        List<Message> messages = messagesDao.getMessagesWithOffset(themeId, offsetFromEnd);
         MessagesDto messagesDto = conversionListResultFactory.convert(messages);
-        UsersDao usersDao;
-        ShortUser author = usersDao.
+        ShortUser author = usersDao.getUserByThemeId(themeId);
+        //TODO Проверить статус пользователя по токену
+        Theme theme = themesDao.getThemeByThemeId(themeId);
+        ThemeDto themeDto = conversionResultFactory.convert(theme);
 
-        return new ThemeDto.Builder().build();
+        return new ThemeDto.Builder()
+
+                .build();
     }
 
-    private long findOffset(long messagesCount, long count) {
+    private long findOffsetFromEnd(long messagesCount, long count) {
         return messagesCount % count;
     }
 

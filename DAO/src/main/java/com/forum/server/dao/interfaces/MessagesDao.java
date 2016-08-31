@@ -16,5 +16,5 @@ public interface MessagesDao {
 
     long getIdByUserIdAndDate(long userId, long date);
 
-    List<Message> getMessagesWithOffset(long themeId, long offset, long messagesCount);
+    List<Message> getMessagesWithOffset(long themeId, long offsetFromEnd);
 }

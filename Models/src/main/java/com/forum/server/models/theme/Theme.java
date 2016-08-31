@@ -1,5 +1,7 @@
 package com.forum.server.models.theme;
 
+import com.forum.server.models.user.ShortUser;
+
 /**
  * 29.08.16
  *
@@ -8,7 +10,7 @@ package com.forum.server.models.theme;
  */
 public class Theme {
     private long themeId;
-    private long userId;
+    private ShortUser user;
     private long sectionId;
     private long subsectionId;
     private String title;
@@ -16,16 +18,16 @@ public class Theme {
     private long messagesCount;
     private boolean status;
 
-    public void setUserId(long userId) {
-        this.userId = userId;
+    public void setUser(ShortUser user) {
+        this.user = user;
     }
 
     public long getThemeId() {
         return themeId;
     }
 
-    public long getUserId() {
-        return userId;
+    public ShortUser getUser() {
+        return user;
     }
 
     public long getSectionId() {
@@ -57,7 +59,7 @@ public class Theme {
 
     private Theme(Builder builder) {
         this.themeId = builder.themeId;
-        this.userId = builder.userId;
+        this.user = builder.user;
         this.sectionId = builder.sectionId;
         this.subsectionId = builder.subsectionId;
         this.title = builder.title;
@@ -68,7 +70,7 @@ public class Theme {
 
     public static class Builder {
         private long themeId;
-        private long userId;
+        private ShortUser user;
         private long sectionId;
         private long subsectionId;
         private String title;
@@ -81,8 +83,8 @@ public class Theme {
             return this;
         }
 
-        public Builder UserId(long userId) {
-            this.userId = userId;
+        public Builder User(ShortUser user) {
+            this.user = user;
             return this;
         }
 

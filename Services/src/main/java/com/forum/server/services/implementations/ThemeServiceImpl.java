@@ -56,11 +56,11 @@ public class ThemeServiceImpl implements ThemeService {
         ShortUser user = usersDao.findShortUserByToken(token);
         Theme theme = conversionResultFactory.convert(themeCreateDto);
         long userId = user.getUserId();
-        theme.setUserId(userId);
+        theme.setUser(user);
         themesDao.save(theme);
         long themeId = themesDao.getIdByDateAndUserId(userId, theme.getDate());
         Message message = conversionResultFactory.convert(themeCreateDto.getMessage());
-        message.setUserId(userId);
+        message.setUser(user);
         message.setThemeId(themeId);
         messagesDao.save(message);
         message.setMessageId(messagesDao.getIdByUserIdAndDate(userId, message.getDate()));
