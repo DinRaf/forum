@@ -50,7 +50,7 @@ public class MessageServiceImpl implements MessageService {
 
     public ThemeDto createMessage(String token, long themeId, MessageCreateDto messageCreateDto, long count) {
         String messageText = messageCreateDto.getMessage();
-        if (tokensDao.isExistsToken(token)) {
+        if (!tokensDao.isExistsToken(token)) {
             throw new IncorrectTokenException("Token is incorrect");
         } else {
             if (messageText.equals("")) {
@@ -65,6 +65,9 @@ public class MessageServiceImpl implements MessageService {
         messagesDao.save(message);
         long messagesCount = themesDao.findTheNumberOfMessagesInTheme(themeId);
         long offset = messagesCount - findOffsetFromEnd(messagesCount, count);
+        if (offset < 0) {
+            offset = 0;
+        }
         List<Message> messages = messagesDao.getMessagesWithOffset(themeId, offset);
         MessagesDto messagesDto = conversionListResultFactory.convertMessages(messages);
         //TODO Проверить статус пользователя по токену
