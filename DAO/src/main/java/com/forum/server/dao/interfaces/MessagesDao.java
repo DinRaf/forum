@@ -17,7 +17,7 @@ public interface MessagesDao {
 
     long getIdByUserIdAndDate(long userId, long date);
 
-    void saveUpdate(MessageUpdate messageUpdate);
+    void saveUpdate(MessageUpdate messageUpdate, long messageId);
 
     boolean messageIsExists(long messageId);
 

@@ -30,7 +30,7 @@ public class MessagesDaoImpl implements MessagesDao {
     private static final String SQL_GET_MESSAGE_ID_BY_USER_ID_AND_DATE = "SELECT message_id FROM message WHERE user_id = :userId AND message.date = :date;";
     private static final String SQL_GET_MESSAGES_WITH_OFFSET = "SELECT * FROM message INNER JOIN short_user ON message.user_id = short_user.user_id WHERE theme_id = :themeId ORDER BY message_id OFFSET :offset;";
     private static final String SQL_GET_MESSAGE_BY_ID = "SELECT * FROM message WHERE message_id = ?;";
-    private static final String SQL_UPDATE_MESSAGE = "UPDATE message SET update = :update, updater_id = :updater_id, updater_nick_name = :updater_nick_name WHERE message_id = 4 RETURNING true;";
+    private static final String SQL_UPDATE_MESSAGE = "UPDATE message SET update = :update, updater_id = :updater_id, updater_nick_name = :updater_nick_name WHERE message_id = :message_id RETURNING true;";
     private static final String SQL_GET_MESSAGES_WITH_LIMIT_OFFSET = "SELECT * FROM message INNER JOIN short_user ON message.user_id = short_user.user_id WHERE theme_id = :themeId ORDER BY message_id LIMIT :count OFFSET :offset;";
     private static final String SQL_IS_EXISTS_MESSAGE = "SELECT CASE WHEN EXISTS(SELECT theme_id FROM message WHERE message_id = ?)THEN TRUE ELSE FALSE END ;";
     private static final String SQL_DELETE_MESSAGE = "DELETE FROM message WHERE message_id = :message_id;";
@@ -81,11 +81,12 @@ public class MessagesDaoImpl implements MessagesDao {
         return namedJdbcTemplate.queryForObject(SQL_GET_MESSAGE_ID_BY_USER_ID_AND_DATE, params, long.class);
     }
 
-    public void saveUpdate(MessageUpdate messageUpdate) {
+    public void saveUpdate(MessageUpdate messageUpdate, long messageId) {
         Map<String, Object> params = new HashMap<>();
         params.put("update", messageUpdate.getUpdate());
         params.put("updater_id", messageUpdate.getUpdaterId());
         params.put("updater_nick_name", messageUpdate.getUpdaterNickName());
+        params.put("message_id", messageId);
         namedJdbcTemplate.queryForObject(SQL_UPDATE_MESSAGE, params, boolean.class);
     }
 

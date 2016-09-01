@@ -105,7 +105,7 @@ public class MessageServiceImpl implements MessageService {
                 .Update(System.currentTimeMillis())
                 .UpdaterId(updaterId)
                 .UpdaterNickName(updater.getNickName())
-                .build());
+                .build(), messageId);
         ThemeDto themeDto = conversionResultFactory.convert(themesDao.getThemeByThemeId(themeId));
         themeDto.setMessages(conversionListResultFactory
                 .convertMessages(messagesDao
@@ -118,6 +118,8 @@ public class MessageServiceImpl implements MessageService {
     }
 
     public void deleteMessage(String token, long themeId, long messageId) {
+        long authorId = messagesDao.getAuthorIdByMessageId(messageId);
+
         if (!messagesDao.messageIsExists(messageId)){
             throw new NotFoundException("The message isn't exists");
         }
