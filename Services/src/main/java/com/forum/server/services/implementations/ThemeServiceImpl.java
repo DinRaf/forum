@@ -1,5 +1,6 @@
 package com.forum.server.services.implementations;
 
+import com.forum.server.converters.ConversionListResultFactory;
 import com.forum.server.converters.ConversionResultFactory;
 import com.forum.server.dao.interfaces.MessagesDao;
 import com.forum.server.dao.interfaces.ThemesDao;
@@ -13,10 +14,13 @@ import com.forum.server.dto.theme.ThemeDto;
 import com.forum.server.dto.user.ShortUserDto;
 import com.forum.server.models.message.Message;
 import com.forum.server.models.theme.Theme;
+import com.forum.server.models.theme.ThemeUpdate;
 import com.forum.server.models.user.ShortUser;
 import com.forum.server.security.exceptions.AuthException;
+import com.forum.server.security.exceptions.NotFoundException;
 import com.forum.server.services.interfaces.ThemeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Lookup;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -45,6 +49,9 @@ public class ThemeServiceImpl implements ThemeService {
 
     @Autowired
     private ConversionResultFactory conversionResultFactory;
+
+    @Autowired
+    private ConversionListResultFactory conversionListResultFactory;
 
     //TODO Реализовать методы
     public ThemeDto createTheme(String token, ThemeCreateDto themeCreateDto) {
@@ -87,14 +94,46 @@ public class ThemeServiceImpl implements ThemeService {
     }
 
     public ThemeDto getTheme(long themeId, Integer offset, int count) {
-        return null;
+        if (!themesDao.themeIsExists(themeId)) {
+            throw new NotFoundException("The theme isn't exists");
+        }
+        ThemeDto themeDto = conversionResultFactory.convert(themesDao.getThemeByThemeId(themeId));
+        themeDto.setMessages(conversionListResultFactory
+                .convertMessages(messagesDao
+                        .getMessagesWithLimitOffset(themeId, count, offset)));
+        return themeDto;
     }
 
-    public ThemeDto updateTheme(String token, long themeId, String title, String offset, String count) {
-        return null;
+    public ThemeDto updateTheme(String token, long themeId, String title, long offset, long count) {
+        if (!tokensDao.isExistsToken(token)) {
+            throw new AuthException("Incorrect token");
+        } else if (title.equals("") || title == null) {
+            throw new AuthException("Title not found");
+        } else if (!themesDao.themeIsExists(themeId)) {
+            throw new NotFoundException("The theme isn't exists");
+        }
+        if (themesDao.getAuthorIdByThemeId(themeId) != usersDao.findIdByToken(token)){
+            throw new AuthException("Forbidden");
+        }
+
+        themesDao.saveUpdate(new ThemeUpdate.Builder()
+                .Title(title)
+                .build(),
+                themeId);
+
+        ThemeDto themeDto = conversionResultFactory.convert(themesDao.getThemeByThemeId(themeId));
+        themeDto.setMessages(conversionListResultFactory
+                .convertMessages(messagesDao
+                        .getMessagesWithLimitOffset(themeId, count, offset)));
+        return themeDto;
     }
 
     public void deleteTheme(String token, long themeId) {
-
+        if (!themesDao.themeIsExists(themeId)) {
+            throw new NotFoundException("The theme not exists");
+        } else if (themesDao.getAuthorIdByThemeId(themeId) != usersDao.findIdByToken(token)){
+            throw new AuthException("Forbidden");
+        }
+        themesDao.deleteTheme(themeId);
     }
 }

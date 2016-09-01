@@ -38,7 +38,6 @@ public class UsersDaoImpl implements UsersDao {
     private static final String SQL_UPDATE_USER_INFO = "UPDATE user_info SET name = ?, avatar = ?, birth_date = ?, info = ? WHERE user_id = ?;";
     private static final String SQL_GET_USER_BY_THEME_ID = "SELECT * FROM short_user WHERE user_id = (SELECT user_id FROM theme WHERE theme_id = ?) ;";
 
-
     private RowMapper<User> userRowMapper() {
         return (rs, i) -> new User.Builder()
                 .UserId(rs.getInt("user_id"))

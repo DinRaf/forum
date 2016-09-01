@@ -3,6 +3,7 @@ package com.forum.server.dao.interfaces;
 import com.forum.server.models.user.ShortUser;
 import com.forum.server.models.user.User;
 import com.forum.server.models.user.UserUpdate;
+import com.sun.javafx.fxml.expression.Expression;
 
 /**
  * 09.08.16
@@ -39,4 +40,5 @@ public interface UsersDao {
     long findIdByToken(String token);
 
     void update(UserUpdate convert, long userId);
+
 }
