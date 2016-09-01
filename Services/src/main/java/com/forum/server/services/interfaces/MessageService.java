@@ -12,10 +12,10 @@ public interface MessageService {
 
     ThemeDto createMessage(String token, long themeId, MessageCreateDto messageCreateDto, long count);
 
-    ThemeDto updateMessage(String token, long themeId, long messageId, MessageCreateDto message, long offset, long count);
+    ThemeDto updateMessage(String token, long messageId, MessageCreateDto message, long offset, long count);
 
-    void updateMessageRating(long themeId, long messageId, boolean grade, long count, long offset);
+    void updateMessageRating(String token, long messageId, boolean grade, long count, long offset);
 
-    void deleteMessage(String token, long themeId, long messageId);
+    void deleteMessage(String token, long messageId);
 
 }

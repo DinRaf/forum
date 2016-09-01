@@ -2,10 +2,7 @@ package com.forum.server.services.implementations;
 
 import com.forum.server.converters.ConversionListResultFactory;
 import com.forum.server.converters.ConversionResultFactory;
-import com.forum.server.dao.interfaces.MessagesDao;
-import com.forum.server.dao.interfaces.ThemesDao;
-import com.forum.server.dao.interfaces.TokensDao;
-import com.forum.server.dao.interfaces.UsersDao;
+import com.forum.server.dao.interfaces.*;
 import com.forum.server.dto.message.MessageCreateDto;
 import com.forum.server.dto.message.MessageDto;
 import com.forum.server.dto.message.MessagesDto;
@@ -46,6 +43,9 @@ public class MessageServiceImpl implements MessageService {
     private ThemesDao themesDao;
 
     @Autowired
+    private MarksDao marksDao;
+
+    @Autowired
     private ConversionListResultFactory conversionListResultFactory;
 
     public ThemeDto createMessage(String token, long themeId, MessageCreateDto messageCreateDto, long count) {
@@ -84,7 +84,7 @@ public class MessageServiceImpl implements MessageService {
         return messagesCount % count;
     }
 
-    public ThemeDto updateMessage(String token, long themeId, long messageId, MessageCreateDto updatedMessageDto, long offset, long count) {
+    public ThemeDto updateMessage(String token, long messageId, MessageCreateDto updatedMessageDto, long offset, long count) {
         if (!tokensDao.isExistsToken(token)) {
             throw new IncorrectTokenException("Token is incorrect");
         }
@@ -101,6 +101,7 @@ public class MessageServiceImpl implements MessageService {
         if (authorId != updaterId){
             throw new AuthException("Forbidden");
         }
+        long themeId = themesDao.getThemeIdByMessageId(messageId);
         messagesDao.saveUpdate(new MessageUpdate.Builder()
                 .Update(System.currentTimeMillis())
                 .UpdaterId(updaterId)
@@ -113,11 +114,18 @@ public class MessageServiceImpl implements MessageService {
         return themeDto;
     }
 
-    public void updateMessageRating(long themeId, long messageId, boolean grade, long count, long offset) {
-
+    public void updateMessageRating(String token, long messageId, boolean grade, long count, long offset) {
+        if (!tokensDao.isExistsToken(token)) {
+            throw new IncorrectTokenException("Token is incorrect");
+        }
+        long userId = usersDao.findIdByToken(token);
+        if (marksDao.isExistsMark(userId, messageId, grade)) {
+            throw new AuthException("Mark already exists");
+        }
+        marksDao.save(userId, messageId, grade);
     }
 
-    public void deleteMessage(String token, long themeId, long messageId) {
+    public void deleteMessage(String token, long messageId) {
         long authorId = messagesDao.getAuthorIdByMessageId(messageId);
 
         if (!messagesDao.messageIsExists(messageId)){

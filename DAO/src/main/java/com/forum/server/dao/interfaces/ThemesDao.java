@@ -16,4 +16,6 @@ public interface ThemesDao {
     long findTheNumberOfMessagesInTheme(long themeId);
     
     Theme getThemeByThemeId(long themeId);
+
+    long getThemeIdByMessageId(long messageId);
 }

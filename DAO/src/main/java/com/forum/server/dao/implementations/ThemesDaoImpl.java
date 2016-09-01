@@ -31,6 +31,7 @@ public class ThemesDaoImpl implements ThemesDao {
     private static final String SQL_ADD_THEME = "INSERT INTO theme (user_id, section_id, subsection_id, title, date, messages_count, status) VALUES (?, ?, ?, ?, ?, ?, ?);";
     private static final String SQL_NUMBER_OF_MESSAGES_IN_THEME = "SELECT messages_count FROM theme WHERE theme_id = ?;" ;
     private static final String SQL_GET_THEME_BY_THEME_ID = "SELECT * FROM theme INNER JOIN short_user ON short_user.user_id = theme.user_id WHERE theme.theme_id = ?;";
+    private static final String SQL_GET_THEME_ID_BY_MESSAGE_ID = "SELECT theme_id FROM message WHERE message_id = ?;;";
 
     private RowMapper<Theme> themeRowMapper() {
         return (rs, rowNum) -> {
@@ -80,5 +81,9 @@ public class ThemesDaoImpl implements ThemesDao {
 
     public Theme getThemeByThemeId(long themeId) {
         return jdbcTemplate.queryForObject(SQL_GET_THEME_BY_THEME_ID, themeRowMapper(), themeId);
+    }
+
+    public long getThemeIdByMessageId(long messageId) {
+        return jdbcTemplate.queryForObject(SQL_GET_THEME_ID_BY_MESSAGE_ID, long.class, messageId);
     }
 }

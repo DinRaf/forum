@@ -36,32 +36,30 @@ public class MessagesController {
         return buildResponsePostAndPut(message);
     }
 
-    @RequestMapping(value = "/themes/{theme-id}/{message-id}", method = PUT)
-    public ResponseEntity<QueryResultDto> updateMessage(@PathVariable("theme-id") long themeId,
-                                                        @RequestParam("offset") long offset,
+    @RequestMapping(value = "/messages/{message-id}", method = PUT)
+    public ResponseEntity<QueryResultDto> updateMessage(@RequestParam("offset") long offset,
                                                         @RequestParam("count") long count,
                                                         @PathVariable("message-id") long messageId,
                                                         @RequestBody MessageCreateDto message,
                                                         @RequestHeader(name = "Auth-Token") String token) {
-        ThemeDto updatedMessage = messageService.updateMessage(token, themeId, messageId, message, count, offset);
+        ThemeDto updatedMessage = messageService.updateMessage(token, messageId, message, count, offset);
         return buildResponsePostAndPut(updatedMessage);
     }
 
-    @RequestMapping(value = "/themes/{theme-id}/{message-id}/rating", method = PUT)
-    public ResponseEntity<QueryResultDto> updateMessageRating(@PathVariable("theme-id") long themeId,
-                                                        @PathVariable("message-id") long messageId,
+    @RequestMapping(value = "/messages/{message-id}/rating", method = PUT)
+    public ResponseEntity<QueryResultDto> updateMessageRating(@PathVariable("message-id") long messageId,
                                                         @RequestParam("grade") boolean grade,
                                                         @RequestParam("count") long count,
-                                                        @RequestParam("offset") long offset) {
-        messageService.updateMessageRating(themeId, messageId, grade, count, offset);
+                                                        @RequestParam("offset") long offset,
+                                                        @RequestHeader(name = "Auth-Token") String token) {
+        messageService.updateMessageRating(token, messageId, grade, count, offset);
         return buildResponseRating();
     }
 
-    @RequestMapping(value = "/themes/{theme-id}/{message-id}", method = DELETE)
-    public ResponseEntity<QueryResultDto> deleteTheme(@PathVariable("theme-id") long themeId,
-                                                      @PathVariable("message-id") long messageId,
+    @RequestMapping(value = "/messages/{message-id}", method = DELETE)
+    public ResponseEntity<QueryResultDto> deleteTheme(@PathVariable("message-id") long messageId,
                                                       @RequestHeader(name = "Auth-Token") String token) {
-        messageService.deleteMessage(token, themeId, messageId);
+        messageService.deleteMessage(token, messageId);
         return buildResponseDelete();
     }
 }
