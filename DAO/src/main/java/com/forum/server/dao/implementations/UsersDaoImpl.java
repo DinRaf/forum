@@ -42,7 +42,7 @@ public class UsersDaoImpl implements UsersDao {
     private static final String SQL_GET_ID_BY_TOKEN = "SELECT user_id FROM auth WHERE token = ?;";
     private static final String SQL_ADD_SHORT_USER = "INSERT INTO short_user (nick_name, rating, avatar, is_online, rights) VALUES (?, ?, ?, ?, ?);";
     private static final String SQL_UPDATE_SHORT_USER = "UPDATE short_user SET nick_name = ?, avatar = ? WHERE user_id = ?;;";
-    private static final String SQL_ADD_USER_INFO = "INSERT INTO user_info (user_id, mail, birth_date, info, registration_time, last_session, messages_count, themes_count, pass_hash) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);";
+    private static final String SQL_ADD_USER_INFO = "INSERT INTO user_info (user_id, mail, birth_date, info, registration_time, last_session, messages_count, themes_count, pass_hash, name) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
     private static final String SQL_UPDATE_USER_INFO = "UPDATE user_info SET name = ?, avatar = ?, birth_date = ?, info = ? WHERE user_id = ?;";
     private static final String SQL_GET_USER_BY_THEME_ID = "SELECT * FROM short_user WHERE user_id = (SELECT user_id FROM theme WHERE theme_id = ?) ;";
     //    private static final String SQL_GET_SHORT_USER_BY_TOKEN_IS_ONLINE_SORTED_LIMIT_OFFSET = "SELECT * FROM short_user WHERE token = :token AND is_online = :isOnline AND (short_user.nick_name ILIKE :keyword OR short_user.user_id );";
@@ -125,14 +125,14 @@ public class UsersDaoImpl implements UsersDao {
         jdbcTemplate.update(SQL_ADD_USER_INFO,
                 new Object[]{getIdByNickName(user.getNickName()),
                         user.getMail(),
-                        user.getName(),
                         user.getDateOfBirth(),
                         user.getInfo(),
                         user.getRegistrationTime(),
                         user.getLastSession(),
                         user.getMessagesCount(),
                         user.getThemesCount(),
-                        user.getHashPassword()});
+                        user.getHashPassword(),
+                        user.getName()});
     }
 
     @Override
