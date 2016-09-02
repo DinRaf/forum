@@ -14,14 +14,14 @@ import java.util.List;
  */
 @JsonFormat(shape = JsonFormat.Shape.ARRAY)
 public class ShortUsersDto implements Data {
-    private List<ShortUsersDto> users;
+    private List<ShortUserDto> users;
 
     @JsonValue
-    public List<ShortUsersDto> getThemes() {
+    public List<ShortUserDto> getUsers() {
         return users;
     }
 
-    public ShortUsersDto(List<ShortUsersDto> users) {
+    public ShortUsersDto(List<ShortUserDto> users) {
         this.users = users;
     }
 }

@@ -96,6 +96,8 @@ public class ThemeServiceImpl implements ThemeService {
     public ThemeDto getTheme(long themeId, Integer offset, int count) {
         if (!themesDao.themeIsExists(themeId)) {
             throw new NotFoundException("The theme isn't exists");
+        }else if (offset == null) {
+            offset = 0;
         }
         ThemeDto themeDto = conversionResultFactory.convert(themesDao.getThemeByThemeId(themeId));
         themeDto.setMessages(conversionListResultFactory

@@ -1,6 +1,7 @@
 package com.forum.server.dao.implementations;
 
 import com.forum.server.dao.interfaces.ThemesDao;
+import com.forum.server.dto.theme.ThemeSearchDto;
 import com.forum.server.models.theme.Theme;
 import com.forum.server.models.theme.ThemeUpdate;
 import com.forum.server.models.user.ShortUser;
@@ -41,6 +42,10 @@ public class ThemesDaoImpl implements ThemesDao {
     private static final String SQL_DELETE_MESSAGES_IN_THEME = "DELETE FROM message WHERE theme_id = :theme_id;";
     private static final String SQL_DELETE_THEME = "DELETE FROM theme WHERE theme_id = :theme_id;";
     private static final String SQL_GET_ALL_MESSAGES_IN_THEME = "SELECT message_id FROM message WHERE theme_id = :theme_id;";
+    private static final String SQL_GET_THEMES_BY_KEYWORD_SECTION_ID_SUBSECTION_ID_WITH_LIMIT_OFFSET = "SELECT user_id, date, messages_count, status, title FROM theme WHERE title ILIKE :keyword AND (section_id = :section_id AND subsection_id = :subsection_id);";
+    private static final String SQL_GET_THEMES_BY_KEYWORD_WITH_LIMIT_OFFSET = "SELECT user_id, date, messages_count, status, title FROM theme WHERE title ILIKE :keyword;";
+    private static final String SQL_GET_THEMES_BY_KEYWORD_SECTION_ID_WITH_LIMIT_OFFSET = "SELECT user_id, date, messages_count, status, title FROM theme WHERE title ILIKE :keyword AND section_id = :section_id;";
+    private static final String SQL_GET_THEMES_BY_KEYWORD_SUBSECTION_ID_WITH_LIMIT_OFFSET = "SELECT user_id, date, messages_count, status, title FROM theme WHERE title ILIKE :keyword AND subsection_id = :subsection_id;";
 
     private RowMapper<Theme> themeRowMapper() {
         return (rs, rowNum) -> {
@@ -64,7 +69,15 @@ public class ThemesDaoImpl implements ThemesDao {
                     .build();
         };
     }
-
+    private RowMapper<ThemeSearchDto> themeSearchDtoRowMapper() {
+        return (rs, rowNum) -> new ThemeSearchDto.Builder()
+                .AuthorId(rs.getLong("user_id"))
+                .Date(rs.getLong("date"))
+                .MessagesCount(rs.getLong("messages_count"))
+                .Status(rs.getBoolean("status"))
+                .Title(rs.getString("title"))
+                .build();
+    }
     public void save(Theme theme) {
         jdbcTemplate.update(SQL_ADD_THEME,
                 new Object[]{theme.getUser().getUserId(),
@@ -135,6 +148,34 @@ public class ThemesDaoImpl implements ThemesDao {
         Map<String, Number> params = new HashMap<>();
         params.put("theme_id", themeId);
         namedJdbcTemplate.update(SQL_DELETE_THEME, params);
+    }
+
+    public List<ThemeSearchDto> getThemesByKeywordSectionIdSubsectionIdWithLimitOffset(String keyword, int sectionId, int subsectionId, int offset, int count) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("keyword", "%" + keyword + "%");
+        params.put("section_id", sectionId);
+        params.put("subsection_id", subsectionId);
+        return namedJdbcTemplate.query(SQL_GET_THEMES_BY_KEYWORD_SECTION_ID_SUBSECTION_ID_WITH_LIMIT_OFFSET, params, themeSearchDtoRowMapper());
+    }
+
+    public List<ThemeSearchDto> getThemesByKeywordWithLimitOffset(String keyword, int offset, int count) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("keyword", "%" + keyword + "%");
+        return namedJdbcTemplate.query(SQL_GET_THEMES_BY_KEYWORD_WITH_LIMIT_OFFSET, params, themeSearchDtoRowMapper());
+    }
+
+    public List<ThemeSearchDto> getThemesByKeywordSectionIdWithLimitOffset(String keyword, int sectionId, int offset, int count) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("keyword", "%" + keyword + "%");
+        params.put("section_id", sectionId);
+        return namedJdbcTemplate.query(SQL_GET_THEMES_BY_KEYWORD_SECTION_ID_WITH_LIMIT_OFFSET, params, themeSearchDtoRowMapper());
+    }
+
+    public List<ThemeSearchDto> getThemesByKeywordSubsectionIdWithLimitOffset(String keyword, int subsectionId, int offset, int count) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("keyword", "%" + keyword + "%");
+        params.put("subsection_id", subsectionId);
+        return namedJdbcTemplate.query(SQL_GET_THEMES_BY_KEYWORD_SUBSECTION_ID_WITH_LIMIT_OFFSET, params, themeSearchDtoRowMapper());
     }
 
     public long getThemeIdByMessageId(long messageId) {

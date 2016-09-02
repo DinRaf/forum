@@ -5,6 +5,8 @@ import com.forum.server.models.user.User;
 import com.forum.server.models.user.UserUpdate;
 import com.sun.javafx.fxml.expression.Expression;
 
+import java.util.List;
+
 /**
  * 09.08.16
  *
@@ -41,4 +43,11 @@ public interface UsersDao {
 
     void update(UserUpdate convert, long userId);
 
+    List<ShortUser> getShortUsersSortedLimitOffset(Integer offset, int count, String sorting);
+
+    List<ShortUser> getShortUsersIsOnlineSortedLimitOffset(Integer offset, int count, Boolean isOnline, String sorting);
+
+    List<ShortUser> getShortUsersByTokenSortedLimitOffset(String keyword, Integer offset, int count, String sorting);
+
+    List<ShortUser> getShortUsersByTokenIsOnlineSortedLimitOffset(String keyword, Integer offset, int count, Boolean isOnline, String sorting);
 }

@@ -43,6 +43,10 @@
             <artifactId>junit</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>com.forum.server</groupId>
+            <artifactId>dto</artifactId>
+        </dependency>
     </dependencies>
 
 

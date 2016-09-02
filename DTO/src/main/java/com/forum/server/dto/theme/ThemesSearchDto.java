@@ -13,7 +13,7 @@ import java.util.List;
  * @version 1.0
  */
 @JsonFormat(shape = JsonFormat.Shape.ARRAY)
-public class ThemesDto implements Data {
+public class ThemesSearchDto implements Data {
 
     private List<ThemeSearchDto> themes;
 
@@ -22,7 +22,7 @@ public class ThemesDto implements Data {
         return themes;
     }
 
-    public ThemesDto(List<ThemeSearchDto> themes) {
+    public ThemesSearchDto(List<ThemeSearchDto> themes) {
         this.themes = themes;
     }
 }

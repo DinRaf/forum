@@ -3,12 +3,16 @@ package com.forum.server.converters;
 import com.forum.server.converters.message.ListMessageToMessagesDtoConverter;
 import com.forum.server.converters.staticInfo.ListSectionToSectionsDtoConverter;
 import com.forum.server.converters.staticInfo.ListSubsectionToSubsectionsDtoConverter;
+import com.forum.server.converters.user.ListShortUsersToShortUsersDtoConverter;
 import com.forum.server.dto.message.MessagesDto;
 import com.forum.server.dto.staticInfo.SectionsDto;
 import com.forum.server.dto.staticInfo.SubsectionsDto;
+import com.forum.server.dto.user.ShortUserDto;
+import com.forum.server.dto.user.ShortUsersDto;
 import com.forum.server.models.message.Message;
 import com.forum.server.models.staticInfo.Section;
 import com.forum.server.models.staticInfo.Subsection;
+import com.forum.server.models.user.ShortUser;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -33,5 +37,10 @@ public class ConversionListResultFactory {
     public SubsectionsDto convertSubsections(List<Subsection> subsections) {
         ListSubsectionToSubsectionsDtoConverter converter = new ListSubsectionToSubsectionsDtoConverter();
         return converter.convert(subsections);
+    }
+
+    public ShortUsersDto convertShortUsers(List<ShortUser> users) {
+        ListShortUsersToShortUsersDtoConverter converter = new ListShortUsersToShortUsersDtoConverter();
+        return converter.convert(users);
     }
 }

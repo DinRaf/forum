@@ -1,8 +1,8 @@
 package com.forum.server.controller;
 
 import com.forum.server.dto.response.QueryResultDto;
-import com.forum.server.dto.theme.ThemesDto;
-import com.forum.server.dto.user.ShortUsersDto;
+import com.forum.server.dto.theme.ThemeSearchResultDto;
+import com.forum.server.dto.user.SearchUsersDto;
 import com.forum.server.services.interfaces.SearchService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import static com.forum.server.utils.ResponseBuilder.buildResponseGet;
+import static com.forum.server.utils.ResponseBuilder.buildResponseGetWithCount;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
 /**
@@ -31,8 +31,8 @@ public class SearchController {
                                                        @RequestParam(value = "count") int count,
                                                        @RequestParam(value = "section-id", required = false) Integer sectionId,
                                                        @RequestParam(value = "subsection-id", required = false) Integer subsectionId) {
-        ThemesDto result = searchService.searchThemes(keyword, offset, count, sectionId, subsectionId);
-        return buildResponseGet(result);
+        ThemeSearchResultDto themeSearchResultDto = searchService.searchThemes(keyword, offset, count, sectionId, subsectionId);
+        return buildResponseGetWithCount(themeSearchResultDto.getThemesSearchDto(), themeSearchResultDto.getCount());
     }
 
     @RequestMapping(value = "/users", method = GET)
@@ -42,7 +42,8 @@ public class SearchController {
                                                       @RequestParam(value = "offset", required = false) Integer offset,
                                                       @RequestParam(value = "count") int count,
                                                       @RequestHeader(name = "Auth-Token") String token) {
-        ShortUsersDto result = searchService.searchUsers(token, keyword, offset, count, sorting, isOnline);
-        return buildResponseGet(result);
+
+        SearchUsersDto searchUserDto = searchService.searchUsers(token, keyword, offset, count, sorting, isOnline);
+        return buildResponseGetWithCount(searchUserDto.getShortUsersDto(), searchUserDto.getCount());
     }
 }

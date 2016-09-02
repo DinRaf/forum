@@ -7,7 +7,12 @@ import com.forum.server.models.user.UserUpdate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 24.08.16
@@ -20,6 +25,9 @@ public class UsersDaoImpl implements UsersDao {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
+
+    @Autowired
+    private NamedParameterJdbcTemplate namedJdbcTemplate;
 
     private static final String SQL_IS_EXISTS_NICKNAME = "SELECT CASE WHEN EXISTS(SELECT user_id FROM short_user WHERE nick_name = ?)THEN TRUE ELSE FALSE END ;";
     private static final String SQL_IS_EXISTS_MAIL = "SELECT CASE WHEN EXISTS(SELECT user_id FROM user_info WHERE mail = ?)THEN TRUE ELSE FALSE END ;";
@@ -37,6 +45,8 @@ public class UsersDaoImpl implements UsersDao {
     private static final String SQL_ADD_USER_INFO = "INSERT INTO user_info (user_id, mail, birth_date, info, registration_time, last_session, messages_count, themes_count, pass_hash) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);";
     private static final String SQL_UPDATE_USER_INFO = "UPDATE user_info SET name = ?, avatar = ?, birth_date = ?, info = ? WHERE user_id = ?;";
     private static final String SQL_GET_USER_BY_THEME_ID = "SELECT * FROM short_user WHERE user_id = (SELECT user_id FROM theme WHERE theme_id = ?) ;";
+    //    private static final String SQL_GET_SHORT_USER_BY_TOKEN_IS_ONLINE_SORTED_LIMIT_OFFSET = "SELECT * FROM short_user WHERE token = :token AND is_online = :isOnline AND (short_user.nick_name ILIKE :keyword OR short_user.user_id );";
+    private static final String SQL_GET_SHORT_USER_BY_TOKEN_IS_ONLINE_SORTED_LIMIT_OFFSET = "SELECT * FROM short_user LEFT JOIN ON short_user.user_id = user_info.user_id WHERE token = :token AND is_online = :isOnline AND (short_user.nick_name ILIKE :keyword OR user_info.name ILIKE :keyword) ORDER BY : LIMIT :count OFFSET :offset ;";
 
     private RowMapper<User> userRowMapper() {
         return (rs, i) -> new User.Builder()
@@ -149,5 +159,27 @@ public class UsersDaoImpl implements UsersDao {
                         user.getInfo(),
                         user.getName(),
                         userId});
+    }
+
+    public List<ShortUser> getShortUsersSortedLimitOffset(Integer offset, int count, String sorting) {
+        return null;
+    }
+
+    public List<ShortUser> getShortUsersIsOnlineSortedLimitOffset(Integer offset, int count, Boolean isOnline, String sorting) {
+        return null;
+    }
+
+    public List<ShortUser> getShortUsersByTokenSortedLimitOffset(String keyword, Integer offset, int count, String sorting) {
+        return null;
+    }
+
+    public List<ShortUser> getShortUsersByTokenIsOnlineSortedLimitOffset(String keyword, Integer offset, int count, Boolean isOnline, String sorting) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("keyword", '%' + keyword + '%');
+        params.put("offset", offset);
+        params.put("count", count);
+        params.put("isOnline", isOnline);
+        params.put("sorting", "short_user." + sorting);
+        return namedJdbcTemplate.query(SQL_GET_SHORT_USER_BY_TOKEN_IS_ONLINE_SORTED_LIMIT_OFFSET, params, shortUserRowMapper());
     }
 }

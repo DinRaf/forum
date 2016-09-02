@@ -1,5 +1,6 @@
 package com.forum.server.dao.interfaces;
 
+import com.forum.server.dto.theme.ThemeSearchDto;
 import com.forum.server.models.theme.Theme;
 import com.forum.server.models.theme.ThemeUpdate;
 
@@ -29,4 +30,12 @@ public interface ThemesDao {
     boolean themeIsExists(long themeId);
 
     void deleteTheme(long themeId);
+
+    List<ThemeSearchDto> getThemesByKeywordSectionIdSubsectionIdWithLimitOffset(String keyword, int sectionId, int subsectionId, int offset, int count);
+
+    List<ThemeSearchDto> getThemesByKeywordWithLimitOffset(String keyword, int offset, int count);
+
+    List<ThemeSearchDto> getThemesByKeywordSectionIdWithLimitOffset(String keyword, int sectionId, int offset, int count);
+
+    List<ThemeSearchDto> getThemesByKeywordSubsectionIdWithLimitOffset(String keyword, int subsectionId, int offset, int count);
 }
