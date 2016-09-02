@@ -11,6 +11,11 @@ public class Section {
     private String name;
     private long themesCount;
     private long subsectionsCount;
+    private String url;
+
+    public String getUrl() {
+        return url;
+    }
 
     public long getSectionId() {
         return sectionId;
@@ -36,6 +41,7 @@ public class Section {
         this.name = builder.name;
         this.themesCount = builder.themesCount;
         this.subsectionsCount = builder.subsectionsCount;
+        this.url = builder.url;
     }
 
     public static class Builder {
@@ -43,6 +49,12 @@ public class Section {
         private String name;
         private long themesCount;
         private long subsectionsCount;
+        private String url;
+
+        public Builder Url(String url) {
+            this.url = url;
+            return this;
+        }
 
         public Builder SectionId(long sectionId) {
             this.sectionId = sectionId;

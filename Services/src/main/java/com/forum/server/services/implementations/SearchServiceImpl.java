@@ -40,21 +40,21 @@ public class SearchServiceImpl implements SearchService {
     @Autowired
     private ConversionListResultFactory conversionListResultFactory;
 
-    public ThemeSearchResultDto searchThemes(String keyword, Integer offset, int count, Integer sectionId, Integer subsectionId) {
+    public ThemeSearchResultDto searchThemes(String keyword, Integer offset, int count, String sectionUrl, String subsectionUrl) {
         if (keyword == "" || keyword == null) {
             throw new AuthException("Keyword not found");
         } else if (offset == null) {
             offset = 0;
         }
         List<ThemeSearchDto> themeSearchDtos = new LinkedList<>();
-        if (sectionId == null) {
-            themeSearchDtos = themesDao.getThemesByKeywordSubsectionIdWithLimitOffset(keyword, subsectionId, offset, count);
-        } else if (subsectionId == null) {
-            themeSearchDtos = themesDao.getThemesByKeywordSectionIdWithLimitOffset(keyword, sectionId, offset, count);
-        } else if (sectionId == null && subsectionId == null) {
+        if (sectionUrl == null) {
+            themeSearchDtos = themesDao.getThemesByKeywordSubsectionIdWithLimitOffset(keyword, subsectionUrl, offset, count);
+        } else if (subsectionUrl == null) {
+            themeSearchDtos = themesDao.getThemesByKeywordSectionIdWithLimitOffset(keyword, sectionUrl, offset, count);
+        } else if (sectionUrl == null && subsectionUrl == null) {
             themeSearchDtos = themesDao.getThemesByKeywordWithLimitOffset(keyword, offset, count);
         }else {
-            themeSearchDtos = themesDao.getThemesByKeywordSectionIdSubsectionIdWithLimitOffset(keyword, sectionId, subsectionId, offset, count);
+            themeSearchDtos = themesDao.getThemesByKeywordSectionIdSubsectionIdWithLimitOffset(keyword, sectionUrl, subsectionUrl, offset, count);
         }
         int countOfResults = themeSearchDtos.size();
         ThemesSearchDto themesSearchDto = new ThemesSearchDto(themeSearchDtos);

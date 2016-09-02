@@ -2,8 +2,6 @@ package com.forum.server.services.interfaces;
 
 import com.forum.server.dto.theme.ThemeSearchResultDto;
 import com.forum.server.dto.user.SearchUsersDto;
-import com.forum.server.dto.user.SearchUsersDto;
-import com.forum.server.dto.user.ShortUsersDto;
 
 /**
  * 07.08.16
@@ -13,7 +11,7 @@ import com.forum.server.dto.user.ShortUsersDto;
  */
 public interface SearchService {
 
-    ThemeSearchResultDto searchThemes(String keyword, Integer offset, int count, Integer sectionId, Integer subsectionId);
+    ThemeSearchResultDto searchThemes(String keyword, Integer offset, int count, String sectionUrl, String subsectionUrl);
 
     SearchUsersDto searchUsers(String token, String keyword, Integer offset, int count, String sorting, Boolean isOnline);
 }

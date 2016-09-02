@@ -13,7 +13,7 @@ import com.forum.server.dto.staticInfo.SubsectionsDto;
 public interface StaticInfoService {
     SectionsDto getSections();
 
-    SubsectionsDto getSubsections(long sectionId);
+    SubsectionsDto getSubsections(String url);
 
     InfoDto getInfo(String identifier);
 }

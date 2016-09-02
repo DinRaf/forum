@@ -18,6 +18,7 @@ public class SectionToSectionDtoConverter implements Converter<Section, SectionD
                 .Name(section.getName())
                 .SubsectionsCount(section.getSubsectionsCount())
                 .ThemesCount(section.getThemesCount())
+                .Url(section.getUrl())
                 .build();
     }
 }

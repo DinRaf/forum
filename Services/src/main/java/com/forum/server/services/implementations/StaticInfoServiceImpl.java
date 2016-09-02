@@ -33,11 +33,11 @@ public class StaticInfoServiceImpl implements StaticInfoService {
         return conversionListResultFactory.convertSections(staticInfoDao.getSections());
     }
 
-    public SubsectionsDto getSubsections(long sectionId) {
-        if (!staticInfoDao.isExistsSectionId(sectionId)) {
+    public SubsectionsDto getSubsections(String url) {
+        if (!staticInfoDao.isExistsSectionUrl(url)) {
             throw new NotFoundException("Section not found");
         }
-        return conversionListResultFactory.convertSubsections(staticInfoDao.getSubsections(sectionId));
+        return conversionListResultFactory.convertSubsections(staticInfoDao.getSubsections(url));
     }
 
     public InfoDto getInfo(String identifier) {

@@ -23,11 +23,11 @@ public class StaticInfoDaoImpl implements StaticInfoDao {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    private static final String SQL_GET_SECTIONS = "SELECT * FROM section;";
-    private static final String SQL_GET_SUBSECTIONS_BY_SECTION_ID = "SELECT * FROM subsection where section_id = ?;";
+    private static final String SQL_GET_SECTIONS = "SELECT * FROM section ORDER BY section_id;";
+    private static final String SQL_GET_SUBSECTIONS_BY_SECTION_URL = "SELECT * FROM subsection where section_id = (SELECT section_id FROM section WHERE LOWER(url) = ?) ORDER BY subsection_id;";
     private static final String SQL_GET_INFO_BY_IDENTIFIER = "SELECT * FROM info WHERE identifier = ?;";
     private static final String SQL_IS_EXISTS_INFO = "SELECT CASE WHEN EXISTS(SELECT identifier FROM info WHERE identifier = ?)THEN TRUE ELSE FALSE END;";
-    private static final String SQL_IS_EXISTS_SECTION_ID = "SELECT CASE WHEN EXISTS(SELECT subsection_id FROM subsection WHERE section_id = ?)THEN TRUE ELSE FALSE END;";
+    private static final String SQL_IS_EXISTS_SECTION_URL = "SELECT CASE WHEN EXISTS(SELECT url FROM section WHERE LOWER(url) = ?)THEN TRUE ELSE FALSE END;";
 
     private RowMapper<Section> sectionRowMapper() {
         return (rs, i) -> new Section.Builder()
@@ -35,6 +35,7 @@ public class StaticInfoDaoImpl implements StaticInfoDao {
                 .Name(rs.getString("name"))
                 .ThemesCount(rs.getLong("themes_count"))
                 .SubsectionsCount(rs.getLong("subsections_count"))
+                .Url(rs.getString("url"))
                 .build();
     }
 
@@ -43,6 +44,7 @@ public class StaticInfoDaoImpl implements StaticInfoDao {
                 .Subsection_id(rs.getLong("subsection_id"))
                 .Name(rs.getString("name"))
                 .ThemesCount(rs.getLong("themes_count"))
+                .Url(rs.getString("url"))
                 .build();
     }
 
@@ -58,8 +60,8 @@ public class StaticInfoDaoImpl implements StaticInfoDao {
     }
 
     @Override
-    public List<Subsection> getSubsections(long sectionId) {
-        return jdbcTemplate.query(SQL_GET_SUBSECTIONS_BY_SECTION_ID, subsectionRowMapper(), sectionId);
+    public List<Subsection> getSubsections(String url) {
+        return jdbcTemplate.query(SQL_GET_SUBSECTIONS_BY_SECTION_URL, subsectionRowMapper(), url.toLowerCase());
     }
 
     @Override
@@ -72,7 +74,7 @@ public class StaticInfoDaoImpl implements StaticInfoDao {
         return jdbcTemplate.queryForObject(SQL_GET_INFO_BY_IDENTIFIER, infoRowMapper(), identifier);
     }
 
-    public boolean isExistsSectionId(long sectionId) {
-        return jdbcTemplate.queryForObject(SQL_IS_EXISTS_SECTION_ID, boolean.class, sectionId);
+    public boolean isExistsSectionUrl(String url) {
+        return jdbcTemplate.queryForObject(SQL_IS_EXISTS_SECTION_URL, boolean.class, url.toLowerCase());
     }
 }

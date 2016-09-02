@@ -15,11 +15,11 @@ import java.util.List;
 public interface StaticInfoDao {
     List<Section> getSections();
 
-    List<Subsection> getSubsections(long sectionId);
+    List<Subsection> getSubsections(String url);
 
     boolean isExistsInfo(String identifier);
 
     Info getInfo(String info);
 
-    boolean isExistsSectionId(long sectionId);
+    boolean isExistsSectionUrl(String url);
 }

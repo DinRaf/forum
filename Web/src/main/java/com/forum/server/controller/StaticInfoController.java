@@ -31,14 +31,14 @@ public class StaticInfoController {
         return buildResponseGet(sections);
     }
 
-    @RequestMapping(value = "/{section-id}/subsections", method = GET)
-    public ResponseEntity<QueryResultDto> getSubsections(@PathVariable("section-id") long sectionId) {
-        SubsectionsDto subsections = staticInfoService.getSubsections(sectionId);
+    @RequestMapping(value = "/{section-url}/subsections", method = GET)
+    public ResponseEntity<QueryResultDto> getSubsections(@PathVariable("section-url") String url) {
+        SubsectionsDto subsections = staticInfoService.getSubsections(url);
         return buildResponseGet(subsections);
     }
 
     @RequestMapping(value = "/info", method = GET)
-    public ResponseEntity<QueryResultDto> getSubsections(@RequestParam("identifier") String identifier) {
+    public ResponseEntity<QueryResultDto> getStaticInfo(@RequestParam("identifier") String identifier) {
         InfoDto infoDto = staticInfoService.getInfo(identifier);
         return buildResponseGet(infoDto);
     }

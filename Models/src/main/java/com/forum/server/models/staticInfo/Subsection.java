@@ -10,6 +10,11 @@ public class Subsection {
     private long subsection_id;
     private String name;
     private long themesCount;
+    private String url;
+
+    public String getUrl() {
+        return url;
+    }
 
     public long getSubsection_id() {
         return subsection_id;
@@ -26,17 +31,23 @@ public class Subsection {
     protected Subsection() {
     }
 
-    public Subsection(Builder builder) {
+    private Subsection(Builder builder) {
         this.subsection_id = builder.subsection_id;
         this.name = builder.name;
         this.themesCount = builder.themesCount;
+        this.url = builder.url;
     }
 
     public static class Builder {
         private long subsection_id;
-        private long section_id;
         private String name;
         private long themesCount;
+        private String url;
+
+        public Builder Url(String url) {
+            this.url = url;
+            return this;
+        }
 
         public Builder Subsection_id(long subsection_id) {
             this.subsection_id = subsection_id;

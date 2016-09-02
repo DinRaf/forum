@@ -12,6 +12,11 @@ public class SubsectionDto implements Data {
     private long id;
     private String name;
     private long themesCount;
+    private String url;
+
+    public String getUrl() {
+        return url;
+    }
 
     public long getId() {
         return id;
@@ -32,12 +37,19 @@ public class SubsectionDto implements Data {
         this.id = builder.id;
         this.name = builder.name;
         this.themesCount = builder.themesCount;
+        this.url = builder.url;
     }
 
     public static class Builder {
         private long id;
         private String name;
         private long themesCount;
+        private String url;
+
+        public Builder Url(String url) {
+            this.url = url;
+            return this;
+        }
 
         public Builder Id(long id) {
             this.id = id;

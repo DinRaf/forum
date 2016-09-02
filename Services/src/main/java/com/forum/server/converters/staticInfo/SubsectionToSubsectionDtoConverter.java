@@ -17,6 +17,7 @@ public class SubsectionToSubsectionDtoConverter implements Converter<Subsection,
                 .Id(subsection.getSubsection_id())
                 .ThemesCount(subsection.getThemesCount())
                 .Name(subsection.getName())
+                .Url(subsection.getUrl())
                 .build();
     }
 }

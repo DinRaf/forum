@@ -13,6 +13,11 @@ public class SectionDto implements Data{
     private String name;
     private long themesCount;
     private long subsectionsCount;
+    private String url;
+
+    public String getUrl() {
+        return url;
+    }
 
     public long getId() {
         return id;
@@ -38,6 +43,7 @@ public class SectionDto implements Data{
         this.name = builder.name;
         this.themesCount = builder.themesCount;
         this.subsectionsCount = builder.subsectionsCount;
+        this.url = builder.url;
     }
 
     public static class Builder {
@@ -45,6 +51,12 @@ public class SectionDto implements Data{
         private String name;
         private long themesCount;
         private long subsectionsCount;
+        private String url;
+
+        public Builder Url(String url) {
+            this.url = url;
+            return this;
+        }
 
         public Builder Id(long id) {
             this.id = id;
