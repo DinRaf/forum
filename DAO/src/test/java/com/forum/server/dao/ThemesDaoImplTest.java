@@ -96,4 +96,5 @@ public class ThemesDaoImplTest {
     public void getThemesByKeywordSectionIdSubsectionIdWithLimitOffset() {
 //        assertNotNull(themesDao.getThemesByKeywordSectionIdSubsectionIdWithLimitOffset(KEYWORD, SECTION_ID, SUBSECTION_ID, OFFSET, COUNT));
     }
+
 }

@@ -1,6 +1,7 @@
 package com.forum.server.services.implementations;
 
 import com.forum.server.converters.ConversionListResultFactory;
+import com.forum.server.converters.ConversionResultFactory;
 import com.forum.server.dao.interfaces.ThemesDao;
 import com.forum.server.dao.interfaces.TokensDao;
 import com.forum.server.dao.interfaces.UsersDao;
@@ -40,6 +41,9 @@ public class SearchServiceImpl implements SearchService {
     @Autowired
     private ConversionListResultFactory conversionListResultFactory;
 
+    @Autowired
+    private ConversionResultFactory conversionResultFactory;
+
     public ThemeSearchResultDto searchThemes(String keyword, Integer offset, int count, String sectionUrl, String subsectionUrl) {
         if (keyword == "" || keyword == null) {
             throw new AuthException("Keyword not found");
@@ -75,6 +79,10 @@ public class SearchServiceImpl implements SearchService {
         } else if (offset == null) {
             offset = 0;
         }
+        sorting = conversionResultFactory.getSearchSorting(sorting);
+        if (sorting == null) {
+            throw new AuthException("Sort parameter is wrong or missing");
+        }
         List<ShortUser> usersDto;
         if (keyword == null) {
             if (isOnline == null) {
@@ -87,10 +95,10 @@ public class SearchServiceImpl implements SearchService {
         } else {
             if (isOnline == null) {
                 usersDto = usersDao
-                                .getShortUsersByTokenSortedLimitOffset(keyword, offset, count, sorting);
+                                .getShortUsersByKeywordSortedLimitOffset(keyword, offset, count, sorting);
             } else {
                 usersDto = usersDao
-                                .getShortUsersByTokenIsOnlineSortedLimitOffset(keyword, offset, count, isOnline, sorting);
+                                .getShortUsersByKeywordIsOnlineSortedLimitOffset(keyword, offset, count, isOnline, sorting);
             }
         }
         int resultCount = usersDto.size();

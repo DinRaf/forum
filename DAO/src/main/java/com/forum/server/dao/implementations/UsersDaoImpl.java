@@ -45,8 +45,10 @@ public class UsersDaoImpl implements UsersDao {
     private static final String SQL_ADD_USER_INFO = "INSERT INTO user_info (user_id, mail, birth_date, info, registration_time, last_session, messages_count, themes_count, pass_hash, name) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
     private static final String SQL_UPDATE_USER_INFO = "UPDATE user_info SET name = ?, avatar = ?, birth_date = ?, info = ? WHERE user_id = ?;";
     private static final String SQL_GET_USER_BY_THEME_ID = "SELECT * FROM short_user WHERE user_id = (SELECT user_id FROM theme WHERE theme_id = ?) ;";
-    //    private static final String SQL_GET_SHORT_USER_BY_TOKEN_IS_ONLINE_SORTED_LIMIT_OFFSET = "SELECT * FROM short_user WHERE token = :token AND is_online = :isOnline AND (short_user.nick_name ILIKE :keyword OR short_user.user_id );";
-    private static final String SQL_GET_SHORT_USER_BY_TOKEN_IS_ONLINE_SORTED_LIMIT_OFFSET = "SELECT * FROM short_user LEFT JOIN ON short_user.user_id = user_info.user_id WHERE token = :token AND is_online = :isOnline AND (short_user.nick_name ILIKE :keyword OR user_info.name ILIKE :keyword) ORDER BY : LIMIT :count OFFSET :offset ;";
+    private static final String SQL_GET_SHORT_USER_SORTED_LIMIT_OFFSET = "SELECT * FROM short_user LEFT JOIN user_info ON short_user.user_id = user_info.user_id ORDER BY :sorting LIMIT :count OFFSET :offset ;";
+    private static final String SQL_GET_SHORT_USER_IS_ONLINE_SORTED_LIMIT_OFFSET = "SELECT * FROM short_user LEFT JOIN user_info ON short_user.user_id = user_info.user_id WHERE is_online = :isOnline ORDER BY :sorting LIMIT :count OFFSET :offset ;";
+    private static final String SQL_GET_SHORT_USER_BY_KEYWORD_SORTED_LIMIT_OFFSET = "SELECT * FROM short_user LEFT JOIN user_info ON short_user.user_id = user_info.user_id WHERE short_user.nick_name ILIKE :keyword OR user_info.name ILIKE :keyword ORDER BY :sorting LIMIT :count OFFSET :offset ;";
+    private static final String SQL_GET_SHORT_USER_BY_KEYWORD_IS_ONLINE_SORTED_LIMIT_OFFSET = "SELECT * FROM short_user LEFT JOIN user_info ON short_user.user_id = user_info.user_id WHERE is_online = :isOnline AND (short_user.nick_name ILIKE :keyword OR user_info.name ILIKE :keyword) ORDER BY :sorting LIMIT :count OFFSET :offset ;";
 
     private RowMapper<User> userRowMapper() {
         return (rs, i) -> new User.Builder()
@@ -162,24 +164,40 @@ public class UsersDaoImpl implements UsersDao {
     }
 
     public List<ShortUser> getShortUsersSortedLimitOffset(Integer offset, int count, String sorting) {
-        return null;
+        Map<String, Object> params = new HashMap<>();
+        params.put("offset", offset);
+        params.put("count", count);
+        params.put("sorting", "short_user." + sorting);
+        return namedJdbcTemplate.query(SQL_GET_SHORT_USER_SORTED_LIMIT_OFFSET, params, shortUserRowMapper());
+
     }
 
     public List<ShortUser> getShortUsersIsOnlineSortedLimitOffset(Integer offset, int count, Boolean isOnline, String sorting) {
-        return null;
+        Map<String, Object> params = new HashMap<>();
+        params.put("offset", offset);
+        params.put("count", count);
+        params.put("isOnline", isOnline);
+        params.put("sorting", "short_user." + sorting);
+        return namedJdbcTemplate.query(SQL_GET_SHORT_USER_IS_ONLINE_SORTED_LIMIT_OFFSET, params, shortUserRowMapper());
+
     }
 
-    public List<ShortUser> getShortUsersByTokenSortedLimitOffset(String keyword, Integer offset, int count, String sorting) {
-        return null;
+    public List<ShortUser> getShortUsersByKeywordSortedLimitOffset(String keyword, Integer offset, int count, String sorting) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("keyword", '%' + keyword + '%');
+        params.put("offset", offset);
+        params.put("count", count);
+        params.put("sorting", "short_user." + sorting);
+        return namedJdbcTemplate.query(SQL_GET_SHORT_USER_BY_KEYWORD_SORTED_LIMIT_OFFSET, params, shortUserRowMapper());
     }
 
-    public List<ShortUser> getShortUsersByTokenIsOnlineSortedLimitOffset(String keyword, Integer offset, int count, Boolean isOnline, String sorting) {
+    public List<ShortUser> getShortUsersByKeywordIsOnlineSortedLimitOffset(String keyword, Integer offset, int count, Boolean isOnline, String sorting) {
         Map<String, Object> params = new HashMap<>();
         params.put("keyword", '%' + keyword + '%');
         params.put("offset", offset);
         params.put("count", count);
         params.put("isOnline", isOnline);
         params.put("sorting", "short_user." + sorting);
-        return namedJdbcTemplate.query(SQL_GET_SHORT_USER_BY_TOKEN_IS_ONLINE_SORTED_LIMIT_OFFSET, params, shortUserRowMapper());
+        return namedJdbcTemplate.query(SQL_GET_SHORT_USER_BY_KEYWORD_IS_ONLINE_SORTED_LIMIT_OFFSET, params, shortUserRowMapper());
     }
 }

@@ -2,6 +2,7 @@ package com.forum.server.dao;
 
 import com.forum.server.dao.configs.PersistenceConfig;
 import com.forum.server.dao.interfaces.UsersDao;
+import com.forum.server.models.user.ShortUser;
 import com.forum.server.models.user.User;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -9,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -28,6 +31,11 @@ public class UsersDaoImplTest {
     private static final String PASS_HASH = "lol";
     private static final long THEME_ID = 3;
     private static final int ID = 1;
+    private static final int OFFSET = 0;
+    private static final int COUNT = 2;
+    private static final boolean IS_ONLINE = true;
+    private static final String SORTING = "messages_count";
+    private static final String KEYWORD = "Emil";
 
     @Autowired
     private UsersDao usersDao;
@@ -105,5 +113,11 @@ public class UsersDaoImplTest {
     @Test
     public void getUserByThemeId() throws Exception {
         assertNotNull(usersDao.getUserByThemeId(THEME_ID));
+    }
+
+    @Test
+    public void getShortUsersByKeywordIsOnlineSortedLimitOffset(){
+        List<ShortUser> list = usersDao.getShortUsersByKeywordIsOnlineSortedLimitOffset(KEYWORD, OFFSET, COUNT, IS_ONLINE, SORTING);
+        long mail = 5;
     }
 }

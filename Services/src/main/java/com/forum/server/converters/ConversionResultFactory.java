@@ -19,6 +19,9 @@ import com.forum.server.models.user.User;
 import com.forum.server.models.user.UserUpdate;
 import org.springframework.stereotype.Component;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * 15.08.16
  *
@@ -76,5 +79,14 @@ public class ConversionResultFactory {
     public ShortUserDto convertUser(User user) {
         UserToUserDtoConverter converter = new UserToUserDtoConverter();
         return converter.convert(user);
+    }
+
+    public String getSearchSorting(String sorting) {
+        Map<String, String> params = new HashMap<>();
+        params.put("byRating", "rating");
+        params.put("byRegTime", "registration_time");
+        params.put("byThemesCount", "themes_count");
+        params.put("byMessagesCount", "messages_count");
+        return params.get(sorting);
     }
 }

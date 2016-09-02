@@ -47,7 +47,7 @@ public interface UsersDao {
 
     List<ShortUser> getShortUsersIsOnlineSortedLimitOffset(Integer offset, int count, Boolean isOnline, String sorting);
 
-    List<ShortUser> getShortUsersByTokenSortedLimitOffset(String keyword, Integer offset, int count, String sorting);
+    List<ShortUser> getShortUsersByKeywordSortedLimitOffset(String keyword, Integer offset, int count, String sorting);
 
-    List<ShortUser> getShortUsersByTokenIsOnlineSortedLimitOffset(String keyword, Integer offset, int count, Boolean isOnline, String sorting);
+    List<ShortUser> getShortUsersByKeywordIsOnlineSortedLimitOffset(String keyword, Integer offset, int count, Boolean isOnline, String sorting);
 }
