@@ -1,16 +1,13 @@
 package com.forum.server.services.implementations;
 
 import com.forum.server.converters.ConversionResultFactory;
+import com.forum.server.dao.validation.UserValidator;
 import com.forum.server.dao.interfaces.TokensDao;
 import com.forum.server.dao.interfaces.UsersDao;
-import com.forum.server.dto.user.UserDto;
 import com.forum.server.dto.user.ShortUserDto;
 import com.forum.server.dto.user.UserUpdateDto;
-import com.forum.server.models.user.ShortUser;
 import com.forum.server.security.exceptions.AuthException;
-import com.forum.server.security.exceptions.NotFoundException;
 import com.forum.server.services.interfaces.UserService;
-import com.forum.server.services.utils.EmailValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -36,12 +33,11 @@ public class UserServiceImpl implements UserService {
     private ConversionResultFactory conversionResultFactory;
 
     @Autowired
-    private EmailValidator emailValidator;
+    private UserValidator userValidator;
+
 
     public ShortUserDto getUser(String token, long userId) {
-        if (!usersDao.isExistsId(userId)) {
-            throw new NotFoundException("User not found");
-        }
+        userValidator.verifyOnExistence(userId);
         if (token != null && tokensDao.isExistsToken(token)) {
             return conversionResultFactory.convertUser(usersDao.getUserById(userId));
         } else {
@@ -50,29 +46,21 @@ public class UserServiceImpl implements UserService {
     }
 
     public ShortUserDto updateUser(String token, long userId, UserUpdateDto userInfo) {
-        if (!usersDao.isExistsId(userId)) {
-            throw new NotFoundException("User not found");
-        }
-        if (usersDao.findIdByToken(token) != userId) {
-            throw new AuthException("Forbidden");
-        }
+        userValidator.verifyOnExistence(userId);
+        userValidator.compareUsersById(usersDao.findIdByToken(token), userId);
         String identifier = userInfo.getMail();
-        if (identifier == null || !emailValidator.validate(identifier)) {
-            throw new AuthException("E-Mail is not correct or missing");
-        } else if (usersDao.isExistsMail(identifier)) {
-            throw new AuthException("E-Mail already exists");
-        }
+        userValidator.verifyEmail(identifier);
         identifier = userInfo.getNickName();
         if (!nicknameMeetsRequirements(userInfo.getNickName())) {
-            throw new AuthException("Nickname is not correct");
+            throw new AuthException("Не правильный nickname");
         } else if (usersDao.isExistsNickName(identifier)) {
-            throw new AuthException("Nickname already exists");
+            throw new AuthException("Такой nickname уже существует");
         }
         if (userInfo.getPassword() == null) {
             usersDao.update(conversionResultFactory.convert(userInfo), userId);
             return conversionResultFactory.convertUser(usersDao.getUserById(userId));
         } else if (!passwordMeetsRequirements(userInfo.getPassword())) {
-            throw new AuthException("Password is not correct");
+            throw new AuthException("Неверный пароль");
         }
         usersDao.update(conversionResultFactory.convertWithPass(userInfo), userId);
         return conversionResultFactory.convertUser(usersDao.getUserById(userId));

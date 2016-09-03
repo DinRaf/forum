@@ -2,16 +2,18 @@ package com.forum.server.services.implementations;
 
 import com.forum.server.converters.ConversionListResultFactory;
 import com.forum.server.converters.ConversionResultFactory;
+import com.forum.server.dao.validation.MessageMarkValidator;
+import com.forum.server.dao.validation.MessageValidator;
+import com.forum.server.dao.validation.TokenValidator;
+import com.forum.server.dao.validation.UserValidator;
 import com.forum.server.dao.interfaces.*;
 import com.forum.server.dto.message.MessageCreateDto;
-import com.forum.server.dto.message.MessageDto;
 import com.forum.server.dto.message.MessagesDto;
 import com.forum.server.dto.theme.ThemeDto;
 import com.forum.server.models.message.Message;
 import com.forum.server.models.message.MessageUpdate;
 import com.forum.server.models.theme.Theme;
 import com.forum.server.models.user.ShortUser;
-import com.forum.server.security.exceptions.*;
 import com.forum.server.services.interfaces.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,9 +28,6 @@ import java.util.List;
  */
 @Service
 public class MessageServiceImpl implements MessageService {
-
-    @Autowired
-    private TokensDao tokensDao;
 
     @Autowired
     private MessagesDao messagesDao;
@@ -48,19 +47,22 @@ public class MessageServiceImpl implements MessageService {
     @Autowired
     private ConversionListResultFactory conversionListResultFactory;
 
+    @Autowired
+    private MessageValidator messageValidator;
+
+    @Autowired
+    private TokenValidator tokenValidator;
+
+    @Autowired
+    private UserValidator userValidator;
+
+    @Autowired
+    private MessageMarkValidator messageMarkValidator;
+
     public ThemeDto createMessage(String token, long themeId, MessageCreateDto messageCreateDto, long count) {
         String messageText = messageCreateDto.getMessage();
-        if (!tokensDao.isExistsToken(token)) {
-            throw new IncorrectTokenException("Token is incorrect");
-        } else {
-            if (messageText.equals("")) {
-                throw new MessageExeption("The message body is empty");
-            }
-        }
-        if (messageText.length() > 16000) {
-            throw new MessageExeption("Message is too large");
-        }
-
+        tokenValidator.verifyOnExistence(token);
+        messageValidator.verifyMessageText(messageText);
         Message message = conversionResultFactory.convert(messageText);
         //TODO Подумать на целесобразностью
         message.setUser(usersDao.findShortUserByToken(token));
@@ -85,22 +87,13 @@ public class MessageServiceImpl implements MessageService {
     }
 
     public ThemeDto updateMessage(String token, long messageId, MessageCreateDto updatedMessageDto, long offset, long count) {
-        if (!tokensDao.isExistsToken(token)) {
-            throw new IncorrectTokenException("Token is incorrect");
-        }
+        tokenValidator.verifyOnExistence(token);
         String messageText = updatedMessageDto.getMessage();
-        if (messageText.equals("")) {
-            throw new RequiredFieldsAreNotFilled("Message is empty");
-        } else if (messageText.length() > 16000) {
-            throw new MessageExeption("Message is too large");
-        }
+        messageValidator.verifyMessageText(messageText);
         long authorId = messagesDao.getAuthorIdByMessageId(messageId);
         ShortUser updater = usersDao.findByToken(token);
         long updaterId = updater.getUserId();
-
-        if (authorId != updaterId){
-            throw new AuthException("Forbidden");
-        }
+        userValidator.compareUsersById(authorId, updaterId);
         long themeId = themesDao.getThemeIdByMessageId(messageId);
         messagesDao.saveUpdate(new MessageUpdate.Builder()
                 .Update(System.currentTimeMillis())
@@ -115,23 +108,15 @@ public class MessageServiceImpl implements MessageService {
     }
 
     public void updateMessageRating(String token, long messageId, boolean grade, long count, long offset) {
-        if (!tokensDao.isExistsToken(token)) {
-            throw new IncorrectTokenException("Token is incorrect");
-        }
+        tokenValidator.verifyOnExistence(token);
         long userId = usersDao.findIdByToken(token);
-        if (marksDao.isExistsMark(userId, messageId, grade)) {
-            throw new AuthException("Mark already exists");
-        }
+        messageMarkValidator.verifyOnExistence(userId, messageId, grade);
         marksDao.save(userId, messageId, grade);
     }
 
     public void deleteMessage(String token, long messageId) {
         long authorId = messagesDao.getAuthorIdByMessageId(messageId);
-
-        if (!messagesDao.messageIsExists(messageId)){
-            throw new NotFoundException("The message isn't exists");
-        }
-
+        messageValidator.verifyOnExistence(messageId);
         messagesDao.deleteMessageMarkByMessageId(messageId);
         messagesDao.deleteMessageById(messageId);
     }

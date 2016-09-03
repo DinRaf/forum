@@ -2,9 +2,10 @@ package com.forum.server.services.implementations;
 
 import com.forum.server.converters.ConversionListResultFactory;
 import com.forum.server.converters.ConversionResultFactory;
+import com.forum.server.dao.validation.ThemeValidator;
+import com.forum.server.dao.validation.TokenValidator;
 import com.forum.server.dao.interfaces.MessagesDao;
 import com.forum.server.dao.interfaces.ThemesDao;
-import com.forum.server.dao.interfaces.TokensDao;
 import com.forum.server.dao.interfaces.UsersDao;
 import com.forum.server.dto.message.FixMessageDto;
 import com.forum.server.dto.message.MessageDto;
@@ -16,11 +17,8 @@ import com.forum.server.models.message.Message;
 import com.forum.server.models.theme.Theme;
 import com.forum.server.models.theme.ThemeUpdate;
 import com.forum.server.models.user.ShortUser;
-import com.forum.server.security.exceptions.AuthException;
-import com.forum.server.security.exceptions.NotFoundException;
 import com.forum.server.services.interfaces.ThemeService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Lookup;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -34,9 +32,6 @@ import java.util.List;
  */
 @Service
 public class ThemeServiceImpl implements ThemeService {
-
-    @Autowired
-    private TokensDao tokensDao;
 
     @Autowired
     private UsersDao usersDao;
@@ -53,13 +48,17 @@ public class ThemeServiceImpl implements ThemeService {
     @Autowired
     private ConversionListResultFactory conversionListResultFactory;
 
+    @Autowired
+    private TokenValidator tokenValidator;
+
+    @Autowired
+    private ThemeValidator themeValidator;
+
     //TODO Реализовать методы
     public ThemeDto createTheme(String token, ThemeCreateDto themeCreateDto) {
-        if (!tokensDao.isExistsToken(token)) {
-            throw new AuthException("Incorrect token");
-        } else if (themeCreateDto.getTitle().equals("") || themeCreateDto.getMessage().equals("")) {
-            throw new AuthException("Title or message not found");
-        }
+        tokenValidator.verifyOnExistence(token);
+        themeValidator.verifyTitleOnNotNull(themeCreateDto.getTitle());
+        themeValidator.verifyMessageOnNotNull(themeCreateDto.getMessage());
         ShortUser user = usersDao.findShortUserByToken(token);
         Theme theme = conversionResultFactory.convert(themeCreateDto);
         long userId = user.getUserId();
@@ -94,9 +93,8 @@ public class ThemeServiceImpl implements ThemeService {
     }
 
     public ThemeDto getTheme(long themeId, Integer offset, int count) {
-        if (!themesDao.themeIsExists(themeId)) {
-            throw new NotFoundException("The theme isn't exists");
-        }else if (offset == null) {
+        themeValidator.verifyOnExistence(themeId);
+        if (offset == null) {
             offset = 0;
         }
         ThemeDto themeDto = conversionResultFactory.convert(themesDao.getThemeByThemeId(themeId));
@@ -107,16 +105,10 @@ public class ThemeServiceImpl implements ThemeService {
     }
 
     public ThemeDto updateTheme(String token, long themeId, String title, long offset, long count) {
-        if (!tokensDao.isExistsToken(token)) {
-            throw new AuthException("Incorrect token");
-        } else if (title.equals("") || title == null) {
-            throw new AuthException("Title not found");
-        } else if (!themesDao.themeIsExists(themeId)) {
-            throw new NotFoundException("The theme isn't exists");
-        }
-        if (themesDao.getAuthorIdByThemeId(themeId) != usersDao.findIdByToken(token)){
-            throw new AuthException("Forbidden");
-        }
+        tokenValidator.verifyOnExistence(token);
+        themeValidator.verifyTitleOnNotNull(title);
+        themeValidator.verifyOnExistence(themeId);
+        themeValidator.compareThemesById(themesDao.getAuthorIdByThemeId(themeId), usersDao.findIdByToken(token));
 
         themesDao.saveUpdate(new ThemeUpdate.Builder()
                 .Title(title)
@@ -131,11 +123,8 @@ public class ThemeServiceImpl implements ThemeService {
     }
 
     public void deleteTheme(String token, long themeId) {
-        if (!themesDao.themeIsExists(themeId)) {
-            throw new NotFoundException("The theme not exists");
-        } else if (themesDao.getAuthorIdByThemeId(themeId) != usersDao.findIdByToken(token)){
-            throw new AuthException("Forbidden");
-        }
+        themeValidator.verifyOnExistence(themeId);
+        themeValidator.compareThemesById(themesDao.getAuthorIdByThemeId(themeId), usersDao.findIdByToken(token));
         themesDao.deleteTheme(themeId);
     }
 }
