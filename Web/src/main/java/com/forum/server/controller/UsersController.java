@@ -31,7 +31,7 @@ public class UsersController {
 
     @RequestMapping(value = "/users/{user-id}", method = GET)
     public ResponseEntity<QueryResultDto> getUser(@PathVariable("user-id") long userId,
-                                                  @RequestHeader(name = "Auth-Token") String token) {
+                                                  @RequestHeader(name = "Auth-Token", required = false) String token) {
         ShortUserDto user = userService.getUser(token, userId);
         return buildResponseGet(user);
     }

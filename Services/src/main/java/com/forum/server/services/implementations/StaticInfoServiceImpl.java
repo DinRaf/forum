@@ -7,10 +7,15 @@ import com.forum.server.dao.interfaces.StaticInfoDao;
 import com.forum.server.dto.staticInfo.InfoDto;
 import com.forum.server.dto.staticInfo.SectionsDto;
 import com.forum.server.dto.staticInfo.SubsectionsDto;
+import com.forum.server.models.staticInfo.Section;
+import com.forum.server.models.staticInfo.Subsection;
 import com.forum.server.security.exceptions.NotFoundException;
 import com.forum.server.services.interfaces.StaticInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * 31.08.16
@@ -34,7 +39,11 @@ public class StaticInfoServiceImpl implements StaticInfoService {
     private StaticInfoValidator staticInfoValidator;
 
     public SectionsDto getSections() {
-        return conversionListResultFactory.convertSections(staticInfoDao.getSections());
+        List<Section> sections = staticInfoDao.getSections();
+        for (Section s: sections) {
+            s.setSubsections(staticInfoDao.getSubsections(s.getUrl()));
+        }
+        return conversionListResultFactory.convertSections(sections);
     }
 
     public SubsectionsDto getSubsections(String url) {

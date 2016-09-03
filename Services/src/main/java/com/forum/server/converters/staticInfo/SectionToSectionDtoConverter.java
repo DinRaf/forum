@@ -1,8 +1,12 @@
 package com.forum.server.converters.staticInfo;
 
 import com.forum.server.dto.staticInfo.SectionDto;
+import com.forum.server.dto.staticInfo.SubsectionDto;
+import com.forum.server.dto.staticInfo.SubsectionsDto;
 import com.forum.server.models.staticInfo.Section;
 import org.springframework.core.convert.converter.Converter;
+
+import java.util.List;
 
 /**
  * 31.08.16
@@ -13,12 +17,15 @@ import org.springframework.core.convert.converter.Converter;
 public class SectionToSectionDtoConverter implements Converter<Section, SectionDto> {
     @Override
     public SectionDto convert(Section section) {
+        ListSubsectionToSubsectionsDtoConverter converter = new ListSubsectionToSubsectionsDtoConverter();
+        SubsectionsDto subsectionsDto = converter.convert(section.getSubsections());
         return new SectionDto.Builder()
                 .Id(section.getSectionId())
                 .Name(section.getName())
                 .SubsectionsCount(section.getSubsectionsCount())
                 .ThemesCount(section.getThemesCount())
                 .Url(section.getUrl())
+                .Subsections(subsectionsDto.getSubsections())
                 .build();
     }
 }
