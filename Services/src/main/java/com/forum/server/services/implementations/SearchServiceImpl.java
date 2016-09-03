@@ -2,8 +2,9 @@ package com.forum.server.services.implementations;
 
 import com.forum.server.converters.ConversionListResultFactory;
 import com.forum.server.converters.ConversionResultFactory;
+import com.forum.server.dao.validation.SearchValidator;
+import com.forum.server.dao.validation.TokenValidator;
 import com.forum.server.dao.interfaces.ThemesDao;
-import com.forum.server.dao.interfaces.TokensDao;
 import com.forum.server.dao.interfaces.UsersDao;
 import com.forum.server.dto.theme.ThemeSearchDto;
 import com.forum.server.dto.theme.ThemeSearchResultDto;
@@ -11,8 +12,6 @@ import com.forum.server.dto.theme.ThemesSearchDto;
 import com.forum.server.dto.user.SearchUsersDto;
 import com.forum.server.dto.user.ShortUsersDto;
 import com.forum.server.models.user.ShortUser;
-import com.forum.server.security.exceptions.AuthException;
-import com.forum.server.security.exceptions.IncorrectTokenException;
 import com.forum.server.services.interfaces.SearchService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,9 +32,6 @@ public class SearchServiceImpl implements SearchService {
     private ThemesDao themesDao;
 
     @Autowired
-    private TokensDao tokensDao;
-
-    @Autowired
     private UsersDao usersDao;
 
     @Autowired
@@ -44,10 +40,15 @@ public class SearchServiceImpl implements SearchService {
     @Autowired
     private ConversionResultFactory conversionResultFactory;
 
+    @Autowired
+    private SearchValidator searchValidator;
+
+    @Autowired
+    private TokenValidator tokenValidator;
+
     public ThemeSearchResultDto searchThemes(String keyword, Integer offset, int count, String sectionUrl, String subsectionUrl) {
-        if (keyword == "" || keyword == null) {
-            throw new AuthException("Keyword not found");
-        } else if (offset == null) {
+        searchValidator.verifyOnNotNull(keyword);
+        if (offset == null) {
             offset = 0;
         }
         List<ThemeSearchDto> themeSearchDtos = new LinkedList<>();
@@ -71,18 +72,12 @@ public class SearchServiceImpl implements SearchService {
     }
 
     public SearchUsersDto searchUsers(String token, String keyword, Integer offset, int count, String sorting, Boolean isOnline) {
-        if (!tokensDao.isExistsToken(token)) {
-            throw new IncorrectTokenException("Token is incorrect");
-        }
-        if (keyword == "" || keyword == null) {
-            throw new AuthException("Keyword not found");
-        } else if (offset == null) {
+        tokenValidator.verifyOnExistence(token);
+        searchValidator.verifyOnNotNull(keyword);
+        if (offset == null) {
             offset = 0;
         }
         sorting = conversionResultFactory.getSearchSorting(sorting);
-        if (sorting == null) {
-            throw new AuthException("Sort parameter is wrong or missing");
-        }
         List<ShortUser> usersDto;
         if (keyword == null) {
             if (isOnline == null) {

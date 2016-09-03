@@ -47,6 +47,19 @@
             <groupId>com.forum.server</groupId>
             <artifactId>dto</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.forum.server</groupId>
+            <artifactId>security</artifactId>
+            <version>1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.forum.server</groupId>
+            <artifactId>services</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.forum.server</groupId>
+            <artifactId>services</artifactId>
+        </dependency>
     </dependencies>
 
 
