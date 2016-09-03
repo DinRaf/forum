@@ -11,6 +11,8 @@ import com.forum.server.security.generators.TokenGenerator;
 import com.forum.server.services.interfaces.RegistrationService;
 import com.forum.server.services.utils.EmailValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.MailSender;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -40,6 +42,12 @@ public class RegistrationServiceImpl implements RegistrationService {
 
     @Autowired
     private ConversionResultFactory conversionResultFactory;
+
+    @Autowired
+    private SimpleMailMessage mailMessage;
+
+    @Autowired
+    private MailSender mailSender;
 
     @Override
     public LoginDto login(String identifier, String password) {
@@ -87,18 +95,21 @@ public class RegistrationServiceImpl implements RegistrationService {
         if (!passwordMeetsRequirements(authDto.getPassword())) {
             throw new AuthException("Password is not correct");
         }
-        String identifier = authDto.getMail();
-        if (identifier == null || !emailValidator.validate(identifier)) {
-            throw new AuthException("E-Mail is not correct or missing");
-        } else if (usersDao.isExistsMail(identifier)) {
-            throw new AuthException("E-Mail already exists");
-        }
-        identifier = authDto.getNickName();
+        String nickName = authDto.getNickName();
         if (!nicknameMeetsRequirements(authDto.getNickName())) {
             throw new AuthException("Nickname is not correct");
-        } else if (usersDao.isExistsNickName(identifier)) {
+        } else if (usersDao.isExistsNickName(nickName)) {
             throw new AuthException("Nickname already exists");
         }
+        String mail = authDto.getMail();
+        if (mail == null || !emailValidator.validate(mail)) {
+            throw new AuthException("E-Mail is not correct or missing");
+        } else if (usersDao.isExistsMail(mail)) {
+            throw new AuthException("E-Mail already exists");
+        }
+        sendMessage(mail, nickName);
+
+
         User user = conversionResultFactory.convert(authDto);
         usersDao.save(user);
         long userId = usersDao.getIdByNickName(user.getNickName());
@@ -110,6 +121,22 @@ public class RegistrationServiceImpl implements RegistrationService {
                 .build();
     }
 
+
+
+    private void sendMessage(String mail, String nickname) {
+        SimpleMailMessage message = new SimpleMailMessage(mailMessage);
+        message.setTo(mail);
+        message.setText(
+                "Здравствуйте, " + nickname + "!\n" +
+                "Для подтверждения аккаунта перейдите пожалуйста по ссылке ниже:\n"
+
+        );
+        try {
+            mailSender.send(message);
+        } catch (Exception ex) {
+            throw new AuthException("Регистрация не удалась");
+        }
+    }
 
     public static boolean passwordMeetsRequirements(String password) {
         return password.length() >= 6;
