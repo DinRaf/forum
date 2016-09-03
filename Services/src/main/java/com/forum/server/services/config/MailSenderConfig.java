@@ -25,10 +25,10 @@ public class MailSenderConfig {
         properties.put("mail.transport.protocol", "smtp");
         properties.put("mail.debug", true);
         JavaMailSenderImpl javaMailSender = new JavaMailSenderImpl();
-        javaMailSender.setHost("smtp.mail.ru");
+        javaMailSender.setHost("smtp.gmail.com");
         javaMailSender.setPort(465);
-        javaMailSender.setUsername("forum.labooda@mail.ru");
-        javaMailSender.setPassword("emil4mo914");
+        javaMailSender.setUsername("rafteri98@gmail.com");
+        javaMailSender.setPassword("1q2w2w1q");
         javaMailSender.setProtocol("smtp");
         javaMailSender.setJavaMailProperties(properties);
         return javaMailSender;
@@ -37,7 +37,7 @@ public class MailSenderConfig {
     @Bean
     public SimpleMailMessage simpleMailMessage() {
         SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
-        simpleMailMessage.setFrom("forum.labooda@mail.ru");
+        simpleMailMessage.setFrom("rafteri98@gmail.com");
         simpleMailMessage.setSubject("Подвтердите почту");
         return simpleMailMessage;
     }

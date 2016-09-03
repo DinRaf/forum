@@ -43,4 +43,10 @@ public class UsersController {
         ShortUserDto user = userService.updateUser(token, userId, userInfo);
         return buildResponsePostAndPut(user);
     }
+
+    @RequestMapping(value = "/", method = GET)
+    public ResponseEntity<QueryResultDto> verifyUser(@RequestHeader(name = "Auth-Token") String token) {
+        userService.verify(token);
+        return buildResponseGet(null);
+    }
 }

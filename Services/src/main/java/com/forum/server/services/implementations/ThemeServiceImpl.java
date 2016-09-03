@@ -2,8 +2,8 @@ package com.forum.server.services.implementations;
 
 import com.forum.server.converters.ConversionListResultFactory;
 import com.forum.server.converters.ConversionResultFactory;
-import com.forum.server.dao.validation.ThemeValidator;
-import com.forum.server.dao.validation.TokenValidator;
+import com.forum.server.validation.ThemeValidator;
+import com.forum.server.validation.TokenValidator;
 import com.forum.server.dao.interfaces.MessagesDao;
 import com.forum.server.dao.interfaces.ThemesDao;
 import com.forum.server.dao.interfaces.UsersDao;

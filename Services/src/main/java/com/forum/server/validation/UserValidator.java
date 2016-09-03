@@ -1,14 +1,16 @@
-package com.forum.server.dao.validation;
+package com.forum.server.validation;
 
 import com.forum.server.dao.interfaces.UsersDao;
 import com.forum.server.security.exceptions.AuthException;
 import com.forum.server.security.exceptions.NotFoundException;
 import com.forum.server.services.utils.EmailValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  * Created by root on 03.09.16.
  */
+@Component
 public class UserValidator {
 
     @Autowired

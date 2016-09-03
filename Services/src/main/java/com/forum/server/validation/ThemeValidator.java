@@ -1,17 +1,19 @@
-package com.forum.server.dao.validation;
+package com.forum.server.validation;
 
 import com.forum.server.dao.interfaces.ThemesDao;
 import com.forum.server.security.exceptions.AuthException;
 import com.forum.server.security.exceptions.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  * Created by root on 03.09.16.
  */
+@Component
 public class ThemeValidator {
 
     @Autowired
-    ThemesDao themesDao;
+    private ThemesDao themesDao;
 
     public void verifyOnExistence(long themeId) {
         if (!themesDao.themeIsExists(themeId)) {

@@ -2,19 +2,16 @@ package com.forum.server.services.implementations;
 
 import com.forum.server.converters.ConversionListResultFactory;
 import com.forum.server.converters.ConversionResultFactory;
-import com.forum.server.dao.Validation.StaticInfoValidator;
+import com.forum.server.validation.StaticInfoValidator;
 import com.forum.server.dao.interfaces.StaticInfoDao;
 import com.forum.server.dto.staticInfo.InfoDto;
 import com.forum.server.dto.staticInfo.SectionsDto;
 import com.forum.server.dto.staticInfo.SubsectionsDto;
 import com.forum.server.models.staticInfo.Section;
-import com.forum.server.models.staticInfo.Subsection;
-import com.forum.server.security.exceptions.NotFoundException;
 import com.forum.server.services.interfaces.StaticInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.LinkedList;
 import java.util.List;
 
 /**

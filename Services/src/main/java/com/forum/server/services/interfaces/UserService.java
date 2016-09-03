@@ -14,4 +14,6 @@ public interface UserService {
     ShortUserDto getUser(String token, long userId);
 
     ShortUserDto updateUser(String token, long userId, UserUpdateDto userInfo);
+
+    void verify(String token);
 }

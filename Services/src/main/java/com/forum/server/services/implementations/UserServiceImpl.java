@@ -1,7 +1,8 @@
 package com.forum.server.services.implementations;
 
 import com.forum.server.converters.ConversionResultFactory;
-import com.forum.server.dao.validation.UserValidator;
+import com.forum.server.validation.TokenValidator;
+import com.forum.server.validation.UserValidator;
 import com.forum.server.dao.interfaces.TokensDao;
 import com.forum.server.dao.interfaces.UsersDao;
 import com.forum.server.dto.user.ShortUserDto;
@@ -35,6 +36,9 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserValidator userValidator;
 
+    @Autowired
+    private TokenValidator tokenValidator;
+
 
     public ShortUserDto getUser(String token, long userId) {
         userValidator.verifyOnExistence(userId);
@@ -64,5 +68,9 @@ public class UserServiceImpl implements UserService {
         }
         usersDao.update(conversionResultFactory.convertWithPass(userInfo), userId);
         return conversionResultFactory.convertUser(usersDao.getUserById(userId));
+    }
+
+    public void verify(String token) {
+        tokenValidator.verifyOnExistence(token);
     }
 }

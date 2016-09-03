@@ -107,7 +107,7 @@ public class RegistrationServiceImpl implements RegistrationService {
         } else if (usersDao.isExistsMail(mail)) {
             throw new AuthException("E-Mail already exists");
         }
-        sendMessage(mail, nickName);
+//        sendMessage(mail, nickName);
 
 
         User user = conversionResultFactory.convert(authDto);

@@ -2,10 +2,10 @@ package com.forum.server.services.implementations;
 
 import com.forum.server.converters.ConversionListResultFactory;
 import com.forum.server.converters.ConversionResultFactory;
-import com.forum.server.dao.validation.MessageMarkValidator;
-import com.forum.server.dao.validation.MessageValidator;
-import com.forum.server.dao.validation.TokenValidator;
-import com.forum.server.dao.validation.UserValidator;
+import com.forum.server.validation.MessageMarkValidator;
+import com.forum.server.validation.MessageValidator;
+import com.forum.server.validation.TokenValidator;
+import com.forum.server.validation.UserValidator;
 import com.forum.server.dao.interfaces.*;
 import com.forum.server.dto.message.MessageCreateDto;
 import com.forum.server.dto.message.MessagesDto;
