@@ -1,5 +1,7 @@
 package com.forum.server.models.staticInfo;
 
+import java.util.List;
+
 /**
  * 31.08.16
  *
@@ -12,6 +14,15 @@ public class Section {
     private long themesCount;
     private long subsectionsCount;
     private String url;
+    private List<Subsection> subsections;
+
+    public void setSubsections(List<Subsection> subsections) {
+        this.subsections = subsections;
+    }
+
+    public List<Subsection> getSubsections() {
+        return subsections;
+    }
 
     public String getUrl() {
         return url;
@@ -42,6 +53,7 @@ public class Section {
         this.themesCount = builder.themesCount;
         this.subsectionsCount = builder.subsectionsCount;
         this.url = builder.url;
+        this.subsections = builder.subsections;
     }
 
     public static class Builder {
@@ -50,6 +62,12 @@ public class Section {
         private long themesCount;
         private long subsectionsCount;
         private String url;
+        private List<Subsection> subsections;
+
+        public Builder Subsections(List<Subsection> subsections) {
+            this.subsections = subsections;
+            return this;
+        }
 
         public Builder Url(String url) {
             this.url = url;

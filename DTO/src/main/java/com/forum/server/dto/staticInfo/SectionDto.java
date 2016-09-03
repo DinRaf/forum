@@ -2,6 +2,8 @@ package com.forum.server.dto.staticInfo;
 
 import com.forum.server.dto.Data;
 
+import java.util.List;
+
 /**
  * 31.08.16
  *
@@ -14,6 +16,11 @@ public class SectionDto implements Data{
     private long themesCount;
     private long subsectionsCount;
     private String url;
+    private List<SubsectionDto> subsections;
+
+    public List<SubsectionDto> getSubsections() {
+        return subsections;
+    }
 
     public String getUrl() {
         return url;
@@ -44,6 +51,7 @@ public class SectionDto implements Data{
         this.themesCount = builder.themesCount;
         this.subsectionsCount = builder.subsectionsCount;
         this.url = builder.url;
+        this.subsections = builder.subsections;
     }
 
     public static class Builder {
@@ -52,6 +60,12 @@ public class SectionDto implements Data{
         private long themesCount;
         private long subsectionsCount;
         private String url;
+        private List<SubsectionDto> subsections;
+
+        public Builder Subsections(List<SubsectionDto> subsections) {
+            this.subsections = subsections;
+            return this;
+        }
 
         public Builder Url(String url) {
             this.url = url;

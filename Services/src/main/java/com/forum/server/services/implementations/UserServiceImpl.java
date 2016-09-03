@@ -42,7 +42,7 @@ public class UserServiceImpl implements UserService {
         if (!usersDao.isExistsId(userId)) {
             throw new NotFoundException("User not found");
         }
-        if (tokensDao.isExistsToken(token)) {
+        if (token != null && tokensDao.isExistsToken(token)) {
             return conversionResultFactory.convertUser(usersDao.getUserById(userId));
         } else {
             return conversionResultFactory.convertNotAuth(usersDao.getUserById(userId));
