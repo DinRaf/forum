@@ -2,7 +2,7 @@ package com.forum.server.services.interfaces;
 
 import com.forum.server.dto.staticInfo.InfoDto;
 import com.forum.server.dto.staticInfo.SectionsDto;
-import com.forum.server.dto.staticInfo.SubsectionsDto;
+import com.forum.server.dto.staticInfo.SubsectionsWithMetaDto;
 
 /**
  * 31.08.16
@@ -13,7 +13,7 @@ import com.forum.server.dto.staticInfo.SubsectionsDto;
 public interface StaticInfoService {
     SectionsDto getSections();
 
-    SubsectionsDto getSubsections(String url);
+    SubsectionsWithMetaDto getSubsections(String url);
 
     InfoDto getInfo(String identifier);
 }

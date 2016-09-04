@@ -53,4 +53,6 @@ public interface UsersDao {
     int getRightsByToken(String token);
 
     int getRightsByEmail(String email);
+
+    int getRightsByUserId(long userId);
 }

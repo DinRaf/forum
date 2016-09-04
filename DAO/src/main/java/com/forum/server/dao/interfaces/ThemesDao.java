@@ -31,11 +31,19 @@ public interface ThemesDao {
 
     void deleteTheme(long themeId);
 
-    List<ThemeSearchDto> getThemesByKeywordSectionIdSubsectionIdWithLimitOffset(String keyword, String sectionUrl, String subsectionUrl, int offset, int count);
+    List<ThemeSearchDto> getThemesByKeywordSectionUrlSubsectionUrlWithLimitOffset(String keyword, String sectionUrl, String subsectionUrl, int offset, int count);
 
     List<ThemeSearchDto> getThemesByKeywordWithLimitOffset(String keyword, int offset, int count);
 
-    List<ThemeSearchDto> getThemesByKeywordSectionIdWithLimitOffset(String keyword, String sectionUrl, int offset, int count);
+    List<ThemeSearchDto> getThemesByKeywordSectionUrlWithLimitOffset(String keyword, String sectionUrl, int offset, int count);
 
-    List<ThemeSearchDto> getThemesByKeywordSubsectionIdWithLimitOffset(String keyword, String subsectionUrl, int offset, int count);
+    List<ThemeSearchDto> getThemesByKeywordSubsectionUrlWithLimitOffset(String keyword, String subsectionUrl, int offset, int count);
+
+    List<ThemeSearchDto> getThemesWithLimitOffset(Integer offset, int count);
+
+    List<ThemeSearchDto> getThemesBySectionUrlWithLimitOffset(Integer offset, int count);
+
+    List<ThemeSearchDto> getThemesBySubsectionUrlWithLimitOffset(Integer offset, int count);
+
+    List<ThemeSearchDto> getThemesBySectionUrlSubsectionUrlWithLimitOffset(Integer offset, int count);
 }

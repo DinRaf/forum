@@ -2,11 +2,11 @@ package com.forum.server.services.implementations;
 
 import com.forum.server.converters.ConversionListResultFactory;
 import com.forum.server.converters.ConversionResultFactory;
+import com.forum.server.dto.staticInfo.SubsectionsWithMetaDto;
 import com.forum.server.validation.StaticInfoValidator;
 import com.forum.server.dao.interfaces.StaticInfoDao;
 import com.forum.server.dto.staticInfo.InfoDto;
 import com.forum.server.dto.staticInfo.SectionsDto;
-import com.forum.server.dto.staticInfo.SubsectionsDto;
 import com.forum.server.models.staticInfo.Section;
 import com.forum.server.services.interfaces.StaticInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,9 +43,12 @@ public class StaticInfoServiceImpl implements StaticInfoService {
         return conversionListResultFactory.convertSections(sections);
     }
 
-    public SubsectionsDto getSubsections(String url) {
+    public SubsectionsWithMetaDto getSubsections(String url) {
         staticInfoValidator.verifySectionOnExistence(url);
-        return conversionListResultFactory.convertSubsections(staticInfoDao.getSubsections(url));
+        return new SubsectionsWithMetaDto.Builder()
+                .Subsections(conversionListResultFactory.convertSubsections(staticInfoDao.getSubsections(url)))
+                .Section(staticInfoDao.getSectionBySubsectionUrl(url))
+                .build();
     }
 
     public InfoDto getInfo(String identifier) {

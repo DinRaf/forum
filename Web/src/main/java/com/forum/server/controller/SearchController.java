@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import static com.forum.server.utils.ResponseBuilder.buildResponseGetWithCount;
+import static com.forum.server.utils.ResponseBuilder.buildResponseGetWithCountAndSubsection;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
 /**
@@ -26,13 +27,13 @@ public class SearchController {
     private SearchService searchService;
 
     @RequestMapping(value = "/themes", method = GET)
-    public ResponseEntity<QueryResultDto> searchThemes(@RequestParam(value = "find") String keyword,
+    public ResponseEntity<QueryResultDto> searchThemes(@RequestParam(value = "find", required = false) String keyword,
                                                        @RequestParam(value = "offset", required = false) Integer offset,
                                                        @RequestParam(value = "count") int count,
                                                        @RequestParam(value = "section-url", required = false) String sectionUrl,
                                                        @RequestParam(value = "subsection-url", required = false) String subsectionUrl) {
         ThemeSearchResultDto themeSearchResultDto = searchService.searchThemes(keyword, offset, count, sectionUrl, subsectionUrl);
-        return buildResponseGetWithCount(themeSearchResultDto.getThemesSearchDto(), themeSearchResultDto.getCount());
+        return buildResponseGetWithCountAndSubsection(themeSearchResultDto.getThemesSearchDto(), themeSearchResultDto.getCount(), themeSearchResultDto.getSubsection());
     }
 
     @RequestMapping(value = "/users", method = GET)

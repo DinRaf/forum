@@ -2,6 +2,7 @@ package com.forum.server.services.implementations;
 
 import com.forum.server.converters.ConversionListResultFactory;
 import com.forum.server.converters.ConversionResultFactory;
+import com.forum.server.dao.interfaces.StaticInfoDao;
 import com.forum.server.validation.RightsValidator;
 import com.forum.server.validation.SearchValidator;
 import com.forum.server.validation.TokenValidator;
@@ -36,6 +37,9 @@ public class SearchServiceImpl implements SearchService {
     private UsersDao usersDao;
 
     @Autowired
+    private StaticInfoDao staticInfoDao;
+
+    @Autowired
     private ConversionListResultFactory conversionListResultFactory;
 
     @Autowired
@@ -57,21 +61,38 @@ public class SearchServiceImpl implements SearchService {
         }
         List<ThemeSearchDto> themeSearchDtos = new LinkedList<>();
         if (sectionUrl == null && subsectionUrl == null) {
-            themeSearchDtos = themesDao.getThemesByKeywordWithLimitOffset(keyword, offset, count);
+            if (keyword == null) {
+                themeSearchDtos = themesDao.getThemesWithLimitOffset(offset, count);
+            } else {
+                themeSearchDtos = themesDao.getThemesByKeywordWithLimitOffset(keyword, offset, count);
+            }
         } else if (subsectionUrl == null) {
-            themeSearchDtos = themesDao.getThemesByKeywordSectionIdWithLimitOffset(keyword, sectionUrl, offset, count);
-        } else if (sectionUrl == null && subsectionUrl == null) {
-            themeSearchDtos = themesDao.getThemesByKeywordSubsectionIdWithLimitOffset(keyword, subsectionUrl, offset, count);
+            if (keyword == null) {
+                themeSearchDtos = themesDao.getThemesBySectionUrlWithLimitOffset(offset, count);
+            } else {
+                themeSearchDtos = themesDao.getThemesByKeywordSectionUrlWithLimitOffset(keyword, sectionUrl, offset, count);
+            }
+        } else if (sectionUrl == null) {
+            if (keyword == null) {
+                themeSearchDtos = themesDao.getThemesBySubsectionUrlWithLimitOffset(offset, count);
+            } else {
+                themeSearchDtos = themesDao.getThemesByKeywordSubsectionUrlWithLimitOffset(keyword, subsectionUrl, offset, count);
+            }
         } else {
-            themeSearchDtos = themesDao.getThemesByKeywordSectionIdSubsectionIdWithLimitOffset(keyword, sectionUrl, subsectionUrl, offset, count);
+            if (keyword == null) {
+                themeSearchDtos = themesDao.getThemesBySectionUrlSubsectionUrlWithLimitOffset(offset, count);
+            } else {
+                themeSearchDtos = themesDao.getThemesByKeywordSectionUrlSubsectionUrlWithLimitOffset(keyword, sectionUrl, subsectionUrl, offset, count);
+            }
         }
         int countOfResults = themeSearchDtos.size();
         ThemesSearchDto themesSearchDto = new ThemesSearchDto(themeSearchDtos);
-
+        String subsection = (subsectionUrl == null) ? null : staticInfoDao.getSubsectionByUrl(subsectionUrl);
 
         return new ThemeSearchResultDto.Builder()
                 .Count(countOfResults)
                 .ThemesSearhDto(themesSearchDto)
+                .Subsection(subsection)
                 .build();
     }
 

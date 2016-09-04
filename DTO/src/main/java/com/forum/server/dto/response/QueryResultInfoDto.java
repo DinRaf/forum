@@ -13,6 +13,12 @@ public class QueryResultInfoDto {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private Integer count = null;
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private String section = null;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private String subsection = null;
+
     public QueryResultInfoDto(String code, String status) {
         this.code = code;
         this.status = status;
@@ -22,6 +28,19 @@ public class QueryResultInfoDto {
         this.code = code;
         this.status = status;
         this.count = count;
+    }
+
+    public QueryResultInfoDto(String code, String status, String section) {
+        this.code = code;
+        this.status = status;
+        this.section = section;
+    }
+
+    public QueryResultInfoDto(String code, String status, Integer count, String subsection) {
+        this.code = code;
+        this.status = status;
+        this.count = count;
+        this.subsection = subsection;
     }
 
     /**

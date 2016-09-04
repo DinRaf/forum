@@ -153,7 +153,7 @@ public class ThemesDaoImpl implements ThemesDao {
         namedJdbcTemplate.update(SQL_DELETE_THEME, params);
     }
 
-    public List<ThemeSearchDto> getThemesByKeywordSectionIdSubsectionIdWithLimitOffset(String keyword, String sectionUrl, String subsectionUrl, int offset, int count) {
+    public List<ThemeSearchDto> getThemesByKeywordSectionUrlSubsectionUrlWithLimitOffset(String keyword, String sectionUrl, String subsectionUrl, int offset, int count) {
         Map<String, Object> params = new HashMap<>();
         params.put("keyword", "%" + keyword + "%");
         params.put("section_url", sectionUrl.toLowerCase());
@@ -167,18 +167,34 @@ public class ThemesDaoImpl implements ThemesDao {
         return namedJdbcTemplate.query(SQL_GET_THEMES_BY_KEYWORD_WITH_LIMIT_OFFSET, params, themeSearchDtoRowMapper());
     }
 
-    public List<ThemeSearchDto> getThemesByKeywordSectionIdWithLimitOffset(String keyword, String sectionUrl, int offset, int count) {
+    public List<ThemeSearchDto> getThemesByKeywordSectionUrlWithLimitOffset(String keyword, String sectionUrl, int offset, int count) {
         Map<String, Object> params = new HashMap<>();
         params.put("keyword", "%" + keyword + "%");
         params.put("url", sectionUrl.toLowerCase());
         return namedJdbcTemplate.query(SQL_GET_THEMES_BY_KEYWORD_SECTION_URL_WITH_LIMIT_OFFSET, params, themeSearchDtoRowMapper());
     }
 
-    public List<ThemeSearchDto> getThemesByKeywordSubsectionIdWithLimitOffset(String keyword, String subsectionUrl, int offset, int count) {
+    public List<ThemeSearchDto> getThemesByKeywordSubsectionUrlWithLimitOffset(String keyword, String subsectionUrl, int offset, int count) {
         Map<String, Object> params = new HashMap<>();
         params.put("keyword", "%" + keyword + "%");
         params.put("url", subsectionUrl.toLowerCase());
         return namedJdbcTemplate.query(SQL_GET_THEMES_BY_KEYWORD_SUBSECTION_URL_WITH_LIMIT_OFFSET, params, themeSearchDtoRowMapper());
+    }
+
+    public List<ThemeSearchDto> getThemesWithLimitOffset(Integer offset, int count) {
+        return null;
+    }
+
+    public List<ThemeSearchDto> getThemesBySectionUrlWithLimitOffset(Integer offset, int count) {
+        return null;
+    }
+
+    public List<ThemeSearchDto> getThemesBySubsectionUrlWithLimitOffset(Integer offset, int count) {
+        return null;
+    }
+
+    public List<ThemeSearchDto> getThemesBySectionUrlSubsectionUrlWithLimitOffset(Integer offset, int count) {
+        return null;
     }
 
     public long getThemeIdByMessageId(long messageId) {

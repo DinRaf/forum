@@ -46,7 +46,7 @@ public class UserServiceImpl implements UserService {
 
     public ShortUserDto getUser(String token, long userId) {
         verify(token);
-        int rights = usersDao.getRightsByToken(token);
+        int rights = usersDao.getRightsByUserId(userId);
         rightsValidator.getUser(rights);
         userValidator.verifyOnExistence(userId);
         if (token != null && tokensDao.isExistsToken(token)) {
