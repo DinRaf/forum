@@ -30,4 +30,6 @@ public interface MessagesDao {
     void deleteMessageMarkByMessageId(long messageId);
 
     long getAuthorIdByMessageId(long messageId);
+
+    long getOffsetById(long messageId);
 }

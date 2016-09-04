@@ -26,4 +26,6 @@ public interface StaticInfoDao {
     String getSectionBySubsectionUrl(String url);
 
     String getSubsectionByUrl(String subsectionUrl);
+
+    String getSectionBySectionUrl(String url);
 }

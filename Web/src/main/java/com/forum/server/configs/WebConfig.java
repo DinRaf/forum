@@ -1,5 +1,6 @@
 package com.forum.server.configs;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -10,6 +11,8 @@ import org.springframework.web.servlet.config.annotation.DefaultServletHandlerCo
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
 /**
@@ -23,6 +26,17 @@ import java.util.Properties;
 @ComponentScan(basePackages = {"com.forum.server"})
 public class WebConfig extends WebMvcConfigurerAdapter {
 
+
+    @Bean(name = "map")
+    public HashMap<String, Integer> map() {
+        HashMap<String, Integer> params = new HashMap<>();
+        params.put("banned", 0);
+        params.put("unverified", 1);
+        params.put("user", 2);
+        params.put("moderator", 3);
+        params.put("admin", 4);
+        return params;
+    }
     @Bean
     public JavaMailSender javaMailService() {
         JavaMailSenderImpl javaMailSenderImpl = new JavaMailSenderImpl();

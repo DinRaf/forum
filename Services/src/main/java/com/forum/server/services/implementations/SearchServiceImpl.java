@@ -55,7 +55,6 @@ public class SearchServiceImpl implements SearchService {
     private RightsValidator rightsValidator;
 
     public ThemeSearchResultDto searchThemes(String keyword, Integer offset, int count, String sectionUrl, String subsectionUrl) {
-        searchValidator.verifyOnNotNull(keyword);
         if (offset == null) {
             offset = 0;
         }
@@ -98,7 +97,7 @@ public class SearchServiceImpl implements SearchService {
 
     public SearchUsersDto searchUsers(String token, String keyword, Integer offset, int count, String sorting, Boolean isOnline) {
         tokenValidator.verifyOnExistence(token);
-        int rights = usersDao.getRightsByToken(token);
+        String rights = usersDao.getRightsByToken(token);
         rightsValidator.searchUsers(rights);
         searchValidator.verifyOnNotNull(keyword);
         if (offset == null) {

@@ -43,10 +43,9 @@ public class ThemesController {
     @RequestMapping(value = "/themes/{theme-id}", method = PUT)
     public ResponseEntity<QueryResultDto> updateTheme(@PathVariable("theme-id") long themeId,
                                                       @RequestParam(value = "title") String title,
-                                                      @RequestParam(value = "offset") long offset,
                                                       @RequestParam(value = "count") long count,
                                                       @RequestHeader(name = "Auth-Token") String token) {
-        ThemeDto theme = themeService.updateTheme(token, themeId, title, offset, count);
+        ThemeDto theme = themeService.updateTheme(token, themeId, title, count);
         return buildResponseGet(theme);
     }
 

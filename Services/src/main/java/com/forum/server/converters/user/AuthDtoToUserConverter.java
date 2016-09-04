@@ -32,7 +32,7 @@ public class AuthDtoToUserConverter implements Converter<AuthDto, User> {
                 .ThemesCount(0l)
                 .IsOnline(true)
                 .Rating(0l)
-                .Rights(Rights.unverified.toString())
+                .Rights("unverified")
                 .build();
     }
 }

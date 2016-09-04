@@ -65,7 +65,7 @@ public class MessageServiceImpl implements MessageService {
     public ThemeDto createMessage(String token, long themeId, MessageCreateDto messageCreateDto, long count) {
         String messageText = messageCreateDto.getMessage();
         tokenValidator.verifyOnExistence(token);
-        int rights = usersDao.getRightsByToken(token);
+        String rights = usersDao.getRightsByToken(token);
         rightsValidator.createMessage(rights);
         messageValidator.verifyMessageText(messageText);
         Message message = conversionResultFactory.convert(messageText);
@@ -91,10 +91,10 @@ public class MessageServiceImpl implements MessageService {
         return messagesCount % count;
     }
 
-    public ThemeDto updateMessage(String token, long messageId, MessageCreateDto updatedMessageDto, long offset, long count) {
+    public ThemeDto updateMessage(String token, long messageId, MessageCreateDto updatedMessageDto, long count) {
         tokenValidator.verifyOnExistence(token);
         //Проверка прав доступа
-        int rights = usersDao.getRightsByToken(token);
+        String rights = usersDao.getRightsByToken(token);
         rightsValidator.updateMessage(rights);
         //Проверка текста сообщения
         String messageText = updatedMessageDto.getMessage();
@@ -111,6 +111,8 @@ public class MessageServiceImpl implements MessageService {
                 .UpdaterNickName(updater.getNickName())
                 .build(), messageId);
         //Собираем ответ
+        long offset = messagesDao.getOffsetById(messageId);
+        offset = offset - offset % count;
         long themeId = themesDao.getThemeIdByMessageId(messageId);
         ThemeDto themeDto = conversionResultFactory.convert(themesDao.getThemeByThemeId(themeId));
         themeDto.setMessages(conversionListResultFactory
@@ -121,7 +123,7 @@ public class MessageServiceImpl implements MessageService {
 
     public void updateMessageRating(String token, long messageId, boolean grade, long count, long offset) {
         tokenValidator.verifyOnExistence(token);
-        int rights = usersDao.getRightsByToken(token);
+        String rights = usersDao.getRightsByToken(token);
         rightsValidator.updateMessageRating(rights);
         long userId = usersDao.findIdByToken(token);
         messageMarkValidator.verifyOnExistence(userId, messageId, grade);
@@ -130,7 +132,7 @@ public class MessageServiceImpl implements MessageService {
 
     public void deleteMessage(String token, long messageId) {
         tokenValidator.verifyOnExistence(token);
-        int rights = usersDao.getRightsByToken(token);
+        String rights = usersDao.getRightsByToken(token);
         rightsValidator.deleteMessage(rights);
         long authorId = messagesDao.getAuthorIdByMessageId(messageId);
         messageValidator.verifyOnExistence(messageId);

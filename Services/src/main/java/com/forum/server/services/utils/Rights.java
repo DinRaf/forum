@@ -7,5 +7,5 @@ package com.forum.server.services.utils;
  * @version 1.0
  */
 public enum Rights {
-    user, admin, moderator, banned, unverified
+    banned, unverified, user, moderator, admin
 }

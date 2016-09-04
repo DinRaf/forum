@@ -16,6 +16,10 @@ public class ShortUserDto implements Data {
     private String avatar;
     private String rights;
 
+    public void setRights(String rights) {
+        this.rights = rights;
+    }
+
     public String getRights() {
         return rights;
     }

@@ -18,22 +18,14 @@ import java.util.Map;
  */
 public class ShortUserToShortUserDtoConverter implements Converter<ShortUser, ShortUserDto> {
 
-    @Autowired
-    private Map<Number, String> RightsConverter;
-
     @Override
     public ShortUserDto convert(ShortUser shortUser) {
         return new ShortUserDto.Builder()
                 .Avatar(shortUser.getAvatar())
                 .NickName(shortUser.getNickName())
                 .Online(shortUser.isOnline())
-                .Rating(shortUser.getRating())
                 .UserId(shortUser.getUserId())
-                .Rights(shortUser.getRights().toString())
+                .Rights(shortUser.getRights())
                 .build();
-    }
-
-    private String rightsConverter(int rights) {
-        return RightsConverter.get(rights);
     }
 }

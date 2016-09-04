@@ -50,14 +50,4 @@ public class PersistenceConfig {
         return new NamedParameterJdbcTemplate(DataSource());
     }
 
-    @Bean(name = "RightsConverter")
-    public Map<Number, String> RightsConverter() {
-        Map<Number, String> params = new HashMap<>();
-        params.put(0, "banned");
-        params.put(1, "unverified");
-        params.put(2, "user");
-        params.put(3, "moderator");
-        params.put(4, "admin");
-        return params;
-    }
 }

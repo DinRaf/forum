@@ -69,7 +69,7 @@ public class RegistrationServiceImpl implements RegistrationService {
             if (!usersDao.isExistsMail(identifier)) {
                 throw new AuthException("Incorrect identifier or password");
             }
-            int rights = usersDao.getRightsByEmail(identifier);
+            String rights = usersDao.getRightsByEmail(identifier);
             rightsValidator.login(rights);
             String passwordHash = usersDao.getHashByMail(identifier);
             if (encoder.matches(password, passwordHash)) {

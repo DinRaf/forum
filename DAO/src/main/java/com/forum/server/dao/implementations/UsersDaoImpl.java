@@ -204,15 +204,15 @@ public class UsersDaoImpl implements UsersDao {
         return namedJdbcTemplate.query(SQL_GET_SHORT_USER_BY_KEYWORD_IS_ONLINE_SORTED_LIMIT_OFFSET, params, shortUserRowMapper());
     }
 
-    public int getRightsByToken(String token) {
-        return jdbcTemplate.queryForObject(SQL_GET_RIGHTS_BY_TOKEN, int.class, token);
+    public String getRightsByToken(String token) {
+        return jdbcTemplate.queryForObject(SQL_GET_RIGHTS_BY_TOKEN, String.class, token);
     }
 
-    public int getRightsByEmail(String email) {
-        return jdbcTemplate.queryForObject(SQL_GET_RIGHTS_BY_EMAIL, int.class, email);
+    public String getRightsByEmail(String email) {
+        return jdbcTemplate.queryForObject(SQL_GET_RIGHTS_BY_EMAIL, String.class, email);
     }
 
-    public int getRightsByUserId(long userId) {
-        return jdbcTemplate.queryForObject(SQL_GET_RIGHTS_BY_USER_ID, int.class, userId);
+    public String getRightsByUserId(long userId) {
+        return jdbcTemplate.queryForObject(SQL_GET_RIGHTS_BY_USER_ID, String.class, userId);
     }
 }

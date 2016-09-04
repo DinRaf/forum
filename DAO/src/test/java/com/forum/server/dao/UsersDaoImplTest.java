@@ -91,26 +91,6 @@ public class UsersDaoImplTest {
     }
 
     @Test
-    public void save() throws Exception {
-        User sasha = new User.Builder()
-                .NickName("Sanya")
-                .Rating(0l)
-                .Avatar(null)
-                .IsOnline(true)
-                .Mail("sanya@gmail.com")
-                .DateOfBirth(0l)
-                .Info(null)
-                .Rights("user")
-                .RegistrationTime(0l)
-                .LastSession(0l)
-                .MessagesCount(0l)
-                .ThemesCount(0l)
-                .HashPassword("blol")
-                .build();
-        usersDao.save(sasha);
-    }
-
-    @Test
     public void getUserByThemeId() throws Exception {
         assertNotNull(usersDao.getUserByThemeId(THEME_ID));
     }

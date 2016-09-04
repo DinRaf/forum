@@ -11,7 +11,7 @@ public interface MessageService {
 
     ThemeDto createMessage(String token, long themeId, MessageCreateDto messageCreateDto, long count);
 
-    ThemeDto updateMessage(String token, long messageId, MessageCreateDto message, long offset, long count);
+    ThemeDto updateMessage(String token, long messageId, MessageCreateDto message, long count);
 
     void updateMessageRating(String token, long messageId, boolean grade, long count, long offset);
 

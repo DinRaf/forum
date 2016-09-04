@@ -60,7 +60,7 @@ public class ThemeServiceImpl implements ThemeService {
 
     public ThemeDto createTheme(String token, ThemeCreateDto themeCreateDto) {
         tokenValidator.verifyOnExistence(token);
-        int rights = usersDao.getRightsByToken(token);
+        String rights = usersDao.getRightsByToken(token);
         rightsValidator.createTheme(rights);
         themeValidator.verifyTitleOnNotNull(themeCreateDto.getTitle());
         themeValidator.verifyMessageOnNotNull(themeCreateDto.getMessage());
@@ -109,9 +109,9 @@ public class ThemeServiceImpl implements ThemeService {
         return themeDto;
     }
 
-    public ThemeDto updateTheme(String token, long themeId, String title, long offset, long count) {
+    public ThemeDto updateTheme(String token, long themeId, String title, long count) {
         tokenValidator.verifyOnExistence(token);
-        int rights = usersDao.getRightsByToken(token);
+        String rights = usersDao.getRightsByToken(token);
         rightsValidator.updateTheme(rights);
         themeValidator.verifyTitleOnNotNull(title);
         themeValidator.verifyOnExistence(themeId);
@@ -121,7 +121,7 @@ public class ThemeServiceImpl implements ThemeService {
                 .Title(title)
                 .build(),
                 themeId);
-
+        long offset = 0;
         ThemeDto themeDto = conversionResultFactory.convert(themesDao.getThemeByThemeId(themeId));
         themeDto.setMessages(conversionListResultFactory
                 .convertMessages(messagesDao
@@ -131,7 +131,7 @@ public class ThemeServiceImpl implements ThemeService {
 
     public void deleteTheme(String token, long themeId) {
         tokenValidator.verifyOnExistence(token);
-        int rights = usersDao.getRightsByToken(token);
+        String rights = usersDao.getRightsByToken(token);
         rightsValidator.deleteTheme(rights);
         themeValidator.verifyOnExistence(themeId);
         themeValidator.compareThemesById(themesDao.getAuthorIdByThemeId(themeId), usersDao.findIdByToken(token));

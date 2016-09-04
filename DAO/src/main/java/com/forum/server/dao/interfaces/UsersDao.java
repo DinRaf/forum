@@ -50,9 +50,9 @@ public interface UsersDao {
 
     List<ShortUser> getShortUsersByKeywordIsOnlineSortedLimitOffset(String keyword, Integer offset, int count, Boolean isOnline, String sorting);
 
-    int getRightsByToken(String token);
+    String getRightsByToken(String token);
 
-    int getRightsByEmail(String email);
+    String getRightsByEmail(String email);
 
-    int getRightsByUserId(long userId);
+    String getRightsByUserId(long userId);
 }

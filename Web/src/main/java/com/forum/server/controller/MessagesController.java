@@ -37,12 +37,11 @@ public class MessagesController {
     }
 
     @RequestMapping(value = "/messages/{message-id}", method = PUT)
-    public ResponseEntity<QueryResultDto> updateMessage(@RequestParam("offset") long offset,
-                                                        @RequestParam("count") long count,
+    public ResponseEntity<QueryResultDto> updateMessage(@RequestParam("count") long count,
                                                         @PathVariable("message-id") long messageId,
                                                         @RequestBody MessageCreateDto message,
                                                         @RequestHeader(name = "Auth-Token") String token) {
-        ThemeDto updatedMessage = messageService.updateMessage(token, messageId, message, count, offset);
+        ThemeDto updatedMessage = messageService.updateMessage(token, messageId, message, count);
         return buildResponsePostAndPut(updatedMessage);
     }
 

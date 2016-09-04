@@ -29,13 +29,13 @@ public class MessagesDaoImpl implements MessagesDao {
     private static final String SQL_ADD_MESSAGE = "INSERT INTO message (user_id, theme_id, date, body, update, rating, updater_id, updater_nick_name) VALUES (?, ?, ?, ?, ?, ?, ?, ?) ;";
     private static final String SQL_GET_MESSAGE_ID_BY_USER_ID_AND_DATE = "SELECT message_id FROM message WHERE user_id = :userId AND message.date = :date;";
     private static final String SQL_GET_MESSAGES_WITH_OFFSET = "SELECT * FROM message INNER JOIN short_user ON message.user_id = short_user.user_id WHERE theme_id = :themeId ORDER BY message_id OFFSET :offset;";
-    private static final String SQL_GET_MESSAGE_BY_ID = "SELECT * FROM message WHERE message_id = ?;";
     private static final String SQL_UPDATE_MESSAGE = "UPDATE message SET update = :update, updater_id = :updater_id, updater_nick_name = :updater_nick_name WHERE message_id = :message_id RETURNING true;";
     private static final String SQL_GET_MESSAGES_WITH_LIMIT_OFFSET = "SELECT * FROM message INNER JOIN short_user ON message.user_id = short_user.user_id WHERE theme_id = :themeId ORDER BY message_id LIMIT :count OFFSET :offset;";
     private static final String SQL_IS_EXISTS_MESSAGE = "SELECT CASE WHEN EXISTS(SELECT theme_id FROM message WHERE message_id = ?)THEN TRUE ELSE FALSE END ;";
     private static final String SQL_DELETE_MESSAGE = "DELETE FROM message WHERE message_id = :message_id;";
     private static final String SQL_DELETE_MESSAGE_MARK = "DELETE FROM message_mark WHERE message_id = :message_id;";
     private static final String SQL_GET_USER_ID_BY_MESSAGE_ID = "SELECT user_id FROM message WHERE message_id = ?;";
+    private static final String SQL_GET_OFFSET_BY_ID = "SELECT count(*) FROM message WHERE theme_id = (SELECT theme_id FROM message WHERE message_id = :messageId) AND message_id < :messageId;";
 
     private RowMapper<Message> messageRowMapper(){
         return (rs, rowNum) -> {
@@ -123,6 +123,12 @@ public class MessagesDaoImpl implements MessagesDao {
 
     public long getAuthorIdByMessageId(long messageId) {
         return jdbcTemplate.queryForObject(SQL_GET_USER_ID_BY_MESSAGE_ID, long.class, messageId);
+    }
+
+    public long getOffsetById(long messageId) {
+        Map<String, Number> params = new HashMap<>();
+        params.put("messageId", messageId);
+        return namedJdbcTemplate.queryForObject(SQL_GET_OFFSET_BY_ID, params, long.class);
     }
 
 }

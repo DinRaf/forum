@@ -12,22 +12,12 @@ public class ShortUser {
     private Long rating;
     private String rights;
 
-    public void setRights(String rights) {
-        this.rights = rights;
-    }
-
     public String getRights() {
         return rights;
     }
 
-    public ShortUser setRating(Long rating) {
-        this.rating = rating;
-        return this;
-    }
-
-    public ShortUser setOnline(boolean online) {
+    public void setOnline(boolean online) {
         isOnline = online;
-        return this;
     }
 
     private String avatar;

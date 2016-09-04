@@ -77,6 +77,22 @@ public class QueryResultInfoDto {
         this.count = count;
     }
 
+    public String getSection() {
+        return section;
+    }
+
+    public String getSubsection() {
+        return subsection;
+    }
+
+    public void setSection(String section) {
+        this.section = section;
+    }
+
+    public void setSubsection(String subsection) {
+        this.subsection = subsection;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {

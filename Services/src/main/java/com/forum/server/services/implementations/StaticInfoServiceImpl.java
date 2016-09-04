@@ -47,7 +47,7 @@ public class StaticInfoServiceImpl implements StaticInfoService {
         staticInfoValidator.verifySectionOnExistence(url);
         return new SubsectionsWithMetaDto.Builder()
                 .Subsections(conversionListResultFactory.convertSubsections(staticInfoDao.getSubsections(url)))
-                .Section(staticInfoDao.getSectionBySubsectionUrl(url))
+                .Section(staticInfoDao.getSectionBySectionUrl(url))
                 .build();
     }
 

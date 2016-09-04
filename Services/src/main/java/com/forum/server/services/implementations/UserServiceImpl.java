@@ -13,6 +13,10 @@ import com.forum.server.services.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
+import java.util.HashMap;
+import java.util.Map;
+
 import static com.forum.server.services.implementations.RegistrationServiceImpl.nicknameMeetsRequirements;
 import static com.forum.server.services.implementations.RegistrationServiceImpl.passwordMeetsRequirements;
 
@@ -43,14 +47,20 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private RightsValidator rightsValidator;
 
+    @Resource(name = "map")
+    private Map<String, Integer> map;
 
     public ShortUserDto getUser(String token, long userId) {
-        verify(token);
-        int rights = usersDao.getRightsByUserId(userId);
-        rightsValidator.getUser(rights);
+        String rightsString = usersDao.getRightsByUserId(userId);
+        int rights = map.get(rightsString);
         userValidator.verifyOnExistence(userId);
         if (token != null && tokensDao.isExistsToken(token)) {
-            return conversionResultFactory.convertUser(usersDao.getUserById(userId));
+            if (usersDao.findIdByToken(token) == userId && rights > 0) {
+                return conversionResultFactory.convertUser(usersDao.getUserById(userId));
+            } else if (rights > 1) {
+                return conversionResultFactory.convertUser(usersDao.getUserById(userId));
+            }
+            throw new AuthException("Недостаточно прав для получения информации о пользователе");
         } else {
             return conversionResultFactory.convertNotAuth(usersDao.getUserById(userId));
         }
@@ -58,7 +68,7 @@ public class UserServiceImpl implements UserService {
 
     public ShortUserDto updateUser(String token, long userId, UserUpdateDto userInfo) {
         verify(token);
-        int rights = usersDao.getRightsByToken(token);
+        String rights = usersDao.getRightsByToken(token);
         rightsValidator.updateUser(rights);
         userValidator.verifyOnExistence(userId);
         userValidator.compareUsersById(usersDao.findIdByToken(token), userId);
