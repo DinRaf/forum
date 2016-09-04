@@ -29,8 +29,8 @@ public class SearchController {
     public ResponseEntity<QueryResultDto> searchThemes(@RequestParam(value = "find") String keyword,
                                                        @RequestParam(value = "offset", required = false) Integer offset,
                                                        @RequestParam(value = "count") int count,
-                                                       @RequestParam(value = "section-id", required = false) String sectionUrl,
-                                                       @RequestParam(value = "subsection-id", required = false) String subsectionUrl) {
+                                                       @RequestParam(value = "section-url", required = false) String sectionUrl,
+                                                       @RequestParam(value = "subsection-url", required = false) String subsectionUrl) {
         ThemeSearchResultDto themeSearchResultDto = searchService.searchThemes(keyword, offset, count, sectionUrl, subsectionUrl);
         return buildResponseGetWithCount(themeSearchResultDto.getThemesSearchDto(), themeSearchResultDto.getCount());
     }

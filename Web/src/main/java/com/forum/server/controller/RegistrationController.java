@@ -7,11 +7,14 @@ import com.forum.server.services.interfaces.RegistrationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import static com.forum.server.utils.ResponseBuilder.buildResponseGet;
 import static com.forum.server.utils.ResponseBuilder.buildResponseLogin;
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 /**
@@ -37,5 +40,12 @@ public class RegistrationController {
 
         LoginDto token = registrationService.addUser(authDto);
         return buildResponseLogin(token);
+    }
+
+    @RequestMapping(value = "/confirmation/{confirm-hash}", method = GET)
+    public ResponseEntity<QueryResultDto> addUser(@PathVariable("confirm-hash") String confirmHash) {
+
+        registrationService.confirmUser(confirmHash);
+        return buildResponseGet(null);
     }
 }

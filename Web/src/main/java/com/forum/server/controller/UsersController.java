@@ -45,7 +45,7 @@ public class UsersController {
     }
 
     @RequestMapping(value = "/", method = GET)
-    public ResponseEntity<QueryResultDto> verifyUser(@RequestHeader(name = "Auth-Token") String token) {
+    public ResponseEntity<QueryResultDto> verifyUser(@RequestHeader(name = "Auth-Token", required = false) String token) {
         userService.verify(token);
         return buildResponseGet(null);
     }

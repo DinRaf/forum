@@ -1,6 +1,7 @@
 package com.forum.server.services.implementations;
 
 import com.forum.server.converters.ConversionResultFactory;
+import com.forum.server.dao.interfaces.ConfirmationDao;
 import com.forum.server.dao.interfaces.TokensDao;
 import com.forum.server.dao.interfaces.UsersDao;
 import com.forum.server.dto.auth.AuthDto;
@@ -9,10 +10,12 @@ import com.forum.server.models.user.User;
 import com.forum.server.security.exceptions.AuthException;
 import com.forum.server.security.generators.TokenGenerator;
 import com.forum.server.services.interfaces.RegistrationService;
+import com.forum.server.services.utils.ConfirmHashGenerator;
 import com.forum.server.services.utils.EmailValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -48,6 +51,12 @@ public class RegistrationServiceImpl implements RegistrationService {
 
     @Autowired
     private MailSender mailSender;
+
+    @Autowired
+    private ConfirmHashGenerator confirmHashGenerator;
+
+    @Autowired
+    private ConfirmationDao confirmationDao;
 
     @Override
     public LoginDto login(String identifier, String password) {
@@ -107,7 +116,6 @@ public class RegistrationServiceImpl implements RegistrationService {
         } else if (usersDao.isExistsMail(mail)) {
             throw new AuthException("E-Mail already exists");
         }
-//        sendMessage(mail, nickName);
 
 
         User user = conversionResultFactory.convert(authDto);
@@ -115,27 +123,39 @@ public class RegistrationServiceImpl implements RegistrationService {
         long userId = usersDao.getIdByNickName(user.getNickName());
         String token = tokenGenerator.generateToken();
         tokensDao.addToken(userId, token);
+        sendMessage(userId, mail, nickName);
         return new LoginDto.Builder()
                 .Token(token)
                 .UserId(userId)
                 .build();
     }
 
+    public void confirmUser(String confirmHash) {
+        if (!confirmationDao.isExistsHash(confirmHash)) {
+            throw new AuthException("Ссылка более не действительна");
+        } else {
+            confirmationDao.confirmUser(confirmHash);
+        }
+    }
 
 
-    private void sendMessage(String mail, String nickname) {
+    private void sendMessage(long userId, String mail, String nickname) {
         SimpleMailMessage message = new SimpleMailMessage(mailMessage);
         message.setTo(mail);
+        String confirmHash = confirmHashGenerator.generateHash()
+                + confirmHashGenerator.generateHash();
+        confirmationDao.saveConfirmHash(userId, confirmHash);
         message.setText(
                 "Здравствуйте, " + nickname + "!\n" +
-                "Для подтверждения аккаунта перейдите пожалуйста по ссылке ниже:\n"
-
+                "Для подтверждения аккаунта перейдите пожалуйста по ссылке ниже:\n" +
+                "192.168.0.105:8080/confirmation/" + confirmHash
         );
         try {
             mailSender.send(message);
         } catch (Exception ex) {
             throw new AuthException("Регистрация не удалась");
         }
+
     }
 
     public static boolean passwordMeetsRequirements(String password) {

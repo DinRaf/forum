@@ -52,13 +52,13 @@ public class SearchServiceImpl implements SearchService {
             offset = 0;
         }
         List<ThemeSearchDto> themeSearchDtos = new LinkedList<>();
-        if (sectionUrl == null) {
-            themeSearchDtos = themesDao.getThemesByKeywordSubsectionIdWithLimitOffset(keyword, subsectionUrl, offset, count);
+        if (sectionUrl == null && subsectionUrl == null) {
+            themeSearchDtos = themesDao.getThemesByKeywordWithLimitOffset(keyword, offset, count);
         } else if (subsectionUrl == null) {
             themeSearchDtos = themesDao.getThemesByKeywordSectionIdWithLimitOffset(keyword, sectionUrl, offset, count);
         } else if (sectionUrl == null && subsectionUrl == null) {
-            themeSearchDtos = themesDao.getThemesByKeywordWithLimitOffset(keyword, offset, count);
-        }else {
+            themeSearchDtos = themesDao.getThemesByKeywordSubsectionIdWithLimitOffset(keyword, subsectionUrl, offset, count);
+        } else {
             themeSearchDtos = themesDao.getThemesByKeywordSectionIdSubsectionIdWithLimitOffset(keyword, sectionUrl, subsectionUrl, offset, count);
         }
         int countOfResults = themeSearchDtos.size();

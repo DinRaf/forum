@@ -52,7 +52,7 @@ public class UsersDaoImpl implements UsersDao {
 
     private RowMapper<User> userRowMapper() {
         return (rs, i) -> new User.Builder()
-                .UserId(rs.getInt("user_id"))
+                .UserId(rs.getLong("user_id"))
                 .Name(rs.getString("name"))
                 .NickName(rs.getString("nick_name"))
                 .Rating(rs.getLong("rating"))
@@ -62,17 +62,17 @@ public class UsersDaoImpl implements UsersDao {
                 .DateOfBirth(rs.getLong("birth_date"))
                 .Info(rs.getString("info"))
                 .Rights(rs.getString("rights"))
-                .RegistrationTime(rs.getInt("registration_time"))
-                .LastSession(rs.getInt("last_session"))
-                .MessagesCount(rs.getInt("messages_count"))
-                .ThemesCount(rs.getInt("themes_count"))
+                .RegistrationTime(rs.getLong("registration_time"))
+                .LastSession(rs.getLong("last_session"))
+                .MessagesCount(rs.getLong("messages_count"))
+                .ThemesCount(rs.getLong("themes_count"))
                 .HashPassword(rs.getString("pass_hash"))
                 .build();
     }
 
     private RowMapper<ShortUser> shortUserRowMapper() {
         return (rs, i) -> new ShortUser.Builder()
-                .UserId(rs.getInt("user_id"))
+                .UserId(rs.getLong("user_id"))
                 .NickName(rs.getString("nick_name"))
                 .Rating(rs.getLong("rating"))
                 .Avatar(rs.getString("avatar"))

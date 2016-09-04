@@ -15,7 +15,7 @@ public class TokenValidator {
     private TokensDao tokensDao;
 
     public void verifyOnExistence(String token) {
-        if (!tokensDao.isExistsToken(token)) {
+        if (token == null && !tokensDao.isExistsToken(token)) {
             throw new IncorrectTokenException("Не верный токен");
         }
     }
