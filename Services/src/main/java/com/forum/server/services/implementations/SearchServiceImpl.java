@@ -59,7 +59,7 @@ public class SearchServiceImpl implements SearchService {
         if (offset == null) {
             offset = 0;
         }
-        List<ThemeSearchDto> themeSearchDtos = new LinkedList<>();
+        List<ThemeSearchDto> themeSearchDtos;
         if (sectionUrl == null && subsectionUrl == null) {
             if (keyword == null) {
                 themeSearchDtos = themesDao.getThemesWithLimitOffset(offset, count);
@@ -68,19 +68,19 @@ public class SearchServiceImpl implements SearchService {
             }
         } else if (subsectionUrl == null) {
             if (keyword == null) {
-                themeSearchDtos = themesDao.getThemesBySectionUrlWithLimitOffset(offset, count);
+                themeSearchDtos = themesDao.getThemesBySectionUrlWithLimitOffset(sectionUrl, offset, count);
             } else {
                 themeSearchDtos = themesDao.getThemesByKeywordSectionUrlWithLimitOffset(keyword, sectionUrl, offset, count);
             }
         } else if (sectionUrl == null) {
             if (keyword == null) {
-                themeSearchDtos = themesDao.getThemesBySubsectionUrlWithLimitOffset(offset, count);
+                themeSearchDtos = themesDao.getThemesBySubsectionUrlWithLimitOffset(subsectionUrl, offset, count);
             } else {
                 themeSearchDtos = themesDao.getThemesByKeywordSubsectionUrlWithLimitOffset(keyword, subsectionUrl, offset, count);
             }
         } else {
             if (keyword == null) {
-                themeSearchDtos = themesDao.getThemesBySectionUrlSubsectionUrlWithLimitOffset(offset, count);
+                themeSearchDtos = themesDao.getThemesBySectionUrlSubsectionUrlWithLimitOffset(sectionUrl, subsectionUrl, offset, count);
             } else {
                 themeSearchDtos = themesDao.getThemesByKeywordSectionUrlSubsectionUrlWithLimitOffset(keyword, sectionUrl, subsectionUrl, offset, count);
             }

@@ -45,10 +45,25 @@ public class ThemesDaoImpl implements ThemesDao {
     private static final String SQL_GET_THEMES_BY_KEYWORD_SECTION_URL_SUBSECTION_URL_WITH_LIMIT_OFFSET = "SELECT user_id, date, messages_count, status, title " +
             "FROM theme WHERE title ILIKE :keyword AND " +
                 "(section_id = (SELECT section_id FROM section WHERE LOWER(url) = :section_url) AND " +
-                "subsection_id = (SELECT subsection_id FROM subsection WHERE LOWER(url) = :subsection_url));";
-    private static final String SQL_GET_THEMES_BY_KEYWORD_WITH_LIMIT_OFFSET = "SELECT user_id, date, messages_count, status, title FROM theme WHERE title ILIKE :keyword;";
-    private static final String SQL_GET_THEMES_BY_KEYWORD_SECTION_URL_WITH_LIMIT_OFFSET = "SELECT user_id, date, messages_count, status, title FROM theme WHERE title ILIKE :keyword AND LOWER(url) = :url;";
-    private static final String SQL_GET_THEMES_BY_KEYWORD_SUBSECTION_URL_WITH_LIMIT_OFFSET = "SELECT user_id, date, messages_count, status, title FROM theme WHERE title ILIKE :keyword AND LOWER(url) = :url;";
+                "subsection_id = (SELECT subsection_id FROM subsection WHERE LOWER(url) = :subsection_url))" +
+                "ORDER BY theme_id LIMIT :count OFFSET :offset;";
+    private static final String SQL_GET_THEMES_BY_KEYWORD_WITH_LIMIT_OFFSET = "SELECT user_id, date, messages_count, status, title FROM theme WHERE title ILIKE :keyword" +
+            "ORDER BY theme_id LIMIT :count OFFSET :offset;";
+    private static final String SQL_GET_THEMES_BY_KEYWORD_SECTION_URL_WITH_LIMIT_OFFSET = "SELECT user_id, date, messages_count, status, title FROM theme WHERE title ILIKE :keyword AND section_id = (SELECT section_id FROM section WHERE LOWER(url) = :url)" +
+            "ORDER BY theme_id LIMIT :count OFFSET :offset;";
+    private static final String SQL_GET_THEMES_BY_KEYWORD_SUBSECTION_URL_WITH_LIMIT_OFFSET = "SELECT user_id, date, messages_count, status, title FROM theme WHERE title ILIKE :keyword AND subsection_id = (SELECT subsection_id FROM subsection WHERE LOWER(url) = :url)" +
+            "ORDER BY theme_id LIMIT :count OFFSET :offset;";
+    private static final String SQL_GET_THEMES_WITH_LIMIT_OFFSET = "SELECT user_id, date, messages_count, status, title FROM theme " +
+            "ORDER BY theme_id LIMIT :count OFFSET :offset;";
+    private static final String SQL_GET_THEMES_SECTION_URL_WITH_LIMIT_OFFSET = "SELECT user_id, date, messages_count, status, title FROM theme WHERE section_id = (SELECT section_id FROM section WHERE LOWER(url) = :url1)" +
+            "ORDER BY theme_id LIMIT :count OFFSET :offset;";
+    private static final String SQL_GET_THEMES_SUBSECTION_URL_WITH_LIMIT_OFFSET = "SELECT user_id, date, messages_count, status, title FROM theme WHERE subsection_id = (SELECT subsection_id FROM subsection WHERE LOWER(url) = :url2)" +
+            "ORDER BY theme_id LIMIT :count OFFSET :offset;";
+    private static final String SQL_GET_THEMES_SECTION_URL_SUBSECTION_URL_WITH_LIMIT_OFFSET = "SELECT user_id, date, messages_count, status, title " +
+            "FROM theme WHERE " +
+            "(section_id = (SELECT section_id FROM section WHERE LOWER(url) = :url1) AND " +
+            "subsection_id = (SELECT subsection_id FROM subsection WHERE LOWER(url) = :url2))" +
+            "ORDER BY theme_id LIMIT :count OFFSET :offset;";
 
     private RowMapper<Theme> themeRowMapper() {
         return (rs, rowNum) -> {
@@ -158,12 +173,16 @@ public class ThemesDaoImpl implements ThemesDao {
         params.put("keyword", "%" + keyword + "%");
         params.put("section_url", sectionUrl.toLowerCase());
         params.put("subsection_url", subsectionUrl.toLowerCase());
+        params.put("count", count);
+        params.put("offset", offset);
         return namedJdbcTemplate.query(SQL_GET_THEMES_BY_KEYWORD_SECTION_URL_SUBSECTION_URL_WITH_LIMIT_OFFSET, params, themeSearchDtoRowMapper());
     }
 
     public List<ThemeSearchDto> getThemesByKeywordWithLimitOffset(String keyword, int offset, int count) {
         Map<String, Object> params = new HashMap<>();
         params.put("keyword", "%" + keyword + "%");
+        params.put("count", count);
+        params.put("offset", offset);
         return namedJdbcTemplate.query(SQL_GET_THEMES_BY_KEYWORD_WITH_LIMIT_OFFSET, params, themeSearchDtoRowMapper());
     }
 
@@ -178,23 +197,41 @@ public class ThemesDaoImpl implements ThemesDao {
         Map<String, Object> params = new HashMap<>();
         params.put("keyword", "%" + keyword + "%");
         params.put("url", subsectionUrl.toLowerCase());
+        params.put("count", count);
+        params.put("offset", offset);
         return namedJdbcTemplate.query(SQL_GET_THEMES_BY_KEYWORD_SUBSECTION_URL_WITH_LIMIT_OFFSET, params, themeSearchDtoRowMapper());
     }
 
     public List<ThemeSearchDto> getThemesWithLimitOffset(Integer offset, int count) {
-        return null;
+        Map<String, Object> params = new HashMap<>();
+        params.put("count", count);
+        params.put("offset", offset);
+        return namedJdbcTemplate.query(SQL_GET_THEMES_WITH_LIMIT_OFFSET, params, themeSearchDtoRowMapper());
     }
 
-    public List<ThemeSearchDto> getThemesBySectionUrlWithLimitOffset(Integer offset, int count) {
-        return null;
+    public List<ThemeSearchDto> getThemesBySectionUrlWithLimitOffset(String sectionUrl, Integer offset, int count) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("url1", sectionUrl.toLowerCase());
+        params.put("count", count);
+        params.put("offset", offset);
+        return namedJdbcTemplate.query(SQL_GET_THEMES_SECTION_URL_WITH_LIMIT_OFFSET, params, themeSearchDtoRowMapper());
     }
 
-    public List<ThemeSearchDto> getThemesBySubsectionUrlWithLimitOffset(Integer offset, int count) {
-        return null;
+    public List<ThemeSearchDto> getThemesBySubsectionUrlWithLimitOffset(String subsectionUrl, Integer offset, int count) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("url2", subsectionUrl.toLowerCase());
+        params.put("count", count);
+        params.put("offset", offset);
+        return namedJdbcTemplate.query(SQL_GET_THEMES_SUBSECTION_URL_WITH_LIMIT_OFFSET, params, themeSearchDtoRowMapper());
     }
 
-    public List<ThemeSearchDto> getThemesBySectionUrlSubsectionUrlWithLimitOffset(Integer offset, int count) {
-        return null;
+    public List<ThemeSearchDto> getThemesBySectionUrlSubsectionUrlWithLimitOffset(String sectionUrl, String subsectionUrl, Integer offset, int count) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("url1", sectionUrl.toLowerCase());
+        params.put("url2", subsectionUrl.toLowerCase());
+        params.put("count", count);
+        params.put("offset", offset);
+        return namedJdbcTemplate.query(SQL_GET_THEMES_SECTION_URL_SUBSECTION_URL_WITH_LIMIT_OFFSET, params, themeSearchDtoRowMapper());
     }
 
     public long getThemeIdByMessageId(long messageId) {

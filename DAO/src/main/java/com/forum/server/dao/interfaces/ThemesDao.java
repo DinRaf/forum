@@ -41,9 +41,9 @@ public interface ThemesDao {
 
     List<ThemeSearchDto> getThemesWithLimitOffset(Integer offset, int count);
 
-    List<ThemeSearchDto> getThemesBySectionUrlWithLimitOffset(Integer offset, int count);
+    List<ThemeSearchDto> getThemesBySectionUrlWithLimitOffset(String sectionUrl, Integer offset, int count);
 
-    List<ThemeSearchDto> getThemesBySubsectionUrlWithLimitOffset(Integer offset, int count);
+    List<ThemeSearchDto> getThemesBySubsectionUrlWithLimitOffset(String subsectionUrl, Integer offset, int count);
 
-    List<ThemeSearchDto> getThemesBySectionUrlSubsectionUrlWithLimitOffset(Integer offset, int count);
+    List<ThemeSearchDto> getThemesBySectionUrlSubsectionUrlWithLimitOffset(String sectionUrl, String subsectionUrl, Integer offset, int count);
 }
