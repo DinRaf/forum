@@ -1,7 +1,6 @@
 package com.forum.server.services.interfaces;
 
 import com.forum.server.dto.message.MessageCreateDto;
-import com.forum.server.dto.message.MessageDto;
 import com.forum.server.dto.theme.ThemeDto;
 
 
