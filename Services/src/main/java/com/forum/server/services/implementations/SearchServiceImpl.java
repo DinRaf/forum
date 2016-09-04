@@ -2,6 +2,7 @@ package com.forum.server.services.implementations;
 
 import com.forum.server.converters.ConversionListResultFactory;
 import com.forum.server.converters.ConversionResultFactory;
+import com.forum.server.validation.RightsValidator;
 import com.forum.server.validation.SearchValidator;
 import com.forum.server.validation.TokenValidator;
 import com.forum.server.dao.interfaces.ThemesDao;
@@ -46,6 +47,9 @@ public class SearchServiceImpl implements SearchService {
     @Autowired
     private TokenValidator tokenValidator;
 
+    @Autowired
+    private RightsValidator rightsValidator;
+
     public ThemeSearchResultDto searchThemes(String keyword, Integer offset, int count, String sectionUrl, String subsectionUrl) {
         searchValidator.verifyOnNotNull(keyword);
         if (offset == null) {
@@ -73,6 +77,8 @@ public class SearchServiceImpl implements SearchService {
 
     public SearchUsersDto searchUsers(String token, String keyword, Integer offset, int count, String sorting, Boolean isOnline) {
         tokenValidator.verifyOnExistence(token);
+        int rights = usersDao.getRightsByToken(token);
+        rightsValidator.searchUsers(rights);
         searchValidator.verifyOnNotNull(keyword);
         if (offset == null) {
             offset = 0;

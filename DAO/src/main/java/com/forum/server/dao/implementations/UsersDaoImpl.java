@@ -49,6 +49,8 @@ public class UsersDaoImpl implements UsersDao {
     private static final String SQL_GET_SHORT_USER_IS_ONLINE_SORTED_LIMIT_OFFSET = "SELECT * FROM short_user LEFT JOIN user_info ON short_user.user_id = user_info.user_id WHERE is_online = :isOnline ORDER BY :sorting LIMIT :count OFFSET :offset ;";
     private static final String SQL_GET_SHORT_USER_BY_KEYWORD_SORTED_LIMIT_OFFSET = "SELECT * FROM short_user LEFT JOIN user_info ON short_user.user_id = user_info.user_id WHERE short_user.nick_name ILIKE :keyword OR user_info.name ILIKE :keyword ORDER BY :sorting LIMIT :count OFFSET :offset ;";
     private static final String SQL_GET_SHORT_USER_BY_KEYWORD_IS_ONLINE_SORTED_LIMIT_OFFSET = "SELECT * FROM short_user LEFT JOIN user_info ON short_user.user_id = user_info.user_id WHERE is_online = :isOnline AND (short_user.nick_name ILIKE :keyword OR user_info.name ILIKE :keyword) ORDER BY :sorting LIMIT :count OFFSET :offset ;";
+    private static final String SQL_GET_RIGHTS_BY_TOKEN = "SELECT rights FROM short_user WHERE user_id = (SELECT user_id FROM auth WHERE token = ?);";
+    private static final String SQL_GET_RIGHTS_BY_EMAIL = "SELECT rights FROM short_user WHERE user_id = (SELECT user_id FROM user_info WHERE mail = ?);";
 
     private RowMapper<User> userRowMapper() {
         return (rs, i) -> new User.Builder()
@@ -199,5 +201,13 @@ public class UsersDaoImpl implements UsersDao {
         params.put("isOnline", isOnline);
         params.put("sorting", "short_user." + sorting);
         return namedJdbcTemplate.query(SQL_GET_SHORT_USER_BY_KEYWORD_IS_ONLINE_SORTED_LIMIT_OFFSET, params, shortUserRowMapper());
+    }
+
+    public int getRightsByToken(String token) {
+        return jdbcTemplate.queryForObject(SQL_GET_RIGHTS_BY_TOKEN, int.class, token);
+    }
+
+    public int getRightsByEmail(String email) {
+        return jdbcTemplate.queryForObject(SQL_GET_RIGHTS_BY_EMAIL, int.class, email);
     }
 }

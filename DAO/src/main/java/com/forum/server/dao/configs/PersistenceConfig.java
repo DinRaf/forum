@@ -8,6 +8,8 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
 import javax.sql.DataSource;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 15.08.16
@@ -46,5 +48,16 @@ public class PersistenceConfig {
     @Bean
     public NamedParameterJdbcTemplate namedParameterJdbcTemplate() {
         return new NamedParameterJdbcTemplate(DataSource());
+    }
+
+    @Bean(name = "RightsConverter")
+    public Map<Number, String> RightsConverter() {
+        Map<Number, String> params = new HashMap<>();
+        params.put(0, "banned");
+        params.put(1, "unverified");
+        params.put(2, "user");
+        params.put(3, "moderator");
+        params.put(4, "admin");
+        return params;
     }
 }

@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.util.Map;
+
 import static org.junit.Assert.*;
 
 /**
@@ -23,6 +25,10 @@ public class MarksDaoImplTest {
     @Autowired
     private MarksDao marksDao;
 
+
+    @Autowired
+    private Map<Number, String> RightsConverter;
+
     @Test
     public void isExistsMark() throws Exception {
         assertTrue(marksDao.isExistsMark(1, 5, true));
@@ -30,6 +36,7 @@ public class MarksDaoImplTest {
 
     @Test
     public void save() throws Exception {
+        System.out.println(RightsConverter.get(1));
     }
 
 }

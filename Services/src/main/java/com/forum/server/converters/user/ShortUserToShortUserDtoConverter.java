@@ -2,9 +2,13 @@ package com.forum.server.converters.user;
 
 import com.forum.server.dto.user.ShortUserDto;
 import com.forum.server.models.user.ShortUser;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 30.08.16
@@ -14,6 +18,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
  */
 public class ShortUserToShortUserDtoConverter implements Converter<ShortUser, ShortUserDto> {
 
+    @Autowired
+    private Map<Number, String> RightsConverter;
+
     @Override
     public ShortUserDto convert(ShortUser shortUser) {
         return new ShortUserDto.Builder()
@@ -22,7 +29,11 @@ public class ShortUserToShortUserDtoConverter implements Converter<ShortUser, Sh
                 .Online(shortUser.isOnline())
                 .Rating(shortUser.getRating())
                 .UserId(shortUser.getUserId())
-                .Rights(shortUser.getRights())
+                .Rights(shortUser.getRights().toString())
                 .build();
+    }
+
+    private String rightsConverter(int rights) {
+        return RightsConverter.get(rights);
     }
 }

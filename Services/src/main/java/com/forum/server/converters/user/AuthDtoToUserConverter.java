@@ -2,6 +2,7 @@ package com.forum.server.converters.user;
 
 import com.forum.server.dto.auth.AuthDto;
 import com.forum.server.models.user.User;
+import com.forum.server.services.utils.Rights;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -31,7 +32,7 @@ public class AuthDtoToUserConverter implements Converter<AuthDto, User> {
                 .ThemesCount(0l)
                 .IsOnline(true)
                 .Rating(0l)
-                .Rights("half-user")
+                .Rights(Rights.unverified.toString())
                 .build();
     }
 }

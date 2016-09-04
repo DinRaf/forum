@@ -2,6 +2,7 @@ package com.forum.server.services.implementations;
 
 import com.forum.server.converters.ConversionListResultFactory;
 import com.forum.server.converters.ConversionResultFactory;
+import com.forum.server.validation.RightsValidator;
 import com.forum.server.validation.ThemeValidator;
 import com.forum.server.validation.TokenValidator;
 import com.forum.server.dao.interfaces.MessagesDao;
@@ -54,9 +55,13 @@ public class ThemeServiceImpl implements ThemeService {
     @Autowired
     private ThemeValidator themeValidator;
 
-    //TODO Реализовать методы
+    @Autowired
+    private RightsValidator rightsValidator;
+
     public ThemeDto createTheme(String token, ThemeCreateDto themeCreateDto) {
         tokenValidator.verifyOnExistence(token);
+        int rights = usersDao.getRightsByToken(token);
+        rightsValidator.createTheme(rights);
         themeValidator.verifyTitleOnNotNull(themeCreateDto.getTitle());
         themeValidator.verifyMessageOnNotNull(themeCreateDto.getMessage());
         ShortUser user = usersDao.findShortUserByToken(token);
@@ -106,6 +111,8 @@ public class ThemeServiceImpl implements ThemeService {
 
     public ThemeDto updateTheme(String token, long themeId, String title, long offset, long count) {
         tokenValidator.verifyOnExistence(token);
+        int rights = usersDao.getRightsByToken(token);
+        rightsValidator.updateTheme(rights);
         themeValidator.verifyTitleOnNotNull(title);
         themeValidator.verifyOnExistence(themeId);
         themeValidator.compareThemesById(themesDao.getAuthorIdByThemeId(themeId), usersDao.findIdByToken(token));
@@ -123,6 +130,9 @@ public class ThemeServiceImpl implements ThemeService {
     }
 
     public void deleteTheme(String token, long themeId) {
+        tokenValidator.verifyOnExistence(token);
+        int rights = usersDao.getRightsByToken(token);
+        rightsValidator.deleteTheme(rights);
         themeValidator.verifyOnExistence(themeId);
         themeValidator.compareThemesById(themesDao.getAuthorIdByThemeId(themeId), usersDao.findIdByToken(token));
         themesDao.deleteTheme(themeId);

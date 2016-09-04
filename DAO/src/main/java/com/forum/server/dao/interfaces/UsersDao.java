@@ -3,7 +3,6 @@ package com.forum.server.dao.interfaces;
 import com.forum.server.models.user.ShortUser;
 import com.forum.server.models.user.User;
 import com.forum.server.models.user.UserUpdate;
-import com.sun.javafx.fxml.expression.Expression;
 
 import java.util.List;
 
@@ -50,4 +49,8 @@ public interface UsersDao {
     List<ShortUser> getShortUsersByKeywordSortedLimitOffset(String keyword, Integer offset, int count, String sorting);
 
     List<ShortUser> getShortUsersByKeywordIsOnlineSortedLimitOffset(String keyword, Integer offset, int count, Boolean isOnline, String sorting);
+
+    int getRightsByToken(String token);
+
+    int getRightsByEmail(String email);
 }

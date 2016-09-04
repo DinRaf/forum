@@ -1,6 +1,7 @@
 package com.forum.server.services.implementations;
 
 import com.forum.server.converters.ConversionResultFactory;
+import com.forum.server.validation.RightsValidator;
 import com.forum.server.validation.TokenValidator;
 import com.forum.server.validation.UserValidator;
 import com.forum.server.dao.interfaces.TokensDao;
@@ -39,8 +40,14 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private TokenValidator tokenValidator;
 
+    @Autowired
+    private RightsValidator rightsValidator;
+
 
     public ShortUserDto getUser(String token, long userId) {
+        verify(token);
+        int rights = usersDao.getRightsByToken(token);
+        rightsValidator.getUser(rights);
         userValidator.verifyOnExistence(userId);
         if (token != null && tokensDao.isExistsToken(token)) {
             return conversionResultFactory.convertUser(usersDao.getUserById(userId));
@@ -50,6 +57,9 @@ public class UserServiceImpl implements UserService {
     }
 
     public ShortUserDto updateUser(String token, long userId, UserUpdateDto userInfo) {
+        verify(token);
+        int rights = usersDao.getRightsByToken(token);
+        rightsValidator.updateUser(rights);
         userValidator.verifyOnExistence(userId);
         userValidator.compareUsersById(usersDao.findIdByToken(token), userId);
         String identifier = userInfo.getMail();

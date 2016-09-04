@@ -12,6 +12,8 @@ import com.forum.server.security.generators.TokenGenerator;
 import com.forum.server.services.interfaces.RegistrationService;
 import com.forum.server.services.utils.ConfirmHashGenerator;
 import com.forum.server.services.utils.EmailValidator;
+import com.forum.server.validation.RightsValidator;
+import com.sun.mail.imap.Rights;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
@@ -58,6 +60,9 @@ public class RegistrationServiceImpl implements RegistrationService {
     @Autowired
     private ConfirmationDao confirmationDao;
 
+    @Autowired
+    private RightsValidator rightsValidator;
+
     @Override
     public LoginDto login(String identifier, String password) {
         if (identifier == null || password == null) {
@@ -66,6 +71,8 @@ public class RegistrationServiceImpl implements RegistrationService {
             if (!usersDao.isExistsMail(identifier)) {
                 throw new AuthException("Incorrect identifier or password");
             }
+            int rights = usersDao.getRightsByEmail(identifier);
+            rightsValidator.login(rights);
             String passwordHash = usersDao.getHashByMail(identifier);
             if (encoder.matches(password, passwordHash)) {
                 String token = tokenGenerator.generateToken();
@@ -116,6 +123,7 @@ public class RegistrationServiceImpl implements RegistrationService {
         } else if (usersDao.isExistsMail(mail)) {
             throw new AuthException("E-Mail already exists");
         }
+
 
 
         User user = conversionResultFactory.convert(authDto);

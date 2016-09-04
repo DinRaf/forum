@@ -2,11 +2,10 @@ package com.forum.server.services.implementations;
 
 import com.forum.server.converters.ConversionListResultFactory;
 import com.forum.server.converters.ConversionResultFactory;
-import com.forum.server.validation.MessageMarkValidator;
-import com.forum.server.validation.MessageValidator;
-import com.forum.server.validation.TokenValidator;
-import com.forum.server.validation.UserValidator;
-import com.forum.server.dao.interfaces.*;
+import com.forum.server.dao.interfaces.MarksDao;
+import com.forum.server.dao.interfaces.MessagesDao;
+import com.forum.server.dao.interfaces.ThemesDao;
+import com.forum.server.dao.interfaces.UsersDao;
 import com.forum.server.dto.message.MessageCreateDto;
 import com.forum.server.dto.message.MessagesDto;
 import com.forum.server.dto.theme.ThemeDto;
@@ -15,6 +14,7 @@ import com.forum.server.models.message.MessageUpdate;
 import com.forum.server.models.theme.Theme;
 import com.forum.server.models.user.ShortUser;
 import com.forum.server.services.interfaces.MessageService;
+import com.forum.server.validation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -59,9 +59,14 @@ public class MessageServiceImpl implements MessageService {
     @Autowired
     private MessageMarkValidator messageMarkValidator;
 
+    @Autowired
+    private RightsValidator rightsValidator;
+
     public ThemeDto createMessage(String token, long themeId, MessageCreateDto messageCreateDto, long count) {
         String messageText = messageCreateDto.getMessage();
         tokenValidator.verifyOnExistence(token);
+        int rights = usersDao.getRightsByToken(token);
+        rightsValidator.createMessage(rights);
         messageValidator.verifyMessageText(messageText);
         Message message = conversionResultFactory.convert(messageText);
         //TODO Подумать на целесобразностью
@@ -88,18 +93,25 @@ public class MessageServiceImpl implements MessageService {
 
     public ThemeDto updateMessage(String token, long messageId, MessageCreateDto updatedMessageDto, long offset, long count) {
         tokenValidator.verifyOnExistence(token);
+        //Проверка прав доступа
+        int rights = usersDao.getRightsByToken(token);
+        rightsValidator.updateMessage(rights);
+        //Проверка текста сообщения
         String messageText = updatedMessageDto.getMessage();
         messageValidator.verifyMessageText(messageText);
+        //Сравниваем является updater и автор одим и тем же человеком
         long authorId = messagesDao.getAuthorIdByMessageId(messageId);
         ShortUser updater = usersDao.findByToken(token);
         long updaterId = updater.getUserId();
         userValidator.compareUsersById(authorId, updaterId);
-        long themeId = themesDao.getThemeIdByMessageId(messageId);
+        //Вносим изменения сообщения
         messagesDao.saveUpdate(new MessageUpdate.Builder()
                 .Update(System.currentTimeMillis())
                 .UpdaterId(updaterId)
                 .UpdaterNickName(updater.getNickName())
                 .build(), messageId);
+        //Собираем ответ
+        long themeId = themesDao.getThemeIdByMessageId(messageId);
         ThemeDto themeDto = conversionResultFactory.convert(themesDao.getThemeByThemeId(themeId));
         themeDto.setMessages(conversionListResultFactory
                 .convertMessages(messagesDao
@@ -109,12 +121,17 @@ public class MessageServiceImpl implements MessageService {
 
     public void updateMessageRating(String token, long messageId, boolean grade, long count, long offset) {
         tokenValidator.verifyOnExistence(token);
+        int rights = usersDao.getRightsByToken(token);
+        rightsValidator.updateMessageRating(rights);
         long userId = usersDao.findIdByToken(token);
         messageMarkValidator.verifyOnExistence(userId, messageId, grade);
         marksDao.save(userId, messageId, grade);
     }
 
     public void deleteMessage(String token, long messageId) {
+        tokenValidator.verifyOnExistence(token);
+        int rights = usersDao.getRightsByToken(token);
+        rightsValidator.deleteMessage(rights);
         long authorId = messagesDao.getAuthorIdByMessageId(messageId);
         messageValidator.verifyOnExistence(messageId);
         messagesDao.deleteMessageMarkByMessageId(messageId);
