@@ -1,10 +1,7 @@
 package com.forum.server.controller;
 
 import com.forum.server.dto.response.QueryResultDto;
-import com.forum.server.dto.staticInfo.InfoDto;
-import com.forum.server.dto.staticInfo.SectionsDto;
-import com.forum.server.dto.staticInfo.SubsectionsDto;
-import com.forum.server.dto.staticInfo.SubsectionsWithMetaDto;
+import com.forum.server.dto.staticInfo.*;
 import com.forum.server.services.interfaces.StaticInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import static com.forum.server.utils.ResponseBuilder.buildResponseGet;
 import static com.forum.server.utils.ResponseBuilder.buildResponseGetWithSection;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 /**
  * 06.08.16
@@ -31,6 +29,20 @@ public class StaticInfoController {
     public ResponseEntity<QueryResultDto> getSections() {
         SectionsDto sections = staticInfoService.getSections();
         return buildResponseGet(sections);
+    }
+
+    @RequestMapping(value = "/sections", method = POST)
+    public ResponseEntity<QueryResultDto> createSection(@RequestBody SectionCreateDto createDto,
+                                                      @RequestHeader(name = "Auth-Token") String token) {
+        staticInfoService.createSection(token, createDto);
+        return buildResponseGet(null);
+    }
+
+    @RequestMapping(value = "/subsections", method = POST)
+    public ResponseEntity<QueryResultDto> createSubsection(@RequestBody SubsectionCreateDto createDto,
+                                                      @RequestHeader(name = "Auth-Token") String token) {
+        staticInfoService.createSubsection(token, createDto);
+        return buildResponseGet(null);
     }
 
     @RequestMapping(value = "/{section-url}/subsections", method = GET)

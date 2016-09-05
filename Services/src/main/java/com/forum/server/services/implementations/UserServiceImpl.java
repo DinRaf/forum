@@ -51,9 +51,9 @@ public class UserServiceImpl implements UserService {
     private Map<String, Integer> map;
 
     public ShortUserDto getUser(String token, long userId) {
+        userValidator.verifyOnExistence(userId);
         String rightsString = usersDao.getRightsByUserId(userId);
         int rights = map.get(rightsString);
-        userValidator.verifyOnExistence(userId);
         if (token != null && tokensDao.isExistsToken(token)) {
             if (usersDao.findIdByToken(token) == userId && rights > 0) {
                 return conversionResultFactory.convertUser(usersDao.getUserById(userId));

@@ -1,8 +1,6 @@
 package com.forum.server.services.interfaces;
 
-import com.forum.server.dto.staticInfo.InfoDto;
-import com.forum.server.dto.staticInfo.SectionsDto;
-import com.forum.server.dto.staticInfo.SubsectionsWithMetaDto;
+import com.forum.server.dto.staticInfo.*;
 
 /**
  * 31.08.16
@@ -16,4 +14,8 @@ public interface StaticInfoService {
     SubsectionsWithMetaDto getSubsections(String url);
 
     InfoDto getInfo(String identifier);
+
+    void createSection(String token, SectionCreateDto createDto);
+
+    void createSubsection(String token, SubsectionCreateDto createDto);
 }

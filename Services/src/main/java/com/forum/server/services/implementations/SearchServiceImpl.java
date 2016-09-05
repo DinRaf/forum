@@ -59,37 +59,45 @@ public class SearchServiceImpl implements SearchService {
             offset = 0;
         }
         List<ThemeSearchDto> themeSearchDtos;
+        int resultCount;
         if (sectionUrl == null && subsectionUrl == null) {
             if (keyword == null) {
+                resultCount = themesDao.getCount();
                 themeSearchDtos = themesDao.getThemesWithLimitOffset(offset, count);
             } else {
+                resultCount = themesDao.getCountByKeyword(keyword);
                 themeSearchDtos = themesDao.getThemesByKeywordWithLimitOffset(keyword, offset, count);
             }
         } else if (subsectionUrl == null) {
             if (keyword == null) {
+                resultCount = themesDao.getCountBySectionUrl(sectionUrl);
                 themeSearchDtos = themesDao.getThemesBySectionUrlWithLimitOffset(sectionUrl, offset, count);
             } else {
+                resultCount = themesDao.getCountByKeywordAndSectionUrl(keyword, sectionUrl);
                 themeSearchDtos = themesDao.getThemesByKeywordSectionUrlWithLimitOffset(keyword, sectionUrl, offset, count);
             }
         } else if (sectionUrl == null) {
             if (keyword == null) {
+                resultCount = themesDao.getCountBySubsectionUrl(subsectionUrl);
                 themeSearchDtos = themesDao.getThemesBySubsectionUrlWithLimitOffset(subsectionUrl, offset, count);
             } else {
+                resultCount = themesDao.getCountByKeywordAndSubsectionUrl(keyword, subsectionUrl);
                 themeSearchDtos = themesDao.getThemesByKeywordSubsectionUrlWithLimitOffset(keyword, subsectionUrl, offset, count);
             }
         } else {
             if (keyword == null) {
+                resultCount = themesDao.getCountBySubsectionUrl(subsectionUrl);
                 themeSearchDtos = themesDao.getThemesBySectionUrlSubsectionUrlWithLimitOffset(sectionUrl, subsectionUrl, offset, count);
             } else {
+                resultCount = themesDao.getCountByKeywordAndSectionUrlAndSubsectionUrl(keyword, sectionUrl, subsectionUrl);
                 themeSearchDtos = themesDao.getThemesByKeywordSectionUrlSubsectionUrlWithLimitOffset(keyword, sectionUrl, subsectionUrl, offset, count);
             }
         }
-        int countOfResults = themeSearchDtos.size();
         ThemesSearchDto themesSearchDto = new ThemesSearchDto(themeSearchDtos);
         String subsection = (subsectionUrl == null) ? null : staticInfoDao.getSubsectionByUrl(subsectionUrl);
 
         return new ThemeSearchResultDto.Builder()
-                .Count(countOfResults)
+                .Count(resultCount)
                 .ThemesSearhDto(themesSearchDto)
                 .Subsection(subsection)
                 .build();

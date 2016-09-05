@@ -91,4 +91,11 @@ public class RightsValidator {
             throw new AuthException("Недостаточно прав для изменения информации о пользователе");
         }
     }
+
+    public void createStatic(String rights) {
+        int right = map.get(rights);
+        if (right != 4) {
+            throw new AuthException("Недостаточно прав для добавления");
+        }
+    }
 }
