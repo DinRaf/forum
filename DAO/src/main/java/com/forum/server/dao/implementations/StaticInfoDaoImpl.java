@@ -28,7 +28,6 @@ public class StaticInfoDaoImpl implements StaticInfoDao {
     private static final String SQL_GET_INFO_BY_IDENTIFIER = "SELECT * FROM info WHERE identifier = ?;";
     private static final String SQL_IS_EXISTS_INFO = "SELECT CASE WHEN EXISTS(SELECT identifier FROM info WHERE identifier = ?)THEN TRUE ELSE FALSE END;";
     private static final String SQL_IS_EXISTS_SECTION_URL = "SELECT CASE WHEN EXISTS(SELECT url FROM section WHERE LOWER(url) = ?)THEN TRUE ELSE FALSE END;";
-    private static final String SQL_GET_SECTION_BY_SUBSECTION_URL = "SELECT name FROM section WHERE section_id = (SELECT section_id FROM subsection WHERE LOWER(url) = ?);";
     private static final String SQL_GET_SUBSECTION_BY_URL = "SELECT name FROM subsection WHERE LOWER(url) = ?;";
     private static final String SQL_GET_SECTION_NAME_BY_URL = "SELECT name FROM section WHERE LOWER(url) = ?;";
     private static final String SQL_CREATE_SECTION = "INSERT INTO section (name, themes_count, subsections_count, url) VALUES (?, 0, 0, ?);";
@@ -81,10 +80,6 @@ public class StaticInfoDaoImpl implements StaticInfoDao {
 
     public boolean isExistsSectionUrl(String url) {
         return jdbcTemplate.queryForObject(SQL_IS_EXISTS_SECTION_URL, boolean.class, url.toLowerCase());
-    }
-
-    public String getSectionBySubsectionUrl(String url) {
-        return jdbcTemplate.queryForObject(SQL_GET_SECTION_BY_SUBSECTION_URL, String.class, url.toLowerCase());
     }
 
     public String getSubsectionByUrl(String subsectionUrl) {

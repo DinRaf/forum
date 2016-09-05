@@ -13,7 +13,7 @@ public interface MessageService {
 
     ThemeDto updateMessage(String token, long messageId, MessageCreateDto message, long count);
 
-    void updateMessageRating(String token, long messageId, boolean grade, long count, long offset);
+    void updateMessageRating(String token, long messageId, boolean grade);
 
     void deleteMessage(String token, long messageId);
 

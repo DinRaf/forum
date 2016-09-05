@@ -42,10 +42,9 @@ public class MessagesDaoImpl implements MessagesDao {
         return (rs, rowNum) -> {
             User user = new User.Builder()
                     .UserId(rs.getInt("user_id"))
-                    .NickName(rs.getString("nick_name"))
+                    .Nickname(rs.getString("nick_name"))
                     .Rating(rs.getLong("rating"))
                     .Avatar(rs.getString("avatar"))
-                    .IsOnline(rs.getBoolean("is_online"))
                     .build();
             return new Message.Builder()
                     .MessageId(rs.getLong("message_id"))

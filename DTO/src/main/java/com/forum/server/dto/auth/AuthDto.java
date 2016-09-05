@@ -10,7 +10,7 @@ import com.forum.server.dto.Data;
  */
 public class AuthDto implements Data {
 
-    private String nickName;
+    private String nickname;
     private String mail;
     private String password;
 
@@ -22,26 +22,26 @@ public class AuthDto implements Data {
         return password;
     }
 
-    public String getNickName() {
-        return nickName;
+    public String getNickname() {
+        return nickname;
     }
 
     protected AuthDto() {
     }
 
     private AuthDto(Builder builder) {
-        this.nickName = builder.nickName;
+        this.nickname = builder.nickname;
         this.mail = builder.mail;
         this.password = builder.password;
     }
 
     private static class Builder {
-        private String nickName;
+        private String nickname;
         private String mail;
         private String password;
 
         public Builder nickname(String data) {
-            this.nickName = data;
+            this.nickname = data;
             return this;
         }
         public Builder mail(String data) {

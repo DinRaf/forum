@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.HashMap;
 import java.util.Map;
 
 import static com.forum.server.services.implementations.RegistrationServiceImpl.nicknameMeetsRequirements;
@@ -75,8 +74,8 @@ public class UserServiceImpl implements UserService {
         userValidator.verifyOnExistence(userId);
         String identifier = userInfo.getMail();
         userValidator.verifyEmail(identifier);
-        identifier = userInfo.getNickName();
-        if (!nicknameMeetsRequirements(userInfo.getNickName())) {
+        identifier = userInfo.getNickname();
+        if (!nicknameMeetsRequirements(userInfo.getNickname())) {
             throw new AuthException("Не правильный nickname");
         } else if (usersDao.isExistsNickName(identifier)) {
             throw new AuthException("Такой nickname уже существует");

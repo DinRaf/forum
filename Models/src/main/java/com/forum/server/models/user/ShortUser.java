@@ -8,7 +8,7 @@ package com.forum.server.models.user;
  */
 public class ShortUser {
     private long userId;
-    private String nickName;
+    private String nickname;
     private Long rating;
     private String rights;
 
@@ -22,8 +22,8 @@ public class ShortUser {
         return userId;
     }
 
-    public String getNickName() {
-        return nickName;
+    public String getNickname() {
+        return nickname;
     }
 
     public Long getRating() {
@@ -39,7 +39,7 @@ public class ShortUser {
 
     protected ShortUser(Builder builder) {
         this.userId = builder.userId;
-        this.nickName = builder.nickName;
+        this.nickname = builder.nickname;
         this.rating = builder.rating;
         this.avatar = builder.avatar;
         this.rights = builder.rights;
@@ -47,7 +47,7 @@ public class ShortUser {
 
     public static class Builder {
         private long userId;
-        private String nickName;
+        private String nickname;
         private Long rating;
         private String avatar;
         private String rights;
@@ -62,8 +62,8 @@ public class ShortUser {
             return this;
         }
 
-        public Builder NickName(String nickName) {
-            this.nickName = nickName;
+        public Builder Nickname(String nickname) {
+            this.nickname = nickname;
             return this;
         }
 

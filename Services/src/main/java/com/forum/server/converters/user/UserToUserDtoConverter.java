@@ -2,11 +2,7 @@ package com.forum.server.converters.user;
 
 import com.forum.server.dto.user.UserDto;
 import com.forum.server.models.user.User;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.converter.Converter;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * 31.08.16
@@ -28,7 +24,7 @@ public class UserToUserDtoConverter implements Converter<User, UserDto> {
                 .Mail(user.getMail())
                 .MessagesCount(user.getMessagesCount())
                 .Name(user.getName())
-                .NickName(user.getNickName())
+                .Nickname(user.getNickname())
                 .RegistrationTime(user.getRegistrationTime())
                 .ThemesCount(user.getThemesCount())
                 .MessagesCount(user.getMessagesCount())

@@ -48,10 +48,8 @@ public class MessagesController {
     @RequestMapping(value = "/messages/{message-id}/rating", method = PUT)
     public ResponseEntity<QueryResultDto> updateMessageRating(@PathVariable("message-id") long messageId,
                                                         @RequestParam("grade") boolean grade,
-                                                        @RequestParam("count") long count,
-                                                        @RequestParam("offset") long offset,
                                                         @RequestHeader(name = "Auth-Token") String token) {
-        messageService.updateMessageRating(token, messageId, grade, count, offset);
+        messageService.updateMessageRating(token, messageId, grade);
         return buildResponseRating();
     }
 

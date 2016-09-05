@@ -42,25 +42,25 @@ public class ThemesDaoImpl implements ThemesDao {
     private static final String SQL_DELETE_MESSAGES_IN_THEME = "DELETE FROM message WHERE theme_id = :theme_id;";
     private static final String SQL_DELETE_THEME = "DELETE FROM theme WHERE theme_id = :theme_id;";
     private static final String SQL_GET_ALL_MESSAGES_IN_THEME = "SELECT message_id FROM message WHERE theme_id = :theme_id;";
-    private static final String SQL_GET_THEMES_BY_KEYWORD_SECTION_URL_SUBSECTION_URL_WITH_LIMIT_OFFSET = "SELECT user_id, date, messages_count, status, title " +
-            "FROM theme WHERE title ILIKE :keyword AND " +
+    private static final String SQL_GET_THEMES_BY_KEYWORD_SECTION_URL_SUBSECTION_URL_WITH_LIMIT_OFFSET = "SELECT theme_id, theme.user_id, date, messages_count, status, title, nick_name " +
+            "FROM theme INNER JOIN short_user ON short_user.user_id = theme.user_id WHERE title ILIKE :keyword AND " +
                 "(section_id = (SELECT section_id FROM section WHERE LOWER(url) = :section_url) AND " +
                 "subsection_id = (SELECT subsection_id FROM subsection WHERE LOWER(url) = :subsection_url)) " +
                 "ORDER BY theme_id LIMIT :count OFFSET :offset;";
-    private static final String SQL_GET_THEMES_BY_KEYWORD_WITH_LIMIT_OFFSET = "SELECT user_id, date, messages_count, status, title FROM theme WHERE title ILIKE :keyword " +
+    private static final String SQL_GET_THEMES_BY_KEYWORD_WITH_LIMIT_OFFSET = "SELECT theme_id, theme.user_id, date, messages_count, status, title, nick_name FROM theme INNER JOIN short_user ON short_user.user_id = theme.user_id WHERE title ILIKE :keyword " +
             "ORDER BY theme_id LIMIT :count OFFSET :offset;";
-    private static final String SQL_GET_THEMES_BY_KEYWORD_SECTION_URL_WITH_LIMIT_OFFSET = "SELECT user_id, date, messages_count, status, title FROM theme WHERE title ILIKE :keyword AND section_id = (SELECT section_id FROM section WHERE LOWER(url) = :url) " +
+    private static final String SQL_GET_THEMES_BY_KEYWORD_SECTION_URL_WITH_LIMIT_OFFSET = "SELECT theme_id, theme.user_id, date, messages_count, status, title, nick_name FROM theme INNER JOIN short_user ON short_user.user_id = theme.user_id WHERE title ILIKE :keyword AND section_id = (SELECT section_id FROM section WHERE LOWER(url) = :url) " +
             "ORDER BY theme_id LIMIT :count OFFSET :offset;";
-    private static final String SQL_GET_THEMES_BY_KEYWORD_SUBSECTION_URL_WITH_LIMIT_OFFSET = "SELECT user_id, date, messages_count, status, title FROM theme WHERE title ILIKE :keyword AND subsection_id = (SELECT subsection_id FROM subsection WHERE LOWER(url) = :url) " +
+    private static final String SQL_GET_THEMES_BY_KEYWORD_SUBSECTION_URL_WITH_LIMIT_OFFSET = "SELECT theme_id, theme.user_id, date, messages_count, status, title, nick_name FROM theme INNER JOIN short_user ON short_user.user_id = theme.user_id WHERE title ILIKE :keyword AND subsection_id = (SELECT subsection_id FROM subsection WHERE LOWER(url) = :url) " +
             "ORDER BY theme_id LIMIT :count OFFSET :offset;";
-    private static final String SQL_GET_THEMES_WITH_LIMIT_OFFSET = "SELECT user_id, date, messages_count, status, title FROM theme " +
+    private static final String SQL_GET_THEMES_WITH_LIMIT_OFFSET = "SELECT theme_id, theme.user_id, date, messages_count, status, title FROM theme, nick_name INNER JOIN short_user ON short_user.user_id = theme.user_id " +
             "ORDER BY theme_id LIMIT :count OFFSET :offset;";
-    private static final String SQL_GET_THEMES_SECTION_URL_WITH_LIMIT_OFFSET = "SELECT user_id, date, messages_count, status, title FROM theme WHERE section_id = (SELECT section_id FROM section WHERE LOWER(url) = :url1) " +
+    private static final String SQL_GET_THEMES_SECTION_URL_WITH_LIMIT_OFFSET = "SELECT theme_id, theme.user_id, date, messages_count, status, title, nick_name FROM theme INNER JOIN short_user ON short_user.user_id = theme.user_id WHERE section_id = (SELECT section_id FROM section WHERE LOWER(url) = :url1) " +
             "ORDER BY theme_id LIMIT :count OFFSET :offset;";
-    private static final String SQL_GET_THEMES_SUBSECTION_URL_WITH_LIMIT_OFFSET = "SELECT user_id, date, messages_count, status, title FROM theme WHERE subsection_id = (SELECT subsection_id FROM subsection WHERE LOWER(url) = :url2) " +
+    private static final String SQL_GET_THEMES_SUBSECTION_URL_WITH_LIMIT_OFFSET = "SELECT theme_id, theme.user_id, date, messages_count, status, title, nick_name FROM theme INNER JOIN short_user ON short_user.user_id = theme.user_id WHERE subsection_id = (SELECT subsection_id FROM subsection WHERE LOWER(url) = :url2) " +
             "ORDER BY theme_id LIMIT :count OFFSET :offset;";
-    private static final String SQL_GET_THEMES_SECTION_URL_SUBSECTION_URL_WITH_LIMIT_OFFSET = "SELECT user_id, date, messages_count, status, title " +
-            "FROM theme WHERE " +
+    private static final String SQL_GET_THEMES_SECTION_URL_SUBSECTION_URL_WITH_LIMIT_OFFSET = "SELECT theme_id, theme.user_id, date, messages_count, status, title, nick_name " +
+            "FROM theme INNER JOIN short_user ON short_user.user_id = theme.user_id WHERE " +
             "(section_id = (SELECT section_id FROM section WHERE LOWER(url) = :url1) AND " +
             "subsection_id = (SELECT subsection_id FROM subsection WHERE LOWER(url) = :url2)) " +
             "ORDER BY theme_id LIMIT :count OFFSET :offset;";
@@ -77,10 +77,9 @@ public class ThemesDaoImpl implements ThemesDao {
         return (rs, rowNum) -> {
             ShortUser user = new ShortUser.Builder()
                     .UserId(rs.getInt("user_id"))
-                    .NickName(rs.getString("nick_name"))
+                    .Nickname(rs.getString("nick_name"))
                     .Rating(rs.getLong("rating"))
                     .Avatar(rs.getString("avatar"))
-                    .IsOnline(rs.getBoolean("is_online"))
                     .build();
 
             return new Theme.Builder()
@@ -98,7 +97,9 @@ public class ThemesDaoImpl implements ThemesDao {
 
     private RowMapper<ThemeSearchDto> themeSearchDtoRowMapper() {
         return (rs, rowNum) -> new ThemeSearchDto.Builder()
+                .Id(rs.getLong("theme_id"))
                 .AuthorId(rs.getLong("user_id"))
+                .Nickname(rs.getString("nick_name"))
                 .Date(rs.getLong("date"))
                 .MessagesCount(rs.getLong("messages_count"))
                 .Status(rs.getBoolean("status"))

@@ -2,13 +2,7 @@ package com.forum.server.converters.user;
 
 import com.forum.server.dto.user.ShortUserDto;
 import com.forum.server.models.user.ShortUser;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.converter.Converter;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * 30.08.16
@@ -22,7 +16,7 @@ public class ShortUserToShortUserDtoConverter implements Converter<ShortUser, Sh
     public ShortUserDto convert(ShortUser shortUser) {
         return new ShortUserDto.Builder()
                 .Avatar(shortUser.getAvatar())
-                .NickName(shortUser.getNickName())
+                .Nickname(shortUser.getNickname())
                 .UserId(shortUser.getUserId())
                 .Rights(shortUser.getRights())
                 .build();

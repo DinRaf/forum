@@ -2,14 +2,8 @@ package com.forum.server.converters.user;
 
 import com.forum.server.dto.user.UserDto;
 import com.forum.server.models.user.User;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
-
-import javax.annotation.Resource;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * 31.08.16
@@ -29,7 +23,7 @@ public class NotAuthUserToUserDtoConverter implements Converter<User, UserDto> {
                 .Info(user.getInfo())
                 .LastSession(user.getLastSession())
                 .MessagesCount(user.getMessagesCount())
-                .NickName(user.getNickName())
+                .Nickname(user.getNickname())
                 .RegistrationTime(user.getRegistrationTime())
                 .ThemesCount(user.getThemesCount())
                 .Rights(user.getRights())

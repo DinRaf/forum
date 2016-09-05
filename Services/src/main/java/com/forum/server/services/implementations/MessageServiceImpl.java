@@ -110,7 +110,7 @@ public class MessageServiceImpl implements MessageService {
         messagesDao.saveUpdate(new MessageUpdate.Builder()
                 .Update(System.currentTimeMillis())
                 .UpdaterId(updaterId)
-                .UpdaterNickName(updater.getNickName())
+                .UpdaterNickName(updater.getNickname())
                 .build(), messageId);
         //Собираем ответ
         long offset = messagesDao.getOffsetById(messageId);
@@ -123,7 +123,7 @@ public class MessageServiceImpl implements MessageService {
         return themeDto;
     }
 
-    public void updateMessageRating(String token, long messageId, boolean grade, long count, long offset) {
+    public void updateMessageRating(String token, long messageId, boolean grade) {
         tokenValidator.verifyOnExistence(token);
         String rights = usersDao.getRightsByToken(token);
         rightsValidator.updateMessageRating(rights);

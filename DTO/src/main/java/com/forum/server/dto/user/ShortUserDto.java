@@ -10,7 +10,7 @@ import com.forum.server.dto.Data;
  */
 public class ShortUserDto implements Data {
     private long userId;
-    private String nickName;
+    private String nickname;
     private long rating;
     private String avatar;
     private String rights;
@@ -27,8 +27,8 @@ public class ShortUserDto implements Data {
         return userId;
     }
 
-    public String getNickName() {
-        return nickName;
+    public String getNickname() {
+        return nickname;
     }
 
     public long getRating() {
@@ -44,7 +44,7 @@ public class ShortUserDto implements Data {
 
     protected ShortUserDto(Builder builder) {
         this.userId = builder.userId;
-        this.nickName = builder.nickName;
+        this.nickname = builder.nickname;
         this.rating = builder.rating;
         this.avatar = builder.avatar;
         this.rights = builder.rights;
@@ -53,7 +53,7 @@ public class ShortUserDto implements Data {
 
     public static class Builder {
         private long userId;
-        private String nickName;
+        private String nickname;
         private long rating;
         private String avatar;
         private String rights;
@@ -68,8 +68,8 @@ public class ShortUserDto implements Data {
             return this;
         }
 
-        public Builder NickName(String nickName) {
-            this.nickName = nickName;
+        public Builder Nickname(String nickname) {
+            this.nickname = nickname;
             return this;
         }
 

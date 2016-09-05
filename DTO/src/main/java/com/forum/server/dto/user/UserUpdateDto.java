@@ -14,7 +14,7 @@ public class UserUpdateDto implements Data{
     private Long dateOfBirth;
     private String info;
     private String avatar;
-    private String nickName;
+    private String nickname;
     private String password;
 
     public String getPassword() {
@@ -25,8 +25,8 @@ public class UserUpdateDto implements Data{
         return avatar;
     }
 
-    public String getNickName() {
-        return nickName;
+    public String getNickname() {
+        return nickname;
     }
 
     public String getName() {
@@ -54,7 +54,7 @@ public class UserUpdateDto implements Data{
         this.dateOfBirth = builder.dateOfBirth;
         this.info = builder.info;
         this.avatar = builder.avatar;
-        this.nickName = builder.nickName;
+        this.nickname = builder.nickname;
         this.password = builder.password;
     }
 
@@ -66,7 +66,7 @@ public class UserUpdateDto implements Data{
         private Long dateOfBirth;
         private String info;
         private String avatar;
-        private String nickName;
+        private String nickname;
         private String password;
 
         public Builder Password(String password) {
@@ -74,13 +74,13 @@ public class UserUpdateDto implements Data{
             return this;
         }
 
-        public Builder setAvatar(String avatar) {
+        public Builder Avatar(String avatar) {
             this.avatar = avatar;
             return this;
         }
 
-        public Builder setNickName(String nickName) {
-            this.nickName = nickName;
+        public Builder Nickname(String nickname) {
+            this.nickname = nickname;
             return this;
         }
 

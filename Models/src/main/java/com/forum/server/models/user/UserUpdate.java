@@ -12,7 +12,7 @@ public class UserUpdate {
     private Long dateOfBirth;
     private String info;
     private String avatar;
-    private String nickName;
+    private String nickname;
     private String hashPassword;
 
     public String getHashPassword() {
@@ -23,8 +23,8 @@ public class UserUpdate {
         return avatar;
     }
 
-    public String getNickName() {
-        return nickName;
+    public String getNickname() {
+        return nickname;
     }
 
     public String getName() {
@@ -52,7 +52,7 @@ public class UserUpdate {
         this.dateOfBirth = builder.dateOfBirth;
         this.info = builder.info;
         this.avatar = builder.avatar;
-        this.nickName = builder.nickName;
+        this.nickname = builder.nickname;
         this.hashPassword = builder.hashPassword;
     }
 
@@ -64,7 +64,7 @@ public class UserUpdate {
         private Long dateOfBirth;
         private String info;
         private String avatar;
-        private String nickName;
+        private String nickname;
         private String hashPassword;
 
         public Builder HashPassword(String hashPassword) {
@@ -77,8 +77,8 @@ public class UserUpdate {
             return this;
         }
 
-        public Builder NickName(String nickName) {
-            this.nickName = nickName;
+        public Builder Nickname(String nickname) {
+            this.nickname = nickname;
             return this;
         }
 

@@ -109,8 +109,8 @@ public class RegistrationServiceImpl implements RegistrationService {
         if (!passwordMeetsRequirements(authDto.getPassword())) {
             throw new AuthException("Password is not correct");
         }
-        String nickName = authDto.getNickName();
-        if (!nicknameMeetsRequirements(authDto.getNickName())) {
+        String nickName = authDto.getNickname();
+        if (!nicknameMeetsRequirements(authDto.getNickname())) {
             throw new AuthException("Nickname is not correct");
         } else if (usersDao.isExistsNickName(nickName)) {
             throw new AuthException("Nickname already exists");
@@ -126,7 +126,7 @@ public class RegistrationServiceImpl implements RegistrationService {
 
         User user = conversionResultFactory.convert(authDto);
         usersDao.save(user);
-        long userId = usersDao.getIdByNickName(user.getNickName());
+        long userId = usersDao.getIdByNickName(user.getNickname());
         String token = tokenGenerator.generateToken();
         tokensDao.addToken(userId, token);
         sendMessage(userId, mail, nickName);

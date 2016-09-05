@@ -94,10 +94,4 @@ public class UsersDaoImplTest {
     public void getUserByThemeId() throws Exception {
         assertNotNull(usersDao.getUserByThemeId(THEME_ID));
     }
-
-    @Test
-    public void getShortUsersByKeywordIsOnlineSortedLimitOffset(){
-        List<ShortUser> list = usersDao.getShortUsersByKeywordIsOnlineSortedLimitOffset(KEYWORD, OFFSET, COUNT, IS_ONLINE, SORTING);
-        long mail = 5;
-    }
 }

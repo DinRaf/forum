@@ -23,8 +23,6 @@ public interface StaticInfoDao {
 
     boolean isExistsSectionUrl(String url);
 
-    String getSectionBySubsectionUrl(String url);
-
     String getSubsectionByUrl(String subsectionUrl);
 
     String getSectionBySectionUrl(String url);

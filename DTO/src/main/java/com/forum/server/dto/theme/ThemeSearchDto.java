@@ -6,11 +6,21 @@ import com.forum.server.dto.Data;
  * Created by root on 02.09.16.
  */
 public class ThemeSearchDto implements Data {
+    private long id;
     private String title;
+    private String nickname;
     private long authorId;
     private long date;
     private long messagesCount;
     private boolean status;
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public long getId() {
+        return id;
+    }
 
     public String getTitle() {
         return title;
@@ -40,6 +50,8 @@ public class ThemeSearchDto implements Data {
         this.messagesCount = builder.messagesCount;
         this.status = builder.status;
         this.title = builder.title;
+        this.id = builder.id;
+        this.nickname = builder.nickname;
     }
 
     public static class Builder {
@@ -48,6 +60,18 @@ public class ThemeSearchDto implements Data {
         private long date;
         private long messagesCount;
         private boolean status;
+        private long id;
+        private String nickname;
+
+        public Builder Nickname(String nickname) {
+            this.nickname = nickname;
+            return this;
+        }
+
+        public Builder Id(long id) {
+            this.id = id;
+            return this;
+        }
 
         public Builder Title(String title) {
             this.title = title;

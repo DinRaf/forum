@@ -57,7 +57,7 @@ public class UsersDaoImpl implements UsersDao {
         return (rs, i) -> new User.Builder()
                 .UserId(rs.getLong("user_id"))
                 .Name(rs.getString("name"))
-                .NickName(rs.getString("nick_name"))
+                .Nickname(rs.getString("nick_name"))
                 .Rating(rs.getLong("rating"))
                 .Avatar(rs.getString("avatar"))
                 .Mail(rs.getString("mail"))
@@ -75,7 +75,7 @@ public class UsersDaoImpl implements UsersDao {
     private RowMapper<ShortUser> shortUserRowMapper() {
         return (rs, i) -> new ShortUser.Builder()
                 .UserId(rs.getLong("user_id"))
-                .NickName(rs.getString("nick_name"))
+                .Nickname(rs.getString("nick_name"))
                 .Rating(rs.getLong("rating"))
                 .Avatar(rs.getString("avatar"))
                 .Rights(rs.getString("rights"))
@@ -120,12 +120,12 @@ public class UsersDaoImpl implements UsersDao {
 
     public void save(User user) {
         jdbcTemplate.update(SQL_ADD_SHORT_USER,
-                new Object[]{user.getNickName(),
+                new Object[]{user.getNickname(),
                         user.getRating(),
                         user.getAvatar(),
                         user.getRights()});
         jdbcTemplate.update(SQL_ADD_USER_INFO,
-                new Object[]{getIdByNickName(user.getNickName()),
+                new Object[]{getIdByNickName(user.getNickname()),
                         user.getMail(),
                         user.getDateOfBirth(),
                         user.getInfo(),
@@ -152,7 +152,7 @@ public class UsersDaoImpl implements UsersDao {
 
     public void update(UserUpdate user, long userId) {
         jdbcTemplate.update(SQL_UPDATE_SHORT_USER,
-                new Object[]{user.getNickName(),
+                new Object[]{user.getNickname(),
                         user.getAvatar(),
                         userId});
         jdbcTemplate.update(SQL_UPDATE_USER_INFO,

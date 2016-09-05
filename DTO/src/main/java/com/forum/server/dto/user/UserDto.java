@@ -88,8 +88,8 @@ public class UserDto extends ShortUserDto {
         }
 
         @Override
-        public Builder NickName(String nickName) {
-            super.NickName(nickName);
+        public Builder Nickname(String nickname) {
+            super.Nickname(nickname);
             return this;
         }
 

@@ -19,7 +19,7 @@ public class MessageToMessageDtoConverter implements Converter<Message, MessageD
         FixMessageDto fixMessageDto = new FixMessageDto.Builder()
                 .Date(message.getDate())
                 .UserId(userDto.getUserId())
-                .Username(userDto.getNickName())
+                .Username(userDto.getNickname())
                 .build();
         return new MessageDto.Builder()
                 .MessageId(message.getMessageId())
