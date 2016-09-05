@@ -105,12 +105,6 @@ public class UserDto extends ShortUserDto {
             return this;
         }
 
-        @Override
-        public Builder Online(boolean isOnline) {
-            super.Online(isOnline);
-            return this;
-        }
-
         public Builder Name(String name) {
             this.name = name;
             return this;

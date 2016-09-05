@@ -30,7 +30,6 @@ public class AuthDtoToUserConverter implements Converter<AuthDto, User> {
                 .LastSession(System.currentTimeMillis())
                 .MessagesCount(0l)
                 .ThemesCount(0l)
-                .IsOnline(true)
                 .Rating(0l)
                 .Rights("unverified")
                 .build();

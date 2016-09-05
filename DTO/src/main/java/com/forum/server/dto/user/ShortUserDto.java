@@ -12,7 +12,6 @@ public class ShortUserDto implements Data {
     private long userId;
     private String nickName;
     private long rating;
-    private boolean isOnline;
     private String avatar;
     private String rights;
 
@@ -36,10 +35,6 @@ public class ShortUserDto implements Data {
         return rating;
     }
 
-    public boolean isOnline() {
-        return isOnline;
-    }
-
     public String getAvatar() {
         return avatar;
     }
@@ -51,7 +46,6 @@ public class ShortUserDto implements Data {
         this.userId = builder.userId;
         this.nickName = builder.nickName;
         this.rating = builder.rating;
-        this.isOnline = builder.isOnline;
         this.avatar = builder.avatar;
         this.rights = builder.rights;
 
@@ -61,7 +55,6 @@ public class ShortUserDto implements Data {
         private long userId;
         private String nickName;
         private long rating;
-        private boolean isOnline;
         private String avatar;
         private String rights;
 
@@ -82,11 +75,6 @@ public class ShortUserDto implements Data {
 
         public Builder Rating(long rating) {
             this.rating = rating;
-            return this;
-        }
-
-        public Builder Online(boolean online) {
-            isOnline = online;
             return this;
         }
 

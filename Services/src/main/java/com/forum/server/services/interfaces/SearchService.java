@@ -13,5 +13,5 @@ public interface SearchService {
 
     ThemeSearchResultDto searchThemes(String keyword, Integer offset, int count, String sectionUrl, String subsectionUrl);
 
-    SearchUsersDto searchUsers(String token, String keyword, Integer offset, int count, String sorting, Boolean isOnline);
+    SearchUsersDto searchUsers(String token, String keyword, Integer offset, int count, String sorting);
 }

@@ -2,17 +2,12 @@ package com.forum.server.controller;
 
 import com.forum.server.dto.response.QueryResultDto;
 import com.forum.server.dto.staticInfo.*;
-import com.forum.server.models.staticInfo.Info;
 import com.forum.server.services.interfaces.StaticInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import static com.forum.server.utils.ResponseBuilder.buildResponseGet;
-import static com.forum.server.utils.ResponseBuilder.buildResponseGetWithSection;
-import static org.springframework.web.bind.annotation.RequestMethod.GET;
-import static org.springframework.web.bind.annotation.RequestMethod.POST;
 import static com.forum.server.utils.ResponseBuilder.*;
 import static org.springframework.web.bind.annotation.RequestMethod.*;
 
@@ -72,7 +67,7 @@ public class StaticInfoController {
     public ResponseEntity<QueryResultDto> createStaticInfo(@RequestHeader(name = "Auth-Token") String token,
                                                            @RequestBody InfoCreateDto infoCreateDto) {
         staticInfoService.createInfo(token, infoCreateDto);
-        return buildResponsePost();
+        return buildResponseGet(null);
     }
 
     @RequestMapping(value = "/info", method = GET)

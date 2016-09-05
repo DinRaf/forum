@@ -39,12 +39,11 @@ public class SearchController {
     @RequestMapping(value = "/users", method = GET)
     public ResponseEntity<QueryResultDto> searchUsers(@RequestParam(value = "find", required = false) String keyword,
                                                       @RequestParam(value = "sort") String sorting,
-                                                      @RequestParam(value = "isOnline", required = false) Boolean isOnline,
                                                       @RequestParam(value = "offset", required = false) Integer offset,
                                                       @RequestParam(value = "count") int count,
                                                       @RequestHeader(name = "Auth-Token") String token) {
 
-        SearchUsersDto searchUserDto = searchService.searchUsers(token, keyword, offset, count, sorting, isOnline);
+        SearchUsersDto searchUserDto = searchService.searchUsers(token, keyword, offset, count, sorting);
         return buildResponseGetWithCount(searchUserDto.getShortUsersDto(), searchUserDto.getCount());
     }
 }

@@ -18,7 +18,6 @@ import com.forum.server.services.interfaces.SearchService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -103,7 +102,7 @@ public class SearchServiceImpl implements SearchService {
                 .build();
     }
 
-    public SearchUsersDto searchUsers(String token, String keyword, Integer offset, int count, String sorting, Boolean isOnline) {
+    public SearchUsersDto searchUsers(String token, String keyword, Integer offset, int count, String sorting) {
         tokenValidator.verifyOnExistence(token);
         String rights = usersDao.getRightsByToken(token);
         rightsValidator.searchUsers(rights);
@@ -112,30 +111,19 @@ public class SearchServiceImpl implements SearchService {
             offset = 0;
         }
         sorting = conversionResultFactory.getSearchSorting(sorting);
-        List<ShortUser> usersDto;
-        if (keyword == null) {
-            if (isOnline == null) {
-                usersDto = usersDao
-                                .getShortUsersSortedLimitOffset(offset, count, sorting);
-            } else {
-                 usersDto = usersDao
-                                .getShortUsersIsOnlineSortedLimitOffset(offset, count, isOnline, sorting);
-            }
-        } else {
-            if (isOnline == null) {
-                usersDto = usersDao
-                                .getShortUsersByKeywordSortedLimitOffset(keyword, offset, count, sorting);
-            } else {
-                usersDto = usersDao
-                                .getShortUsersByKeywordIsOnlineSortedLimitOffset(keyword, offset, count, isOnline, sorting);
-            }
-        }
-        int resultCount = usersDto.size();
-        ShortUsersDto shortUsersDto = conversionListResultFactory.convertShortUsers(usersDto);
-
-        return new SearchUsersDto.Builder()
-                .Count(resultCount)
-                .ShortUsersDto(shortUsersDto)
+        ShortUsersDto shortUsersDto;
+        if (keyword == null) {return new SearchUsersDto.Builder()
+                .Count(usersDao.getUsersCount())
+                .ShortUsersDto(conversionListResultFactory.convertShortUsers(usersDao.getShortUsersSortedLimitOffset(offset, count, sorting)))
                 .build();
+
+        } else {return new SearchUsersDto.Builder()
+                .Count(usersDao.getUsersCountByKeyword(keyword))
+                .ShortUsersDto(conversionListResultFactory.convertShortUsers(usersDao.getShortUsersByKeywordSortedLimitOffset(keyword, offset, count, sorting)))
+                .build();
+        }
+
+
+
     }
 }

@@ -40,15 +40,15 @@ public class UsersDaoImpl implements UsersDao {
     private static final String SQL_GET_ID_BY_MAIL = "SELECT user_id FROM user_info WHERE mail = ?;";
     private static final String SQL_GET_ID_BY_NICKNAME = "SELECT user_id FROM short_user WHERE nick_name = ?;";
     private static final String SQL_GET_ID_BY_TOKEN = "SELECT user_id FROM auth WHERE token = ?;";
-    private static final String SQL_ADD_SHORT_USER = "INSERT INTO short_user (nick_name, rating, avatar, is_online, rights) VALUES (?, ?, ?, ?, ?);";
+    private static final String SQL_ADD_SHORT_USER = "INSERT INTO short_user (nick_name, rating, avatar, rights) VALUES (?, ?, ?, ?);";
     private static final String SQL_UPDATE_SHORT_USER = "UPDATE short_user SET nick_name = ?, avatar = ? WHERE user_id = ?;;";
     private static final String SQL_ADD_USER_INFO = "INSERT INTO user_info (user_id, mail, birth_date, info, registration_time, last_session, messages_count, themes_count, pass_hash, name) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
     private static final String SQL_UPDATE_USER_INFO = "UPDATE user_info SET name = ?, avatar = ?, birth_date = ?, info = ? WHERE user_id = ?;";
     private static final String SQL_GET_USER_BY_THEME_ID = "SELECT * FROM short_user WHERE user_id = (SELECT user_id FROM theme WHERE theme_id = ?) ;";
     private static final String SQL_GET_SHORT_USER_SORTED_LIMIT_OFFSET = "SELECT * FROM short_user LEFT JOIN user_info ON short_user.user_id = user_info.user_id ORDER BY :sorting LIMIT :count OFFSET :offset ;";
-    private static final String SQL_GET_SHORT_USER_IS_ONLINE_SORTED_LIMIT_OFFSET = "SELECT * FROM short_user LEFT JOIN user_info ON short_user.user_id = user_info.user_id WHERE is_online = :isOnline ORDER BY :sorting LIMIT :count OFFSET :offset ;";
+    private static final String SQL_GET_USERS_COUNT = "SELECT count(*) FROM short_user;";
     private static final String SQL_GET_SHORT_USER_BY_KEYWORD_SORTED_LIMIT_OFFSET = "SELECT * FROM short_user LEFT JOIN user_info ON short_user.user_id = user_info.user_id WHERE short_user.nick_name ILIKE :keyword OR user_info.name ILIKE :keyword ORDER BY :sorting LIMIT :count OFFSET :offset ;";
-    private static final String SQL_GET_SHORT_USER_BY_KEYWORD_IS_ONLINE_SORTED_LIMIT_OFFSET = "SELECT * FROM short_user LEFT JOIN user_info ON short_user.user_id = user_info.user_id WHERE is_online = :isOnline AND (short_user.nick_name ILIKE :keyword OR user_info.name ILIKE :keyword) ORDER BY :sorting LIMIT :count OFFSET :offset ;";
+    private static final String SQL_GET_USERS_COUNT_BY_KEYWORD = "SELECT count(*) FROM short_user LEFT JOIN user_info ON short_user.user_id = user_info.user_id WHERE short_user.nick_name ILIKE ? OR user_info.name ILIKE ? ;";
     private static final String SQL_GET_RIGHTS_BY_TOKEN = "SELECT rights FROM short_user WHERE user_id = (SELECT user_id FROM auth WHERE token = ?);";
     private static final String SQL_GET_RIGHTS_BY_EMAIL = "SELECT rights FROM short_user WHERE user_id = (SELECT user_id FROM user_info WHERE mail = ?);";
     private static final String SQL_GET_RIGHTS_BY_USER_ID = "SELECT rights FROM short_user WHERE user_id = ?;";
@@ -60,7 +60,6 @@ public class UsersDaoImpl implements UsersDao {
                 .NickName(rs.getString("nick_name"))
                 .Rating(rs.getLong("rating"))
                 .Avatar(rs.getString("avatar"))
-                .IsOnline(rs.getBoolean("is_online"))
                 .Mail(rs.getString("mail"))
                 .DateOfBirth(rs.getLong("birth_date"))
                 .Info(rs.getString("info"))
@@ -79,7 +78,6 @@ public class UsersDaoImpl implements UsersDao {
                 .NickName(rs.getString("nick_name"))
                 .Rating(rs.getLong("rating"))
                 .Avatar(rs.getString("avatar"))
-                .IsOnline(rs.getBoolean("is_online"))
                 .Rights(rs.getString("rights"))
                 .build();
     }
@@ -125,7 +123,6 @@ public class UsersDaoImpl implements UsersDao {
                 new Object[]{user.getNickName(),
                         user.getRating(),
                         user.getAvatar(),
-                        user.isOnline(),
                         user.getRights()});
         jdbcTemplate.update(SQL_ADD_USER_INFO,
                 new Object[]{getIdByNickName(user.getNickName()),
@@ -175,16 +172,6 @@ public class UsersDaoImpl implements UsersDao {
 
     }
 
-    public List<ShortUser> getShortUsersIsOnlineSortedLimitOffset(Integer offset, int count, Boolean isOnline, String sorting) {
-        Map<String, Object> params = new HashMap<>();
-        params.put("offset", offset);
-        params.put("count", count);
-        params.put("isOnline", isOnline);
-        params.put("sorting", "short_user." + sorting);
-        return namedJdbcTemplate.query(SQL_GET_SHORT_USER_IS_ONLINE_SORTED_LIMIT_OFFSET, params, shortUserRowMapper());
-
-    }
-
     public List<ShortUser> getShortUsersByKeywordSortedLimitOffset(String keyword, Integer offset, int count, String sorting) {
         Map<String, Object> params = new HashMap<>();
         params.put("keyword", '%' + keyword + '%');
@@ -192,16 +179,6 @@ public class UsersDaoImpl implements UsersDao {
         params.put("count", count);
         params.put("sorting", "short_user." + sorting);
         return namedJdbcTemplate.query(SQL_GET_SHORT_USER_BY_KEYWORD_SORTED_LIMIT_OFFSET, params, shortUserRowMapper());
-    }
-
-    public List<ShortUser> getShortUsersByKeywordIsOnlineSortedLimitOffset(String keyword, Integer offset, int count, Boolean isOnline, String sorting) {
-        Map<String, Object> params = new HashMap<>();
-        params.put("keyword", '%' + keyword + '%');
-        params.put("offset", offset);
-        params.put("count", count);
-        params.put("isOnline", isOnline);
-        params.put("sorting", "short_user." + sorting);
-        return namedJdbcTemplate.query(SQL_GET_SHORT_USER_BY_KEYWORD_IS_ONLINE_SORTED_LIMIT_OFFSET, params, shortUserRowMapper());
     }
 
     public String getRightsByToken(String token) {
@@ -214,5 +191,13 @@ public class UsersDaoImpl implements UsersDao {
 
     public String getRightsByUserId(long userId) {
         return jdbcTemplate.queryForObject(SQL_GET_RIGHTS_BY_USER_ID, String.class, userId);
+    }
+
+    public int getUsersCount() {
+        return jdbcTemplate.queryForObject(SQL_GET_USERS_COUNT, int.class);
+    }
+
+    public int getUsersCountByKeyword(String keyword) {
+        return jdbcTemplate.queryForObject(SQL_GET_USERS_COUNT_BY_KEYWORD, int.class, keyword);
     }
 }

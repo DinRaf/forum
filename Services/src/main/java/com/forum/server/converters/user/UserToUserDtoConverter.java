@@ -21,7 +21,6 @@ public class UserToUserDtoConverter implements Converter<User, UserDto> {
         return new UserDto.Builder()
                 .UserId(user.getUserId())
                 .Rating(user.getRating())
-                .Online(user.isOnline())
                 .Avatar(user.getAvatar())
                 .DateOfBirth(user.getDateOfBirth())
                 .Info(user.getInfo())

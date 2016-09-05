@@ -16,12 +16,7 @@ public class ShortUser {
         return rights;
     }
 
-    public void setOnline(boolean online) {
-        isOnline = online;
-    }
-
     private String avatar;
-    private boolean isOnline;
 
     public long getUserId() {
         return userId;
@@ -39,9 +34,6 @@ public class ShortUser {
         return avatar;
     }
 
-    public boolean isOnline() {
-        return isOnline;
-    }
 
     protected ShortUser() {}
 
@@ -50,7 +42,6 @@ public class ShortUser {
         this.nickName = builder.nickName;
         this.rating = builder.rating;
         this.avatar = builder.avatar;
-        this.isOnline = builder.isOnline;
         this.rights = builder.rights;
     }
 
@@ -59,7 +50,6 @@ public class ShortUser {
         private String nickName;
         private Long rating;
         private String avatar;
-        private boolean isOnline;
         private String rights;
 
         public Builder Rights(String rights) {
@@ -84,11 +74,6 @@ public class ShortUser {
 
         public Builder Avatar(String avatar) {
             this.avatar = avatar;
-            return this;
-        }
-
-        public Builder IsOnline(boolean isOnline) {
-            this.isOnline = isOnline;
             return this;
         }
 

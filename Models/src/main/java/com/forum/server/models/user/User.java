@@ -122,12 +122,6 @@ public class User extends ShortUser{
             return this;
         }
 
-        @Override
-        public Builder IsOnline(boolean isOnline) {
-            super.IsOnline(isOnline);
-            return this;
-        }
-
         public Builder Name(String name) {
             this.name = name;
             return this;

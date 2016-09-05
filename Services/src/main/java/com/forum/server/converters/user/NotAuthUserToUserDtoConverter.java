@@ -25,7 +25,6 @@ public class NotAuthUserToUserDtoConverter implements Converter<User, UserDto> {
         return new UserDto.Builder()
                 .UserId(user.getUserId())
                 .Rating(user.getRating())
-                .Online(user.isOnline())
                 .Avatar(user.getAvatar())
                 .Info(user.getInfo())
                 .LastSession(user.getLastSession())
