@@ -80,4 +80,10 @@ public class MessageDaoImplTest {
     public void getAuthorIdByMessageId() {
         assertEquals(USER_ID, messagesDao.getAuthorIdByMessageId(MESSAGE_ID));
     }
+
+
+    @Test
+    public void getMessagesIdsByThemeId() {
+        assertNotNull(messagesDao.getMessagesIdsByThemeId(THEME_ID));
+    }
 }

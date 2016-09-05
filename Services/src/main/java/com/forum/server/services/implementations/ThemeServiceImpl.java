@@ -111,11 +111,12 @@ public class ThemeServiceImpl implements ThemeService {
 
     public ThemeDto updateTheme(String token, long themeId, String title, long count) {
         tokenValidator.verifyOnExistence(token);
-        String rights = usersDao.getRightsByToken(token);
-        rightsValidator.updateTheme(rights);
+        if(themesDao.getAuthorIdByThemeId(themeId) != usersDao.findIdByToken(token)) {
+            String rights = usersDao.getRightsByToken(token);
+            rightsValidator.updateTheme(rights);
+        }
         themeValidator.verifyTitleOnNotNull(title);
         themeValidator.verifyOnExistence(themeId);
-        themeValidator.compareThemesById(themesDao.getAuthorIdByThemeId(themeId), usersDao.findIdByToken(token));
 
         themesDao.saveUpdate(new ThemeUpdate.Builder()
                 .Title(title)
@@ -130,11 +131,24 @@ public class ThemeServiceImpl implements ThemeService {
     }
 
     public void deleteTheme(String token, long themeId) {
+        //проверяем токен
         tokenValidator.verifyOnExistence(token);
-        String rights = usersDao.getRightsByToken(token);
-        rightsValidator.deleteTheme(rights);
+        //смотрим есть ли такая тема
         themeValidator.verifyOnExistence(themeId);
-        themeValidator.compareThemesById(themesDao.getAuthorIdByThemeId(themeId), usersDao.findIdByToken(token));
+        //является ли пользователь автором данной темы
+        if (usersDao.findIdByToken(token) != themesDao.getAuthorIdByThemeId(themeId)) {
+            //если не явлется проверяем его права
+            String rights = usersDao.getRightsByToken(token);
+            rightsValidator.deleteTheme(rights);
+        }
+        //удаляем внешние ключи темы(сообщения => оценки сообщений)
+        List<Long> messageIds = messagesDao.getMessagesIdsByThemeId(themeId);
+        for (long messageId:
+             messageIds) {
+            messagesDao.deleteMessageMarkByMessageId(messageId);
+            messagesDao.deleteMessageById(messageId);
+        }
+        //удаляем тему
         themesDao.deleteTheme(themeId);
     }
 }

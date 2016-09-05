@@ -2,10 +2,7 @@ package com.forum.server.services.implementations;
 
 import com.forum.server.converters.ConversionListResultFactory;
 import com.forum.server.converters.ConversionResultFactory;
-import com.forum.server.dao.interfaces.MarksDao;
-import com.forum.server.dao.interfaces.MessagesDao;
-import com.forum.server.dao.interfaces.ThemesDao;
-import com.forum.server.dao.interfaces.UsersDao;
+import com.forum.server.dao.interfaces.*;
 import com.forum.server.dto.message.MessageCreateDto;
 import com.forum.server.dto.message.MessagesDto;
 import com.forum.server.dto.theme.ThemeDto;
@@ -54,33 +51,38 @@ public class MessageServiceImpl implements MessageService {
     private TokenValidator tokenValidator;
 
     @Autowired
-    private UserValidator userValidator;
-
-    @Autowired
     private MessageMarkValidator messageMarkValidator;
 
     @Autowired
     private RightsValidator rightsValidator;
 
     public ThemeDto createMessage(String token, long themeId, MessageCreateDto messageCreateDto, long count) {
+        //берём текст сообщений
         String messageText = messageCreateDto.getMessage();
+        //проверяем токен
         tokenValidator.verifyOnExistence(token);
+        //проверяем права пользователя
         String rights = usersDao.getRightsByToken(token);
         rightsValidator.createMessage(rights);
+        //проверяем написанный текст
         messageValidator.verifyMessageText(messageText);
+        //конвертируем текст в сообщение и собираем модель сообщения
         Message message = conversionResultFactory.convert(messageText);
         //TODO Подумать на целесобразностью
         message.setUser(usersDao.findShortUserByToken(token));
         message.setThemeId(themeId);
+        //сохраняем сообщение в бд
         messagesDao.save(message);
+
         long messagesCount = themesDao.findTheNumberOfMessagesInTheme(themeId);
         long offset = messagesCount - findOffsetFromEnd(messagesCount, count);
         if (offset < 0) {
             offset = 0;
         }
+        //берём нужные нам сообщения и собираем dto
         List<Message> messages = messagesDao.getMessagesWithOffset(themeId, offset);
         MessagesDto messagesDto = conversionListResultFactory.convertMessages(messages);
-        //TODO Проверить статус пользователя по токену
+        //собираем dto тем
         Theme theme = themesDao.getThemeByThemeId(themeId);
         ThemeDto themeDto = conversionResultFactory.convert(theme);
         themeDto.setMessages(messagesDto);
@@ -93,17 +95,17 @@ public class MessageServiceImpl implements MessageService {
 
     public ThemeDto updateMessage(String token, long messageId, MessageCreateDto updatedMessageDto, long count) {
         tokenValidator.verifyOnExistence(token);
-        //Проверка прав доступа
-        String rights = usersDao.getRightsByToken(token);
-        rightsValidator.updateMessage(rights);
         //Проверка текста сообщения
         String messageText = updatedMessageDto.getMessage();
         messageValidator.verifyMessageText(messageText);
         //Сравниваем является updater и автор одим и тем же человеком
-        long authorId = messagesDao.getAuthorIdByMessageId(messageId);
         ShortUser updater = usersDao.findByToken(token);
         long updaterId = updater.getUserId();
-        userValidator.compareUsersById(authorId, updaterId);
+        if (updaterId != messagesDao.getAuthorIdByMessageId(messageId)) {
+            //Проверка прав доступа
+            String rights = usersDao.getRightsByToken(token);
+            rightsValidator.updateMessage(rights);
+        }
         //Вносим изменения сообщения
         messagesDao.saveUpdate(new MessageUpdate.Builder()
                 .Update(System.currentTimeMillis())
@@ -131,11 +133,17 @@ public class MessageServiceImpl implements MessageService {
     }
 
     public void deleteMessage(String token, long messageId) {
+        //проверка токена
         tokenValidator.verifyOnExistence(token);
-        String rights = usersDao.getRightsByToken(token);
-        rightsValidator.deleteMessage(rights);
-        long authorId = messagesDao.getAuthorIdByMessageId(messageId);
+        //является ли человк автором данного сообщения
+        if (messagesDao.getAuthorIdByMessageId(messageId) != usersDao.findIdByToken(token)) {
+            //проверка прав пользователя на совершение действия
+            String rights = usersDao.getRightsByToken(token);
+            rightsValidator.deleteMessage(rights);
+        }
+        //проверяем есть ли вообще такое сообщение
         messageValidator.verifyOnExistence(messageId);
+        //удаляем сообщение и внешние ключи
         messagesDao.deleteMessageMarkByMessageId(messageId);
         messagesDao.deleteMessageById(messageId);
     }

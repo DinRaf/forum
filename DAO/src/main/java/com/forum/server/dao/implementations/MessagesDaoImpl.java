@@ -36,6 +36,7 @@ public class MessagesDaoImpl implements MessagesDao {
     private static final String SQL_DELETE_MESSAGE_MARK = "DELETE FROM message_mark WHERE message_id = :message_id;";
     private static final String SQL_GET_USER_ID_BY_MESSAGE_ID = "SELECT user_id FROM message WHERE message_id = ?;";
     private static final String SQL_GET_OFFSET_BY_ID = "SELECT count(*) FROM message WHERE theme_id = (SELECT theme_id FROM message WHERE message_id = :messageId) AND message_id < :messageId;";
+    private static final String SQL_GET_MESSAGES_IDS_BY_THEME_ID = "SELECT message_id FROM message WHERE theme_id = ?;";
 
     private RowMapper<Message> messageRowMapper(){
         return (rs, rowNum) -> {
@@ -129,6 +130,10 @@ public class MessagesDaoImpl implements MessagesDao {
         Map<String, Number> params = new HashMap<>();
         params.put("messageId", messageId);
         return namedJdbcTemplate.queryForObject(SQL_GET_OFFSET_BY_ID, params, long.class);
+    }
+
+    public List<Long> getMessagesIdsByThemeId(long themeId) {
+        return jdbcTemplate.queryForList(SQL_GET_MESSAGES_IDS_BY_THEME_ID, long.class, themeId);
     }
 
 }

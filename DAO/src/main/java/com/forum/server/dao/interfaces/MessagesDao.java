@@ -32,4 +32,6 @@ public interface MessagesDao {
     long getAuthorIdByMessageId(long messageId);
 
     long getOffsetById(long messageId);
+
+    List<Long> getMessagesIdsByThemeId(long themeId);
 }

@@ -68,10 +68,11 @@ public class UserServiceImpl implements UserService {
 
     public ShortUserDto updateUser(String token, long userId, UserUpdateDto userInfo) {
         verify(token);
-        String rights = usersDao.getRightsByToken(token);
-        rightsValidator.updateUser(rights);
+        if (usersDao.findIdByToken(token) != userId) {
+            String rights = usersDao.getRightsByToken(token);
+            rightsValidator.updateUser(rights);
+        }
         userValidator.verifyOnExistence(userId);
-        userValidator.compareUsersById(usersDao.findIdByToken(token), userId);
         String identifier = userInfo.getMail();
         userValidator.verifyEmail(identifier);
         identifier = userInfo.getNickName();

@@ -21,12 +21,6 @@ public class ThemeValidator {
         }
     }
 
-    public void compareThemesById(long themeId1, long themeId2) {
-        if (themeId1 != themeId2){
-            throw new AuthException("Forbidden");
-        }
-    }
-
     public void verifyTitleOnNotNull(String title) {
         if (title.equals("") || title == null) {
             throw new AuthException("Введите заголовок темы");
