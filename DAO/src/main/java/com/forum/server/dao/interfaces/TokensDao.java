@@ -11,4 +11,6 @@ public interface TokensDao {
     boolean isExistsToken(String token);
 
     void addToken(long userId, String token);
+
+    void logout(String token);
 }

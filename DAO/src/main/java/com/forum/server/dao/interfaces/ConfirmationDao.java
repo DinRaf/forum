@@ -12,4 +12,8 @@ public interface ConfirmationDao {
     boolean isExistsHash(String confirmHash);
 
     void saveConfirmHash(long userId, String confirmHash);
+
+    long getIdByHash(String confirmHash);
+
+    void updatePassHash(long userId, String password);
 }

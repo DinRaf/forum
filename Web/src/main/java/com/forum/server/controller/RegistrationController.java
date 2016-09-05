@@ -7,15 +7,11 @@ import com.forum.server.services.interfaces.RegistrationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import static com.forum.server.utils.ResponseBuilder.buildResponseGet;
 import static com.forum.server.utils.ResponseBuilder.buildResponseLogin;
-import static org.springframework.web.bind.annotation.RequestMethod.GET;
-import static org.springframework.web.bind.annotation.RequestMethod.POST;
+import static org.springframework.web.bind.annotation.RequestMethod.*;
 
 /**
  * 06.08.16
@@ -40,6 +36,28 @@ public class RegistrationController {
 
         LoginDto token = registrationService.addUser(authDto);
         return buildResponseLogin(token);
+    }
+
+    @RequestMapping(value = "/logout", method = DELETE)
+    public ResponseEntity<QueryResultDto> logout(@RequestHeader(name = "Auth-Token") String token) {
+
+        registrationService.logout(token);
+        return buildResponseGet(null);
+    }
+
+    @RequestMapping(value = "/recovery", method = GET)
+    public ResponseEntity<QueryResultDto> passwordRecovery(@RequestParam(name = "mail") String mail) {
+
+        registrationService.recoveryPass(mail);
+        return buildResponseGet(null);
+    }
+
+    @RequestMapping(value = "/password/{confirm-hash}", method = PUT)
+    public ResponseEntity<QueryResultDto> passwordRecovery(@PathVariable("confirm-hash")  String hash,
+                                                            @RequestHeader(name = "password") String password) {
+
+        registrationService.changePass(hash, password);
+        return buildResponseGet(null);
     }
 
     @RequestMapping(value = "/confirmation/{confirm-hash}", method = GET)

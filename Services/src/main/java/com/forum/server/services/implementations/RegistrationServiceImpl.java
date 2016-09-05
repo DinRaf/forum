@@ -8,6 +8,7 @@ import com.forum.server.dto.auth.AuthDto;
 import com.forum.server.dto.auth.LoginDto;
 import com.forum.server.models.user.User;
 import com.forum.server.security.exceptions.AuthException;
+import com.forum.server.security.exceptions.NotFoundException;
 import com.forum.server.security.generators.TokenGenerator;
 import com.forum.server.services.interfaces.RegistrationService;
 import com.forum.server.services.utils.ConfirmHashGenerator;
@@ -122,8 +123,6 @@ public class RegistrationServiceImpl implements RegistrationService {
             throw new AuthException("E-Mail already exists");
         }
 
-
-
         User user = conversionResultFactory.convert(authDto);
         usersDao.save(user);
         long userId = usersDao.getIdByNickName(user.getNickname());
@@ -139,11 +138,48 @@ public class RegistrationServiceImpl implements RegistrationService {
     public void confirmUser(String confirmHash) {
         if (!confirmationDao.isExistsHash(confirmHash)) {
             throw new AuthException("Ссылка более не действительна");
-        } else {
-            confirmationDao.confirmUser(confirmHash);
         }
+        confirmationDao.confirmUser(confirmHash);
     }
 
+    public void logout(String token) {
+        if (!tokensDao.isExistsToken(token)) {
+            throw new AuthException("Токен не валиден");
+        }
+        tokensDao.logout(token);
+    }
+
+    public void recoveryPass(String mail) {
+        if (!usersDao.isExistsMail(mail)) {
+            throw new NotFoundException("Пользовтель с данным адресом почты не найден");
+        }
+        sendMessageRecoveryPass(usersDao.getIdByMail(mail), mail, usersDao.getNicknameByMail(mail));
+    }
+
+    public void changePass(String confirmHash, String password) {
+        if (!confirmationDao.isExistsHash(confirmHash)) {
+            throw new AuthException("Ссылка более не действительна");
+        }
+        confirmationDao.updatePassHash(confirmationDao.getIdByHash(confirmHash), encoder.encode(password));
+    }
+
+    private void sendMessageRecoveryPass(long userId, String mail, String nickname) {
+        SimpleMailMessage message = new SimpleMailMessage(mailMessage);
+        message.setTo(mail);
+        String confirmHash = confirmHashGenerator.generateHash()
+                + confirmHashGenerator.generateHash();
+        confirmationDao.saveConfirmHash(userId, confirmHash);
+        message.setText(
+                "Здравствуйте, " + nickname + "!\n" +
+                        "Для смены пароля пожалуйста перейдите по ссылке ниже:\n" +
+                        "192.168.0.105:8080/password/" + confirmHash
+        );
+        try {
+            mailSender.send(message);
+        } catch (Exception ex) {
+            throw new AuthException("Смена пароля не удалась");
+        }
+    }
 
     private void sendMessage(long userId, String mail, String nickname) {
         SimpleMailMessage message = new SimpleMailMessage(mailMessage);

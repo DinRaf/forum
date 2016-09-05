@@ -55,4 +55,6 @@ public interface UsersDao {
     int getUsersCount();
 
     int getUsersCountByKeyword(String keyword);
+
+    String getNicknameByMail(String mail);
 }

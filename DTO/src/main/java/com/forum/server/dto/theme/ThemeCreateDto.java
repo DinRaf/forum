@@ -12,8 +12,8 @@ public class ThemeCreateDto implements Data{
 
     private String title;
     private String message;
-    private int sectionId;
-    private int subsectionId;
+    private String sectionUrl;
+    private String subsectionUrl;
 
     public String getTitle() {
         return title;
@@ -23,12 +23,12 @@ public class ThemeCreateDto implements Data{
         return message;
     }
 
-    public int getSectionId() {
-        return sectionId;
+    public String getSectionUrl() {
+        return sectionUrl;
     }
 
-    public int getSubsectionId() {
-        return subsectionId;
+    public String getSubsectionUrl() {
+        return subsectionUrl;
     }
 
     protected ThemeCreateDto() {
@@ -37,15 +37,15 @@ public class ThemeCreateDto implements Data{
     private ThemeCreateDto(Builder builder) {
         this.title = builder.title;
         this.message = builder.message;
-        this.sectionId = builder.sectionId;
-        this.subsectionId = builder.subsectionId;
+        this.sectionUrl = builder.sectionUrl;
+        this.subsectionUrl = builder.subsectionUrl;
     }
     
     public static class Builder {
         private String title;
         private String message;
-        private int sectionId;
-        private int subsectionId;
+        private String sectionUrl;
+        private String subsectionUrl;
 
         public Builder Title(String title) {
             this.title = title;
@@ -57,13 +57,13 @@ public class ThemeCreateDto implements Data{
             return this;
         }
 
-        public Builder SectionId(int sectionId) {
-            this.sectionId = sectionId;
+        public Builder SectionId(String sectionUrl) {
+            this.sectionUrl = sectionUrl;
             return this;
         }
 
-        public Builder SubsectionId(int subsectionId) {
-            this.subsectionId = subsectionId;
+        public Builder SubsectionUrl(String subsectionUrl) {
+            this.subsectionUrl = subsectionUrl;
             return this;
         }
 

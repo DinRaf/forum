@@ -49,8 +49,6 @@ public class ThemesDaoImplTest {
 
         Theme theme = new Theme.Builder()
                 .User(user)
-                .SectionId(SECTION_ID)
-                .SubsectionId(SUBSECTION_ID)
                 .Title(TITLE)
                 .Date(System.currentTimeMillis())
                 .MessagesCount(MESSAGES_COUNT)

@@ -11,8 +11,8 @@ import com.forum.server.models.user.ShortUser;
 public class Theme {
     private long themeId;
     private ShortUser user;
-    private long sectionId;
-    private long subsectionId;
+    private String sectionUrl;
+    private String subsectionUrl;
     private String title;
     private long date;
     private long messagesCount;
@@ -30,12 +30,12 @@ public class Theme {
         return user;
     }
 
-    public long getSectionId() {
-        return sectionId;
+    public String getSectionUrl() {
+        return sectionUrl;
     }
 
-    public long getSubsectionId() {
-        return subsectionId;
+    public String getSubsectionUrl() {
+        return subsectionUrl;
     }
 
     public String getTitle() {
@@ -60,8 +60,8 @@ public class Theme {
     private Theme(Builder builder) {
         this.themeId = builder.themeId;
         this.user = builder.user;
-        this.sectionId = builder.sectionId;
-        this.subsectionId = builder.subsectionId;
+        this.sectionUrl = builder.sectionUrl;
+        this.subsectionUrl = builder.subsectionUrl;
         this.title = builder.title;
         this.date = builder.date;
         this.messagesCount = builder.messagesCount;
@@ -71,8 +71,8 @@ public class Theme {
     public static class Builder {
         private long themeId;
         private ShortUser user;
-        private long sectionId;
-        private long subsectionId;
+        private String sectionUrl;
+        private String subsectionUrl;
         private String title;
         private long date;
         private long messagesCount;
@@ -88,13 +88,13 @@ public class Theme {
             return this;
         }
 
-        public Builder SectionId(long sectionId) {
-            this.sectionId = sectionId;
+        public Builder SectionUrl(String sectionUrl) {
+            this.sectionUrl = sectionUrl;
             return this;
         }
 
-        public Builder SubsectionId(long subsectionId) {
-            this.subsectionId = subsectionId;
+        public Builder SubsectionUrl(String subsectionUrl) {
+            this.subsectionUrl = subsectionUrl;
             return this;
         }
 

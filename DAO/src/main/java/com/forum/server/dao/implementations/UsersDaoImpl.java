@@ -52,6 +52,7 @@ public class UsersDaoImpl implements UsersDao {
     private static final String SQL_GET_RIGHTS_BY_TOKEN = "SELECT rights FROM short_user WHERE user_id = (SELECT user_id FROM auth WHERE token = ?);";
     private static final String SQL_GET_RIGHTS_BY_EMAIL = "SELECT rights FROM short_user WHERE user_id = (SELECT user_id FROM user_info WHERE mail = ?);";
     private static final String SQL_GET_RIGHTS_BY_USER_ID = "SELECT rights FROM short_user WHERE user_id = ?;";
+    private static final String SQL_GET_NICKNAME_BY_MAIL = "SELECT nick_name FROM short_user WHERE user_id = (SELECT user_id FROM user_info WHERE mail = ?);";
 
     private RowMapper<User> userRowMapper() {
         return (rs, i) -> new User.Builder()
@@ -199,5 +200,9 @@ public class UsersDaoImpl implements UsersDao {
 
     public int getUsersCountByKeyword(String keyword) {
         return jdbcTemplate.queryForObject(SQL_GET_USERS_COUNT_BY_KEYWORD, int.class, keyword);
+    }
+
+    public String getNicknameByMail(String mail) {
+        return jdbcTemplate.queryForObject(SQL_GET_NICKNAME_BY_MAIL, String.class, mail);
     }
 }

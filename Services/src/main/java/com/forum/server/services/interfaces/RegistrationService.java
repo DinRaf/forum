@@ -16,4 +16,10 @@ public interface RegistrationService {
     LoginDto addUser(AuthDto authDto);
 
     void confirmUser(String confirmHash);
+
+    void logout(String token);
+
+    void recoveryPass(String mail);
+
+    void changePass(String hash, String password);
 }
