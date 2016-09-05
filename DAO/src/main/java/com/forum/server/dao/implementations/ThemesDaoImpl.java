@@ -65,6 +65,14 @@ public class ThemesDaoImpl implements ThemesDao {
             "subsection_id = (SELECT subsection_id FROM subsection WHERE LOWER(url) = :url2)) " +
             "ORDER BY theme_id LIMIT :count OFFSET :offset;";
 
+    private static final String SQL_GET_COUNT = "SELECT SUM(themes_count) FROM section;";
+    private static final String SQL_GET_COUNT_BY_KEYWORD = "SELECT count(*) FROM theme WHERE title ILIKE ?;";
+    private static final String SQL_GET_COUNT_BY_SECTION_URL = "SELECT themes_count FROM section WHERE LOWER(url) = ?;";
+    private static final String SQL_GET_COUNT_BY_KEYWORD_AND_SECTION_URL = "SELECT count(*) FROM theme WHERE title ILIKE ? AND section_id = (SELECT section_id FROM section WHERE LOWER(url) = ?);";
+    private static final String SQL_GET_COUNT_BY_SUBSECTION_URL = "SELECT themes_count FROM subsection WHERE LOWER(url) = ?;";
+    private static final String SQL_GET_COUNT_BY_KEYWORD_AND_SUBSECTION_URL = "SELECT count(*) FROM theme WHERE title ILIKE ? AND subsection_id = (SELECT subsection_id FROM subsection WHERE LOWER(url) = ?);";
+    private static final String SQL_GET_COUNT_BY_KEYWORD_AND_SECTION_URL_AND_SUBSECTION_URL = "SELECT count(*) FROM theme WHERE title ILIKE ? AND section_id = (SELECT section_id FROM section WHERE LOWER(url) = ?) AND subsection_id = (SELECT subsection_id FROM subsection WHERE LOWER(url) = ?);";
+
     private RowMapper<Theme> themeRowMapper() {
         return (rs, rowNum) -> {
             ShortUser user = new ShortUser.Builder()
@@ -87,6 +95,7 @@ public class ThemesDaoImpl implements ThemesDao {
                     .build();
         };
     }
+
     private RowMapper<ThemeSearchDto> themeSearchDtoRowMapper() {
         return (rs, rowNum) -> new ThemeSearchDto.Builder()
                 .AuthorId(rs.getLong("user_id"))
@@ -96,6 +105,7 @@ public class ThemesDaoImpl implements ThemesDao {
                 .Title(rs.getString("title"))
                 .build();
     }
+
     public void save(Theme theme) {
         jdbcTemplate.update(SQL_ADD_THEME,
                 new Object[]{theme.getUser().getUserId(),
@@ -232,6 +242,34 @@ public class ThemesDaoImpl implements ThemesDao {
         params.put("count", count);
         params.put("offset", offset);
         return namedJdbcTemplate.query(SQL_GET_THEMES_SECTION_URL_SUBSECTION_URL_WITH_LIMIT_OFFSET, params, themeSearchDtoRowMapper());
+    }
+
+    public int getCount() {
+        return jdbcTemplate.queryForObject(SQL_GET_COUNT, int.class);
+    }
+
+    public int getCountByKeyword(String keyword) {
+        return jdbcTemplate.queryForObject(SQL_GET_COUNT_BY_KEYWORD, int.class, "%" + keyword + "%");
+    }
+
+    public int getCountBySectionUrl(String sectionUrl) {
+        return jdbcTemplate.queryForObject(SQL_GET_COUNT_BY_SECTION_URL, int.class, sectionUrl.toLowerCase());
+    }
+
+    public int getCountByKeywordAndSectionUrl(String keyword, String sectionUrl) {
+        return jdbcTemplate.queryForObject(SQL_GET_COUNT_BY_KEYWORD_AND_SECTION_URL, int.class, new Object[]{"%" + keyword + "%", sectionUrl.toLowerCase()});
+    }
+
+    public int getCountBySubsectionUrl(String subsectionUrl) {
+        return jdbcTemplate.queryForObject(SQL_GET_COUNT_BY_SUBSECTION_URL, int.class, subsectionUrl.toLowerCase());
+    }
+
+    public int getCountByKeywordAndSubsectionUrl(String keyword, String subsectionUrl) {
+        return jdbcTemplate.queryForObject(SQL_GET_COUNT_BY_KEYWORD_AND_SUBSECTION_URL, int.class, new Object[]{"%" + keyword + "%", subsectionUrl.toLowerCase()});
+    }
+
+    public int getCountByKeywordAndSectionUrlAndSubsectionUrl(String keyword, String sectionUrl, String subsectionUrl) {
+        return jdbcTemplate.queryForObject(SQL_GET_COUNT_BY_KEYWORD_AND_SECTION_URL_AND_SUBSECTION_URL, int.class, new Object[]{"%" + keyword + "%", sectionUrl.toLowerCase(), subsectionUrl.toLowerCase()});
     }
 
     public long getThemeIdByMessageId(long messageId) {

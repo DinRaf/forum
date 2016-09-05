@@ -18,7 +18,7 @@ public class ConfirmationDaoImpl implements ConfirmationDao {
     private JdbcTemplate jdbcTemplate;
 
     private static final String SQL_SAVE_CONFIRM_HASH = "INSERT INTO confirm (user_id, confirm_hash) VALUES (?, ?);";
-    private static final String SQL_CONFIRM_USER = "UPDATE short_user SET rights = 2 WHERE user_id = (SELECT user_id FROM confirm WHERE confirm_hash = ?);";
+    private static final String SQL_CONFIRM_USER = "UPDATE short_user SET rights = 'user' WHERE user_id = (SELECT user_id FROM confirm WHERE confirm_hash = ?);";
     private static final String SQL_IS_EXISTS_HASH = "SELECT CASE WHEN EXISTS(SELECT user_id FROM confirm WHERE confirm_hash = ?) THEN TRUE ELSE FALSE END ;";
 
 

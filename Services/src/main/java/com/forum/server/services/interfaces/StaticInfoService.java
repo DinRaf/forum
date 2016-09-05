@@ -15,6 +15,10 @@ public interface StaticInfoService {
 
     InfoDto getInfo(String identifier);
 
+    void createSection(String token, SectionCreateDto createDto);
+
+    void createSubsection(String token, SubsectionCreateDto createDto);
+
     void deleteSections(String token, String section_url);
 
     void deleteSubsection(String token, String url);

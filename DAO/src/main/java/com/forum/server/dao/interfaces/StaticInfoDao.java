@@ -28,4 +28,8 @@ public interface StaticInfoDao {
     String getSubsectionByUrl(String subsectionUrl);
 
     String getSectionBySectionUrl(String url);
+
+    void createSection(String name, String url);
+
+    void createSubsection(String name, String sectionUrl, String url);
 }

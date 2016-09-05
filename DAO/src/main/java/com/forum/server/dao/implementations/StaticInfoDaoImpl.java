@@ -31,6 +31,8 @@ public class StaticInfoDaoImpl implements StaticInfoDao {
     private static final String SQL_GET_SECTION_BY_SUBSECTION_URL = "SELECT name FROM section WHERE section_id = (SELECT section_id FROM subsection WHERE LOWER(url) = ?);";
     private static final String SQL_GET_SUBSECTION_BY_URL = "SELECT name FROM subsection WHERE LOWER(url) = ?;";
     private static final String SQL_GET_SECTION_NAME_BY_URL = "SELECT name FROM section WHERE LOWER(url) = ?;";
+    private static final String SQL_CREATE_SECTION = "INSERT INTO section (name, themes_count, subsections_count, url) VALUES (?, 0, 0, ?);";
+    private static final String SQL_CREATE_SUBSECTION = "INSERT INTO subsection (section_id, name, themes_count, url) VALUES ((SELECT FROM section WHERE LOWER(url) = ?), ?, 0, ?);";
 
     private RowMapper<Section> sectionRowMapper() {
         return (rs, i) -> new Section.Builder()
@@ -91,5 +93,14 @@ public class StaticInfoDaoImpl implements StaticInfoDao {
 
     public String getSectionBySectionUrl(String url) {
         return jdbcTemplate.queryForObject(SQL_GET_SECTION_NAME_BY_URL, String.class, url.toLowerCase());
+    }
+
+    public void createSection(String name, String url) {
+        jdbcTemplate.update(SQL_CREATE_SECTION, new Object[]{name, url});
+    }
+
+    public void createSubsection(String name, String sectionUrl, String url) {
+        jdbcTemplate.update(SQL_CREATE_SUBSECTION, new Object[]{sectionUrl, name, sectionUrl + "/" + url});
+
     }
 }

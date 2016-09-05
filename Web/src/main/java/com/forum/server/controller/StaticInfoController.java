@@ -9,6 +9,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import static com.forum.server.utils.ResponseBuilder.buildResponseGet;
+import static com.forum.server.utils.ResponseBuilder.buildResponseGetWithSection;
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
 import static com.forum.server.utils.ResponseBuilder.*;
 import static org.springframework.web.bind.annotation.RequestMethod.*;
 
@@ -28,6 +32,20 @@ public class StaticInfoController {
     public ResponseEntity<QueryResultDto> getSections() {
         SectionsDto sections = staticInfoService.getSections();
         return buildResponseGet(sections);
+    }
+
+    @RequestMapping(value = "/sections", method = POST)
+    public ResponseEntity<QueryResultDto> createSection(@RequestBody SectionCreateDto createDto,
+                                                      @RequestHeader(name = "Auth-Token") String token) {
+        staticInfoService.createSection(token, createDto);
+        return buildResponseGet(null);
+    }
+
+    @RequestMapping(value = "/subsections", method = POST)
+    public ResponseEntity<QueryResultDto> createSubsection(@RequestBody SubsectionCreateDto createDto,
+                                                      @RequestHeader(name = "Auth-Token") String token) {
+        staticInfoService.createSubsection(token, createDto);
+        return buildResponseGet(null);
     }
 
     @RequestMapping(value = "/sections", method = DELETE)
