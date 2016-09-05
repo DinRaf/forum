@@ -46,7 +46,7 @@ public class StaticInfoController {
     @RequestMapping(value = "/sections", method = DELETE)
     public ResponseEntity<QueryResultDto> deleteSection(@RequestHeader(name = "Auth-Token") String token,
                                                         @RequestParam String section_url) {
-        staticInfoService.deleteSections(token, section_url);
+        staticInfoService.deleteSection(token, section_url);
         return buildResponseDelete();
     }
 

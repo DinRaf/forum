@@ -141,13 +141,6 @@ public class ThemeServiceImpl implements ThemeService {
             String rights = usersDao.getRightsByToken(token);
             rightsValidator.deleteTheme(rights);
         }
-        //удаляем внешние ключи темы(сообщения => оценки сообщений)
-        List<Long> messageIds = messagesDao.getMessagesIdsByThemeId(themeId);
-        for (long messageId:
-             messageIds) {
-            messagesDao.deleteMessageMarkByMessageId(messageId);
-            messagesDao.deleteMessageById(messageId);
-        }
         //удаляем тему
         themesDao.deleteTheme(themeId);
     }

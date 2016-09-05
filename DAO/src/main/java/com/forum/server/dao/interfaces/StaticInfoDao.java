@@ -1,5 +1,6 @@
 package com.forum.server.dao.interfaces;
 
+import com.forum.server.dto.staticInfo.InfoCreateDto;
 import com.forum.server.models.staticInfo.Info;
 import com.forum.server.models.staticInfo.Section;
 import com.forum.server.models.staticInfo.Subsection;
@@ -30,4 +31,14 @@ public interface StaticInfoDao {
     void createSection(String name, String url);
 
     void createSubsection(String name, String sectionUrl, String url);
+
+    void deleteSectionByUrl(String section_url);
+
+    void deleteSubsectionByUrl(String url);
+
+    void deleteInfoByIdentifier(String identifier);
+
+    boolean isExistsSubsectionUrl(String url);
+
+    void saveInfo(InfoCreateDto infoCreateDto);
 }

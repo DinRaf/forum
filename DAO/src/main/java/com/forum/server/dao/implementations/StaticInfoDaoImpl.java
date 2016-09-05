@@ -1,6 +1,7 @@
 package com.forum.server.dao.implementations;
 
 import com.forum.server.dao.interfaces.StaticInfoDao;
+import com.forum.server.dto.staticInfo.InfoCreateDto;
 import com.forum.server.models.staticInfo.Info;
 import com.forum.server.models.staticInfo.Section;
 import com.forum.server.models.staticInfo.Subsection;
@@ -32,6 +33,12 @@ public class StaticInfoDaoImpl implements StaticInfoDao {
     private static final String SQL_GET_SECTION_NAME_BY_URL = "SELECT name FROM section WHERE LOWER(url) = ?;";
     private static final String SQL_CREATE_SECTION = "INSERT INTO section (name, themes_count, subsections_count, url) VALUES (?, 0, 0, ?);";
     private static final String SQL_CREATE_SUBSECTION = "INSERT INTO subsection (section_id, name, themes_count, url) VALUES ((SELECT section_id FROM section WHERE LOWER(url) = ?), ?, 0, ?);";
+    private static final String SQL_CREATE_SUBSECTION = "INSERT INTO subsection (section_id, name, themes_count, url) VALUES ((SELECT FROM section WHERE LOWER(url) = ?), ?, 0, ?);";
+    private static final String SQL_DELETE_SECTION_BY_URL = "DELETE FROM section WHERE url = ?;";
+    private static final String SQL_DELETE_SUBSECTION_BY_URL = "DELETE FROM subsection WHERE url = ?;";
+    private static final String SQL_DELETE_INFO_BY_IDENTIFIER = "DELETE FROM info WHERE identifier = ?;";
+    private static final String SQL_IS_EXISTS_SUBSECTION_URL = "SELECT CASE WHEN EXISTS(SELECT section_id FROM subsection WHERE url = ?);";
+    private static final String SQL_ADD_INFO = "INSERT INTO info (identifier, title, text) VALUES (?, ?, ?);";
 
     private RowMapper<Section> sectionRowMapper() {
         return (rs, i) -> new Section.Builder()
@@ -96,6 +103,29 @@ public class StaticInfoDaoImpl implements StaticInfoDao {
 
     public void createSubsection(String name, String sectionUrl, String url) {
         jdbcTemplate.update(SQL_CREATE_SUBSECTION, new Object[]{sectionUrl, name, sectionUrl + "/" + url});
+    }
 
+    public void deleteSectionByUrl(String section_url) {
+        jdbcTemplate.update(SQL_DELETE_SECTION_BY_URL, section_url);
+    }
+
+    public void deleteSubsectionByUrl(String url) {
+        jdbcTemplate.update(SQL_DELETE_SUBSECTION_BY_URL, url);
+    }
+
+    public void deleteInfoByIdentifier(String identifier) {
+        jdbcTemplate.update(SQL_DELETE_INFO_BY_IDENTIFIER, identifier);
+    }
+
+    public boolean isExistsSubsectionUrl(String url) {
+        return jdbcTemplate.queryForObject(SQL_IS_EXISTS_SUBSECTION_URL, boolean.class, url);
+    }
+
+    public void saveInfo(InfoCreateDto infoCreateDto) {
+        jdbcTemplate.update(SQL_ADD_INFO, new Object[] {
+                infoCreateDto.getIdentifier(),
+                infoCreateDto.getTitle(),
+                infoCreateDto.getText(),
+        });
     }
 }

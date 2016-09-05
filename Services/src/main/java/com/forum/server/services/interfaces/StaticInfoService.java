@@ -19,7 +19,7 @@ public interface StaticInfoService {
 
     void createSubsection(String token, SubsectionCreateDto createDto);
 
-    void deleteSections(String token, String section_url);
+    void deleteSection(String token, String section_url);
 
     void deleteSubsection(String token, String url);
 

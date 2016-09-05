@@ -27,8 +27,6 @@ public interface MessagesDao {
 
     List<Message> getMessagesWithOffset(long themeId, long offset);
 
-    void deleteMessageMarkByMessageId(long messageId);
-
     long getAuthorIdByMessageId(long messageId);
 
     long getOffsetById(long messageId);

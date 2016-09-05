@@ -144,7 +144,6 @@ public class MessageServiceImpl implements MessageService {
         //проверяем есть ли вообще такое сообщение
         messageValidator.verifyOnExistence(messageId);
         //удаляем сообщение и внешние ключи
-        messagesDao.deleteMessageMarkByMessageId(messageId);
         messagesDao.deleteMessageById(messageId);
     }
 

@@ -115,12 +115,6 @@ public class MessagesDaoImpl implements MessagesDao {
         return namedJdbcTemplate.query(SQL_GET_MESSAGES_WITH_OFFSET, params, messageRowMapper());
     }
 
-    public void deleteMessageMarkByMessageId(long messageId) {
-        Map<String, Number> params = new HashMap<>();
-        params.put("message_id", messageId);
-        namedJdbcTemplate.update(SQL_DELETE_MESSAGE_MARK, params);
-    }
-
     public long getAuthorIdByMessageId(long messageId) {
         return jdbcTemplate.queryForObject(SQL_GET_USER_ID_BY_MESSAGE_ID, long.class, messageId);
     }

@@ -84,20 +84,32 @@ public class StaticInfoServiceImpl implements StaticInfoService {
 
     }
 
-    public void deleteSections(String token, String section_url) {
-
+    public void deleteSection(String token, String section_url) {
+        tokenValidator.verifyOnExistence(token);
+        rightsValidator.workWithStaticInfo(usersDao.getRightsByToken(token));
+        staticInfoValidator.verifyInfoOnExistence(section_url);
+        staticInfoDao.deleteSectionByUrl(section_url);
     }
 
     public void deleteSubsection(String token, String url) {
-
+        tokenValidator.verifyOnExistence(token);
+        rightsValidator.workWithStaticInfo(usersDao.getRightsByToken(token));
+        staticInfoValidator.verifySubsectionOnExistence(url);
+        staticInfoDao.deleteSubsectionByUrl(url);
     }
 
     public void deleteInfo(String token, String identifier) {
-
+        tokenValidator.verifyOnExistence(token);
+        rightsValidator.workWithStaticInfo(usersDao.getRightsByToken(token));
+        staticInfoValidator.verifyInfoOnExistence(identifier);
+        staticInfoDao.deleteInfoByIdentifier(identifier);
     }
 
     public void createInfo(String token, InfoCreateDto infoCreateDto) {
-
+        tokenValidator.verifyOnExistence(token);
+        rightsValidator.workWithStaticInfo(usersDao.getRightsByToken(token));
+        staticInfoValidator.verifyInfoOnExistence(infoCreateDto.getIdentifier());
+        staticInfoDao.saveInfo(infoCreateDto);
     }
 
 }
