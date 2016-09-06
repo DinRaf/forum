@@ -125,8 +125,10 @@ public class MessageServiceImpl implements MessageService {
 
     public void updateMessageRating(String token, long messageId, boolean grade) {
         tokenValidator.verifyOnExistence(token);
+        messageValidator.verifyOnExistence(messageId);
         String rights = usersDao.getRightsByToken(token);
         rightsValidator.updateMessageRating(rights);
+
         long userId = usersDao.findIdByToken(token);
         messageMarkValidator.verifyOnExistence(userId, messageId, grade);
         marksDao.save(userId, messageId, grade);

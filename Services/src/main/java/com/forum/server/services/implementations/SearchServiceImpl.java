@@ -57,6 +57,10 @@ public class SearchServiceImpl implements SearchService {
         if (offset == null) {
             offset = 0;
         }
+        searchValidator.verifyOnExistenceSectionUrl(sectionUrl);
+        searchValidator.verifyOnExistenceSubsectionUrl(subsectionUrl);
+        searchValidator.verifyOnNotNullSectionUrl(sectionUrl);
+        searchValidator.verifyOnNotNullSubsectionUrl(subsectionUrl);
         List<ThemeSearchDto> themeSearchDtos;
         int resultCount;
         if (sectionUrl == null && subsectionUrl == null) {
