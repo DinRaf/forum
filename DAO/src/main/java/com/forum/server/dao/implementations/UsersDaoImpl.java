@@ -29,16 +29,16 @@ public class UsersDaoImpl implements UsersDao {
     @Autowired
     private NamedParameterJdbcTemplate namedJdbcTemplate;
 
-    private static final String SQL_IS_EXISTS_NICKNAME = "SELECT CASE WHEN EXISTS(SELECT user_id FROM short_user WHERE nick_name = ?)THEN TRUE ELSE FALSE END ;";
+    private static final String SQL_IS_EXISTS_NICKNAME = "SELECT CASE WHEN EXISTS(SELECT user_id FROM short_user WHERE LOWER(nick_name) = ?)THEN TRUE ELSE FALSE END ;";
     private static final String SQL_IS_EXISTS_MAIL = "SELECT CASE WHEN EXISTS(SELECT user_id FROM user_info WHERE mail = ?)THEN TRUE ELSE FALSE END ;";
     private static final String SQL_IS_EXISTS_ID = "SELECT CASE WHEN EXISTS(SELECT user_id FROM user_info WHERE user_id = ?)THEN TRUE ELSE FALSE END ;";
-    private static final String SQL_GET_HASH_BY_NICKNAME = "SELECT pass_hash FROM user_info WHERE user_id = (SELECT user_id FROM short_user WHERE nick_name = ?);";
+    private static final String SQL_GET_HASH_BY_NICKNAME = "SELECT pass_hash FROM user_info WHERE user_id = (SELECT user_id FROM short_user WHERE LOWER(nick_name) = ?);";
     private static final String SQL_GET_HASH_BY_MAIL = "SELECT pass_hash FROM user_info WHERE mail = ?;";
     private static final String SQL_FIND_BY_TOKEN = "SELECT * FROM user_info INNER JOIN short_user ON user_info.user_id = short_user.user_id WHERE short_user.user_id = (SELECT user_id FROM auth WHERE token = ?);";
     private static final String SQL_FIND_BY_ID = "SELECT * FROM user_info INNER JOIN short_user ON user_info.user_id = short_user.user_id WHERE short_user.user_id = ?;";
     private static final String SQL_FIND_SHORT_USER_BY_TOKEN = "SELECT * FROM short_user WHERE user_id = (SELECT user_id FROM auth WHERE token = ?);";
     private static final String SQL_GET_ID_BY_MAIL = "SELECT user_id FROM user_info WHERE mail = ?;";
-    private static final String SQL_GET_ID_BY_NICKNAME = "SELECT user_id FROM short_user WHERE nick_name = ?;";
+    private static final String SQL_GET_ID_BY_NICKNAME = "SELECT user_id FROM short_user WHERE LOWER(nick_name) = ?;";
     private static final String SQL_GET_ID_BY_TOKEN = "SELECT user_id FROM auth WHERE token = ?;";
     private static final String SQL_ADD_SHORT_USER = "INSERT INTO short_user (nick_name, rating, avatar, rights) VALUES (?, ?, ?, ?);";
     private static final String SQL_UPDATE_SHORT_USER = "UPDATE short_user SET nick_name = ?, avatar = ? WHERE user_id = ?;;";
@@ -100,19 +100,19 @@ public class UsersDaoImpl implements UsersDao {
     }
 
     public Integer getIdByMail(String identifier) {
-        return jdbcTemplate.queryForObject(SQL_GET_ID_BY_MAIL, Integer.class, identifier);
+        return jdbcTemplate.queryForObject(SQL_GET_ID_BY_MAIL, Integer.class,  identifier);
     }
 
     public boolean isExistsNickName(String identifier) {
-        return jdbcTemplate.queryForObject(SQL_IS_EXISTS_NICKNAME, boolean.class, identifier);
+        return jdbcTemplate.queryForObject(SQL_IS_EXISTS_NICKNAME, boolean.class, identifier.toLowerCase());
     }
 
     public String getHashByNickName(String identifier) {
-        return jdbcTemplate.queryForObject(SQL_GET_HASH_BY_NICKNAME, String.class, identifier);
+        return jdbcTemplate.queryForObject(SQL_GET_HASH_BY_NICKNAME, String.class, identifier.toLowerCase());
     }
 
     public Integer getIdByNickName(String identifier) {
-        return jdbcTemplate.queryForObject(SQL_GET_ID_BY_NICKNAME, Integer.class, identifier);
+        return jdbcTemplate.queryForObject(SQL_GET_ID_BY_NICKNAME, Integer.class, identifier.toLowerCase());
     }
 
     public ShortUser getUserByThemeId(long themeId) {
