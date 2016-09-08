@@ -72,11 +72,6 @@ public class MessageDaoImplTest {
     }
 
     @Test
-    public void deleteMessageMarkByMessageId() {
-        messagesDao.deleteMessageMarkByMessageId(MESSAGE_ID);
-    }
-
-    @Test
     public void getAuthorIdByMessageId() {
         assertEquals(USER_ID, messagesDao.getAuthorIdByMessageId(MESSAGE_ID));
     }

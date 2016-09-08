@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+
 import static com.forum.server.utils.ResponseBuilder.buildResponseGetWithCount;
 import static com.forum.server.utils.ResponseBuilder.buildResponseGetWithCountAndSubsection;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;

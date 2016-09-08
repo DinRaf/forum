@@ -3,9 +3,6 @@ package com.forum.server.services.implementations;
 import com.forum.server.converters.ConversionListResultFactory;
 import com.forum.server.converters.ConversionResultFactory;
 import com.forum.server.dao.interfaces.StaticInfoDao;
-import com.forum.server.validation.RightsValidator;
-import com.forum.server.validation.SearchValidator;
-import com.forum.server.validation.TokenValidator;
 import com.forum.server.dao.interfaces.ThemesDao;
 import com.forum.server.dao.interfaces.UsersDao;
 import com.forum.server.dto.theme.ThemeSearchDto;
@@ -13,11 +10,17 @@ import com.forum.server.dto.theme.ThemeSearchResultDto;
 import com.forum.server.dto.theme.ThemesSearchDto;
 import com.forum.server.dto.user.SearchUsersDto;
 import com.forum.server.dto.user.ShortUsersDto;
-import com.forum.server.models.user.ShortUser;
 import com.forum.server.services.interfaces.SearchService;
+import com.forum.server.validation.RightsValidator;
+import com.forum.server.validation.SearchValidator;
+import com.forum.server.validation.TokenValidator;
+import org.apache.commons.codec.Decoder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import sun.nio.cs.ext.DoubleByte;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.List;
 
 /**
@@ -53,21 +56,44 @@ public class SearchServiceImpl implements SearchService {
     @Autowired
     private RightsValidator rightsValidator;
 
+    public static void main(String[] args) {
+
+    }
+
     public ThemeSearchResultDto searchThemes(String keyword, Integer offset, int count, String sectionUrl, String subsectionUrl) {
+
         if (offset == null) {
             offset = 0;
         }
         searchValidator.verifyOnExistenceSectionUrl(sectionUrl);
         searchValidator.verifyOnExistenceSubsectionUrl(subsectionUrl);
-        searchValidator.verifyOnNotNullSectionUrl(sectionUrl);
-        searchValidator.verifyOnNotNullSubsectionUrl(subsectionUrl);
+        try {
+            if (sectionUrl != null) {
+                sectionUrl = URLDecoder.decode(sectionUrl, "UTF-8");
+            }
+            if (subsectionUrl != null) {
+                subsectionUrl = URLDecoder.decode(subsectionUrl, "UTF-8");
+            }
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            if (keyword != null) {
+                keyword = new String(keyword.getBytes("ISO-8859-1"), "UTF-8");
+            }
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
         List<ThemeSearchDto> themeSearchDtos;
-        int resultCount;
+        Integer resultCount;
         if (sectionUrl == null && subsectionUrl == null) {
             if (keyword == null) {
                 resultCount = themesDao.getCount();
                 themeSearchDtos = themesDao.getThemesWithLimitOffset(offset, count);
             } else {
+
                 resultCount = themesDao.getCountByKeyword(keyword);
                 themeSearchDtos = themesDao.getThemesByKeywordWithLimitOffset(keyword, offset, count);
             }
@@ -116,17 +142,18 @@ public class SearchServiceImpl implements SearchService {
         }
         sorting = conversionResultFactory.getSearchSorting(sorting);
         ShortUsersDto shortUsersDto;
-        if (keyword == null) {return new SearchUsersDto.Builder()
-                .Count(usersDao.getUsersCount())
-                .ShortUsersDto(conversionListResultFactory.convertShortUsers(usersDao.getShortUsersSortedLimitOffset(offset, count, sorting)))
-                .build();
+        if (keyword == null) {
+            return new SearchUsersDto.Builder()
+                    .Count(usersDao.getUsersCount())
+                    .ShortUsersDto(conversionListResultFactory.convertShortUsers(usersDao.getShortUsersSortedLimitOffset(offset, count, sorting)))
+                    .build();
 
-        } else {return new SearchUsersDto.Builder()
-                .Count(usersDao.getUsersCountByKeyword(keyword))
-                .ShortUsersDto(conversionListResultFactory.convertShortUsers(usersDao.getShortUsersByKeywordSortedLimitOffset(keyword, offset, count, sorting)))
-                .build();
+        } else {
+            return new SearchUsersDto.Builder()
+                    .Count(usersDao.getUsersCountByKeyword(keyword))
+                    .ShortUsersDto(conversionListResultFactory.convertShortUsers(usersDao.getShortUsersByKeywordSortedLimitOffset(keyword, offset, count, sorting)))
+                    .build();
         }
-
 
 
     }

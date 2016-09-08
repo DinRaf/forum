@@ -22,14 +22,18 @@ public class SearchValidator {
     }
 
     public void verifyOnExistenceSectionUrl(String sectionUrl) {
-        if (staticInfoDao.isExistsSectionUrl(sectionUrl)) {
-            throw new NotFoundException("Вы ввели неверный адрес секции");
+        if (sectionUrl != null) {
+            if (staticInfoDao.isExistsSectionUrl(sectionUrl)) {
+                throw new NotFoundException("Вы ввели неверный адрес секции");
+            }
         }
     }
 
     public void verifyOnExistenceSubsectionUrl(String subsectionUrl) {
-        if (staticInfoDao.isExistsSectionUrl(subsectionUrl)) {
-            throw new NotFoundException("Вы ввели неверный адрес субсекции");
+        if (subsectionUrl != null) {
+            if (staticInfoDao.isExistsSectionUrl(subsectionUrl)) {
+                throw new NotFoundException("Вы ввели неверный адрес субсекции");
+            }
         }
     }
 

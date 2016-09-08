@@ -49,9 +49,9 @@ public class ThemesDaoImpl implements ThemesDao {
                 "ORDER BY theme_id LIMIT :count OFFSET :offset;";
     private static final String SQL_GET_THEMES_BY_KEYWORD_WITH_LIMIT_OFFSET = "SELECT theme_id, theme.user_id, date, messages_count, status, title, nick_name FROM theme INNER JOIN short_user ON short_user.user_id = theme.user_id WHERE title ILIKE :keyword " +
             "ORDER BY theme_id LIMIT :count OFFSET :offset;";
-    private static final String SQL_GET_THEMES_BY_KEYWORD_SECTION_URL_WITH_LIMIT_OFFSET = "SELECT theme_id, theme.user_id, date, messages_count, status, title, nick_name FROM theme INNER JOIN short_user ON short_user.user_id = theme.user_id WHERE title ILIKE :keyword AND section_id = (SELECT section_id FROM section WHERE LOWER(url) = :url) " +
+    private static final String SQL_GET_THEMES_BY_KEYWORD_SECTION_URL_WITH_LIMIT_OFFSET = "SELECT theme_id, theme.user_id, date, messages_count, status, title, nick_name FROM theme INNER JOIN short_user ON short_user.user_id = theme.user_id WHERE title ILIKE :keyword AND section_id = (SELECT section_id FROM section WHERE LOWER(url) = :urlSection) " +
             "ORDER BY theme_id LIMIT :count OFFSET :offset;";
-    private static final String SQL_GET_THEMES_BY_KEYWORD_SUBSECTION_URL_WITH_LIMIT_OFFSET = "SELECT theme_id, theme.user_id, date, messages_count, status, title, nick_name FROM theme INNER JOIN short_user ON short_user.user_id = theme.user_id WHERE title ILIKE :keyword AND subsection_id = (SELECT subsection_id FROM subsection WHERE LOWER(url) = :url) " +
+    private static final String SQL_GET_THEMES_BY_KEYWORD_SUBSECTION_URL_WITH_LIMIT_OFFSET = "SELECT theme_id, theme.user_id, date, messages_count, status, title, nick_name FROM theme INNER JOIN short_user ON short_user.user_id = theme.user_id WHERE title ILIKE :keyword AND subsection_id = (SELECT subsection_id FROM subsection WHERE LOWER(url) = :urlSubsection) " +
             "ORDER BY theme_id LIMIT :count OFFSET :offset;";
     private static final String SQL_GET_THEMES_WITH_LIMIT_OFFSET = "SELECT theme_id, theme.user_id, date, messages_count, status, title FROM theme, nick_name INNER JOIN short_user ON short_user.user_id = theme.user_id " +
             "ORDER BY theme_id LIMIT :count OFFSET :offset;";
@@ -198,14 +198,16 @@ public class ThemesDaoImpl implements ThemesDao {
     public List<ThemeSearchDto> getThemesByKeywordSectionUrlWithLimitOffset(String keyword, String sectionUrl, int offset, int count) {
         Map<String, Object> params = new HashMap<>();
         params.put("keyword", "%" + keyword + "%");
-        params.put("url", sectionUrl.toLowerCase());
+        params.put("urlSection", sectionUrl.toLowerCase());
+        params.put("count", count);
+        params.put("offset", offset);
         return namedJdbcTemplate.query(SQL_GET_THEMES_BY_KEYWORD_SECTION_URL_WITH_LIMIT_OFFSET, params, themeSearchDtoRowMapper());
     }
 
     public List<ThemeSearchDto> getThemesByKeywordSubsectionUrlWithLimitOffset(String keyword, String subsectionUrl, int offset, int count) {
         Map<String, Object> params = new HashMap<>();
         params.put("keyword", "%" + keyword + "%");
-        params.put("url", subsectionUrl.toLowerCase());
+        params.put("urlSubsection", subsectionUrl.toLowerCase());
         params.put("count", count);
         params.put("offset", offset);
         return namedJdbcTemplate.query(SQL_GET_THEMES_BY_KEYWORD_SUBSECTION_URL_WITH_LIMIT_OFFSET, params, themeSearchDtoRowMapper());
