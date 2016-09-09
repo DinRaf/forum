@@ -80,13 +80,4 @@ public class ConversionResultFactory {
         UserToUserDtoConverter converter = new UserToUserDtoConverter();
         return converter.convert(user);
     }
-
-    public String getSearchSorting(String sorting) {
-        Map<String, String> params = new HashMap<>();
-        params.put("byRating", "rating");
-        params.put("byRegTime", "registration_time");
-        params.put("byThemesCount", "themes_count");
-        params.put("byMessagesCount", "messages_count");
-        return params.get(sorting);
-    }
 }

@@ -65,10 +65,10 @@ public class RegistrationServiceImpl implements RegistrationService {
     @Override
     public LoginDto login(String identifier, String password) {
         if (identifier == null || password == null) {
-            throw new AuthException("Identifier or password missing, expected both of them");
+            throw new AuthException("Логин или пароль отсутствует");
         } else if (identifier.contains("@")) {
             if (!usersDao.isExistsMail(identifier)) {
-                throw new AuthException("Incorrect identifier or password");
+                throw new AuthException("Неверный e-mail адрес");
             }
             String rights = usersDao.getRightsByEmail(identifier);
             rightsValidator.login(rights);
@@ -77,7 +77,7 @@ public class RegistrationServiceImpl implements RegistrationService {
                 String token = tokenGenerator.generateToken();
                 Integer userId = usersDao.getIdByMail(identifier);
                 if (userId == null) {
-                    throw new AuthException("Incorrect identifier or password");
+                    throw new AuthException("Неверный логин или пароль");
                 }
                 tokensDao.addToken(userId, token);
                 return new LoginDto.Builder()
@@ -85,16 +85,17 @@ public class RegistrationServiceImpl implements RegistrationService {
                         .UserId(userId)
                         .build();
             }
+            throw new AuthException("Неверный логин или пароль");
         } else {
             if (!usersDao.isExistsNickName(identifier)) {
-                throw new AuthException("Incorrect identifier or password");
+                throw new AuthException("Неверный никнейм");
             }
             String passwordHash = usersDao.getHashByNickName(identifier);
             if (encoder.matches(password, passwordHash)) {
                 String token = tokenGenerator.generateToken();
                 Integer userId = usersDao.getIdByNickName(identifier);
                 if (userId == null) {
-                    throw new AuthException("Incorrect identifier or password");
+                    throw new AuthException("Неверный логин или пароль");
                 }
                 tokensDao.addToken(userId, token);
                 return new LoginDto.Builder()
@@ -102,25 +103,25 @@ public class RegistrationServiceImpl implements RegistrationService {
                         .UserId(userId)
                         .build();
             }
+            throw new AuthException("Неверный логин или пароль");
         }
-        throw new AuthException("Incorrect identifier or password");
     }
 
     public LoginDto addUser(AuthDto authDto) {
         if (!passwordMeetsRequirements(authDto.getPassword())) {
-            throw new AuthException("Password is not correct");
+            throw new AuthException("Пароль слишком короткий");
         }
         String nickName = authDto.getNickname();
         if (!nicknameMeetsRequirements(authDto.getNickname())) {
-            throw new AuthException("Nickname is not correct");
+            throw new AuthException("Никнейм не удовлетворяет необходимым условиям");
         } else if (usersDao.isExistsNickName(nickName)) {
-            throw new AuthException("Nickname already exists");
+            throw new AuthException("Никнейм уже занят, попробуйте другой");
         }
         String mail = authDto.getMail();
         if (mail == null || !emailValidator.validate(mail)) {
-            throw new AuthException("E-Mail is not correct or missing");
+            throw new AuthException("E-mail не удовлетворяет необходимым условиям");
         } else if (usersDao.isExistsMail(mail)) {
-            throw new AuthException("E-Mail already exists");
+            throw new AuthException("E-mail уже занят, попробуйте другой");
         }
 
         User user = conversionResultFactory.convert(authDto);
@@ -190,7 +191,7 @@ public class RegistrationServiceImpl implements RegistrationService {
         message.setText(
                 "Здравствуйте, " + nickname + "!\n" +
                 "Для подтверждения аккаунта перейдите пожалуйста по ссылке ниже:\n" +
-                "192.168.0.105:8080/confirmation/" + confirmHash
+                "http://www.labooda.ru/#confirm/" + confirmHash
         );
         try {
             mailSender.send(message);

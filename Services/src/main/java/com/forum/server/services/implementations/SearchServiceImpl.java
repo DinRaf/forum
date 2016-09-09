@@ -22,6 +22,7 @@ import sun.nio.cs.ext.DoubleByte;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 08.08.16
@@ -55,6 +56,9 @@ public class SearchServiceImpl implements SearchService {
 
     @Autowired
     private RightsValidator rightsValidator;
+
+    @Autowired
+    private Map<String, String> sortingMap;
 
     public static void main(String[] args) {
 
@@ -140,7 +144,7 @@ public class SearchServiceImpl implements SearchService {
         if (offset == null) {
             offset = 0;
         }
-        sorting = conversionResultFactory.getSearchSorting(sorting);
+        sorting = sortingMap.get(sorting);
         ShortUsersDto shortUsersDto;
         if (keyword == null) {
             return new SearchUsersDto.Builder()

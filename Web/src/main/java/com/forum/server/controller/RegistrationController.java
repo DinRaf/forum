@@ -60,7 +60,7 @@ public class RegistrationController {
         return buildResponseGet(null);
     }
 
-    @RequestMapping(value = "/confirmation/{confirm-hash}", method = GET)
+    @RequestMapping(value = "/confirmation/email/{confirm-hash}", method = GET)
     public ResponseEntity<QueryResultDto> addUser(@PathVariable("confirm-hash") String confirmHash) {
 
         registrationService.confirmUser(confirmHash);

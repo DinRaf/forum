@@ -33,7 +33,6 @@ public class MessagesDaoImpl implements MessagesDao {
     private static final String SQL_GET_MESSAGES_WITH_LIMIT_OFFSET = "SELECT * FROM message INNER JOIN short_user ON message.user_id = short_user.user_id WHERE theme_id = :themeId ORDER BY message_id LIMIT :count OFFSET :offset;";
     private static final String SQL_IS_EXISTS_MESSAGE = "SELECT CASE WHEN EXISTS(SELECT theme_id FROM message WHERE message_id = ?)THEN TRUE ELSE FALSE END ;";
     private static final String SQL_DELETE_MESSAGE = "DELETE FROM message WHERE message_id = :message_id;";
-    private static final String SQL_DELETE_MESSAGE_MARK = "DELETE FROM message_mark WHERE message_id = :message_id;";
     private static final String SQL_GET_USER_ID_BY_MESSAGE_ID = "SELECT user_id FROM message WHERE message_id = ?;";
     private static final String SQL_GET_OFFSET_BY_ID = "SELECT count(*) FROM message WHERE theme_id = (SELECT theme_id FROM message WHERE message_id = :messageId) AND message_id < :messageId;";
     private static final String SQL_GET_MESSAGES_IDS_BY_THEME_ID = "SELECT message_id FROM message WHERE theme_id = ?;";

@@ -37,6 +37,16 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         params.put("admin", 4);
         return params;
     }
+
+    @Bean(name = "ratingMap")
+    public Map<String, String> ratingMap() {
+        Map<String, String> params = new HashMap<>();
+        params.put("byRating", "rating");
+        params.put("byRegTime", "registration_time");
+        params.put("byThemesCount", "themes_count");
+        params.put("byMessagesCount", "messages_count");
+        return params;
+    }
     @Bean
     public JavaMailSender javaMailService() {
         JavaMailSenderImpl javaMailSenderImpl = new JavaMailSenderImpl();
