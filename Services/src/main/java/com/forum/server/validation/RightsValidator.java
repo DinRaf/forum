@@ -25,7 +25,14 @@ public class RightsValidator {
     public void workWithStaticInfo(String rights) {
         int right = map.get(rights);
         if (right < 4) {
-            throw new AuthException("Недостаточно прав для создания сообщения");
+            throw new AuthException("Недостаточно прав для работы со статической информацией");
+        }
+    }
+
+    public void getFeedbacks(String rights) {
+        int right = map.get(rights);
+        if (right < 4) {
+            throw new AuthException("Недостаточно прав для получения информации в книге жалоб и предложений");
         }
     }
 
