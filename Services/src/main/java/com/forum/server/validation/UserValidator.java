@@ -40,4 +40,12 @@ public class UserValidator {
             throw new AuthException("Пользователь с таким e-mail уже существует");
         }
     }
+
+    public void verifyEmailPut(String identifier) {
+        if (identifier == null) {
+            throw new AuthException("Введите e-mail");
+        } else if (!emailValidator.validate(identifier)) {
+            throw new AuthException("Некорректный e-mail");
+        }
+    }
 }

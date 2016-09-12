@@ -30,34 +30,4 @@ public interface ThemesDao {
     boolean themeIsExists(long themeId);
 
     void deleteTheme(long themeId);
-
-    List<ThemeSearchDto> getThemesByKeywordSectionUrlSubsectionUrlWithLimitOffset(String keyword, String sectionUrl, String subsectionUrl, int offset, int count);
-
-    List<ThemeSearchDto> getThemesByKeywordWithLimitOffset(String keyword, int offset, int count);
-
-    List<ThemeSearchDto> getThemesByKeywordSectionUrlWithLimitOffset(String keyword, String sectionUrl, int offset, int count);
-
-    List<ThemeSearchDto> getThemesByKeywordSubsectionUrlWithLimitOffset(String keyword, String subsectionUrl, int offset, int count);
-
-    List<ThemeSearchDto> getThemesWithLimitOffset(Integer offset, int count);
-
-    List<ThemeSearchDto> getThemesBySectionUrlWithLimitOffset(String sectionUrl, Integer offset, int count);
-
-    List<ThemeSearchDto> getThemesBySubsectionUrlWithLimitOffset(String subsectionUrl, Integer offset, int count);
-
-    List<ThemeSearchDto> getThemesBySectionUrlSubsectionUrlWithLimitOffset(String sectionUrl, String subsectionUrl, Integer offset, int count);
-
-    int getCount();
-
-    int getCountByKeyword(String keyword);
-
-    int getCountBySectionUrl(String sectionUrl);
-
-    int getCountByKeywordAndSectionUrl(String keyword, String sectionUrl);
-
-    int getCountBySubsectionUrl(String subsectionUrl);
-
-    int getCountByKeywordAndSubsectionUrl(String keyword, String subsectionUrl);
-
-    int getCountByKeywordAndSectionUrlAndSubsectionUrl(String keyword, String sectionUrl, String subsectionUrl);
 }

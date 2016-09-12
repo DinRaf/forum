@@ -42,19 +42,11 @@ public interface UsersDao {
 
     void update(UserUpdate convert, long userId);
 
-    List<ShortUser> getShortUsersSortedLimitOffset(Integer offset, int count, String sorting);
-
-    List<ShortUser> getShortUsersByKeywordSortedLimitOffset(String keyword, Integer offset, int count, String sorting);
-
     String getRightsByToken(String token);
 
     String getRightsByEmail(String email);
 
     String getRightsByUserId(long userId);
-
-    int getUsersCount();
-
-    int getUsersCountByKeyword(String keyword);
 
     String getNicknameByMail(String mail);
 }

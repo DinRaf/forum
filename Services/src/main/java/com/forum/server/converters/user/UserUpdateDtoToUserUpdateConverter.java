@@ -19,7 +19,6 @@ public class UserUpdateDtoToUserUpdateConverter implements Converter<UserUpdateD
                 .Mail(userUpdateDto.getMail())
                 .Name(userUpdateDto.getName())
                 .Avatar(userUpdateDto.getAvatar())
-                .Nickname(userUpdateDto.getNickname())
                 .build();
     }
 }

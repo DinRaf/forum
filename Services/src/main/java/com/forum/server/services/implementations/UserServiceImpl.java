@@ -1,6 +1,9 @@
 package com.forum.server.services.implementations;
 
 import com.forum.server.converters.ConversionResultFactory;
+import com.forum.server.dao.interfaces.ConfirmationDao;
+import com.forum.server.services.utils.ConfirmHashGenerator;
+import com.forum.server.services.utils.MessageSender;
 import com.forum.server.validation.RightsValidator;
 import com.forum.server.validation.TokenValidator;
 import com.forum.server.validation.UserValidator;
@@ -11,6 +14,8 @@ import com.forum.server.dto.user.UserUpdateDto;
 import com.forum.server.security.exceptions.AuthException;
 import com.forum.server.services.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.MailSender;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -46,6 +51,12 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private RightsValidator rightsValidator;
 
+    @Autowired
+    private MessageSender messageSender;
+
+    @Autowired
+    private ConfirmationDao confirmationDao;
+
     @Resource(name = "map")
     private Map<String, Integer> map;
 
@@ -73,12 +84,10 @@ public class UserServiceImpl implements UserService {
         }
         userValidator.verifyOnExistence(userId);
         String identifier = userInfo.getMail();
-        userValidator.verifyEmail(identifier);
-        identifier = userInfo.getNickname();
-        if (!nicknameMeetsRequirements(userInfo.getNickname())) {
-            throw new AuthException("Не правильный nickname");
-        } else if (usersDao.isExistsNickName(identifier)) {
-            throw new AuthException("Такой nickname уже существует");
+        userValidator.verifyEmailPut(identifier);
+        if (!usersDao.isExistsMail(identifier)) {
+            messageSender.sendMessage(userId, identifier, usersDao.getNicknameByMail(identifier));
+            confirmationDao.unconfirm(userId);
         }
         if (userInfo.getPassword() == null) {
             usersDao.update(conversionResultFactory.convert(userInfo), userId);

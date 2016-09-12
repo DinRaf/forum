@@ -26,7 +26,6 @@ public class UserUpdateDtoToUserUpdateWithPassConverter implements Converter<Use
                 .Name(userUpdateDto.getName())
                 .HashPassword(encoder.encode(userUpdateDto.getPassword()))
                 .Avatar(userUpdateDto.getAvatar())
-                .Nickname(userUpdateDto.getNickname())
                 .build();
     }
 }

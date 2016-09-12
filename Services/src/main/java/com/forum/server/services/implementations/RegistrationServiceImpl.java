@@ -13,6 +13,7 @@ import com.forum.server.security.generators.TokenGenerator;
 import com.forum.server.services.interfaces.RegistrationService;
 import com.forum.server.services.utils.ConfirmHashGenerator;
 import com.forum.server.services.utils.EmailValidator;
+import com.forum.server.services.utils.MessageSender;
 import com.forum.server.validation.RightsValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailSender;
@@ -48,13 +49,7 @@ public class RegistrationServiceImpl implements RegistrationService {
     private ConversionResultFactory conversionResultFactory;
 
     @Autowired
-    private SimpleMailMessage mailMessage;
-
-    @Autowired
-    private MailSender mailSender;
-
-    @Autowired
-    private ConfirmHashGenerator confirmHashGenerator;
+    private MessageSender messageSender;
 
     @Autowired
     private ConfirmationDao confirmationDao;
@@ -129,7 +124,7 @@ public class RegistrationServiceImpl implements RegistrationService {
         long userId = usersDao.getIdByNickName(user.getNickname());
         String token = tokenGenerator.generateToken();
         tokensDao.addToken(userId, token);
-        sendMessage(userId, mail, nickName);
+        messageSender.sendMessage(userId, mail, nickName);
         return new LoginDto.Builder()
                 .Token(token)
                 .UserId(userId)
@@ -154,7 +149,7 @@ public class RegistrationServiceImpl implements RegistrationService {
         if (!usersDao.isExistsMail(mail)) {
             throw new NotFoundException("Пользовтель с данным адресом почты не найден");
         }
-        sendMessageRecoveryPass(usersDao.getIdByMail(mail), mail, usersDao.getNicknameByMail(mail));
+        messageSender.sendMessageRecoveryPass(usersDao.getIdByMail(mail), mail, usersDao.getNicknameByMail(mail));
     }
 
     public void changePass(String confirmHash, String password) {
@@ -164,42 +159,8 @@ public class RegistrationServiceImpl implements RegistrationService {
         confirmationDao.updatePassHash(confirmationDao.getIdByHash(confirmHash), encoder.encode(password));
     }
 
-    private void sendMessageRecoveryPass(long userId, String mail, String nickname) {
-        SimpleMailMessage message = new SimpleMailMessage(mailMessage);
-        message.setTo(mail);
-        String confirmHash = confirmHashGenerator.generateHash()
-                + confirmHashGenerator.generateHash();
-        confirmationDao.saveConfirmHash(userId, confirmHash);
-        message.setText(
-                "Здравствуйте, " + nickname + "!\n" +
-                        "Для смены пароля пожалуйста перейдите по ссылке ниже:\n" +
-                        "192.168.0.105:8080/password/" + confirmHash
-        );
-        try {
-            mailSender.send(message);
-        } catch (Exception ex) {
-            throw new AuthException("Смена пароля не удалась");
-        }
-    }
 
-    private void sendMessage(long userId, String mail, String nickname) {
-        SimpleMailMessage message = new SimpleMailMessage(mailMessage);
-        message.setTo(mail);
-        String confirmHash = confirmHashGenerator.generateHash()
-                + confirmHashGenerator.generateHash();
-        confirmationDao.saveConfirmHash(userId, confirmHash);
-        message.setText(
-                "Здравствуйте, " + nickname + "!\n" +
-                "Для подтверждения аккаунта перейдите пожалуйста по ссылке ниже:\n" +
-                "http://www.labooda.ru/#confirm/" + confirmHash
-        );
-        try {
-            mailSender.send(message);
-        } catch (Exception ex) {
-            throw new AuthException("Регистрация не удалась");
-        }
 
-    }
 
     public static boolean passwordMeetsRequirements(String password) {
         return password.length() >= 6;

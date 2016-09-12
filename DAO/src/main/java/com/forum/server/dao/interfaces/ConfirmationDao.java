@@ -16,4 +16,6 @@ public interface ConfirmationDao {
     long getIdByHash(String confirmHash);
 
     void updatePassHash(long userId, String password);
+
+    void unconfirm(long userId);
 }
