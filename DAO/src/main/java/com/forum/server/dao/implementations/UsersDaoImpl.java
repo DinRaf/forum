@@ -43,7 +43,7 @@ public class UsersDaoImpl implements UsersDao {
     private static final String SQL_ADD_SHORT_USER = "INSERT INTO short_user (nick_name, rating, avatar, rights) VALUES (?, ?, ?, ?);";
     private static final String SQL_UPDATE_SHORT_USER = "UPDATE short_user SET avatar = ? WHERE user_id = ?;;";
     private static final String SQL_ADD_USER_INFO = "INSERT INTO user_info (user_id, mail, birth_date, info, registration_time, last_session, messages_count, themes_count, pass_hash, name) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
-    private static final String SQL_UPDATE_USER_INFO = "UPDATE user_info SET mail = ?, birth_date = ?, info = ?, name = ? WHERE user_id = ?;";
+    private static final String SQL_UPDATE_USER_INFO = "UPDATE user_info SET mail = ?, pass_hash = ?, birth_date = ?, info = ?, name = ? WHERE user_id = ?;";
     private static final String SQL_GET_USER_BY_THEME_ID = "SELECT * FROM short_user WHERE user_id = (SELECT user_id FROM theme WHERE theme_id = ?) ;";
     private static final String SQL_GET_RIGHTS_BY_TOKEN = "SELECT rights FROM short_user WHERE user_id = (SELECT user_id FROM auth WHERE token = ?);";
     private static final String SQL_GET_RIGHTS_BY_EMAIL = "SELECT rights FROM short_user WHERE user_id = (SELECT user_id FROM user_info WHERE mail = ?);";
@@ -153,6 +153,20 @@ public class UsersDaoImpl implements UsersDao {
                         userId});
         jdbcTemplate.update(SQL_UPDATE_USER_INFO,
                 new Object[]{user.getMail(),
+                        user.getDateOfBirth(),
+                        user.getInfo(),
+                        user.getName(),
+                        userId});
+    }
+
+
+    public void updateWithHash(UserUpdate user, long userId) {
+        jdbcTemplate.update(SQL_UPDATE_SHORT_USER,
+                new Object[]{user.getAvatar(),
+                        userId});
+        jdbcTemplate.update(SQL_UPDATE_USER_INFO,
+                new Object[]{user.getMail(),
+                        user.getHashPassword(),
                         user.getDateOfBirth(),
                         user.getInfo(),
                         user.getName(),

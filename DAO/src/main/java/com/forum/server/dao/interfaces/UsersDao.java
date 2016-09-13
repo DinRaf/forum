@@ -49,4 +49,6 @@ public interface UsersDao {
     String getRightsByUserId(long userId);
 
     String getNicknameByMail(String mail);
+
+    void updateWithHash(UserUpdate userUpdate, long userId);
 }

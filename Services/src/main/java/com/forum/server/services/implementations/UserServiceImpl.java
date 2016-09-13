@@ -95,7 +95,7 @@ public class UserServiceImpl implements UserService {
         } else if (!passwordMeetsRequirements(userInfo.getPassword())) {
             throw new AuthException("Неверный пароль");
         }
-        usersDao.update(conversionResultFactory.convertWithPass(userInfo), userId);
+        usersDao.updateWithHash(conversionResultFactory.convertWithPass(userInfo), userId);
         return conversionResultFactory.convertUser(usersDao.getUserById(userId));
     }
 
