@@ -102,4 +102,11 @@ public class UserServiceImpl implements UserService {
     public void verify(String token) {
         tokenValidator.verifyOnExistence(token);
     }
+
+    public void ban(String token, String nickname) {
+        tokenValidator.verifyOnExistence(token);
+        rightsValidator.banUser(token);
+        usersDao.banUser(nickname);
+
+    }
 }

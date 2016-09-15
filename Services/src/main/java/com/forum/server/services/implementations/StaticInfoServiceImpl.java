@@ -4,6 +4,7 @@ import com.forum.server.converters.ConversionListResultFactory;
 import com.forum.server.converters.ConversionResultFactory;
 import com.forum.server.dao.interfaces.UsersDao;
 import com.forum.server.dto.staticInfo.*;
+import com.forum.server.security.exceptions.AuthException;
 import com.forum.server.validation.RightsValidator;
 import com.forum.server.dto.staticInfo.InfoCreateDto;
 import com.forum.server.dto.staticInfo.SubsectionsWithMetaDto;
@@ -70,9 +71,12 @@ public class StaticInfoServiceImpl implements StaticInfoService {
 
     public void createSection(String token, SectionCreateDto createDto) {
         tokenValidator.verifyOnExistence(token);
-        rightsValidator.createStatic(usersDao.getRightsByToken(token));
-        staticInfoDao.createSection(createDto.getName(), createDto.getUrl());
-
+        if (!staticInfoDao.isExistsSectionUrl(createDto.getUrl())) {
+            rightsValidator.createStatic(usersDao.getRightsByToken(token));
+            staticInfoDao.createSection(createDto.getName(), createDto.getUrl());
+        } else {
+            throw new AuthException("Секция с таким урлом уже существоет");
+        }
     }
 
     public void createSubsection(String token, SubsectionCreateDto createDto) {

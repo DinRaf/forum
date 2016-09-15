@@ -16,4 +16,6 @@ public interface UserService {
     ShortUserDto updateUser(String token, long userId, UserUpdateDto userInfo);
 
     void verify(String token);
+
+    void ban(String token, String nickname);
 }

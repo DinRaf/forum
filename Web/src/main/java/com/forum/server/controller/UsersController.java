@@ -1,20 +1,17 @@
 package com.forum.server.controller;
 
 import com.forum.server.dto.response.QueryResultDto;
-import com.forum.server.dto.user.UserDto;
 import com.forum.server.dto.user.ShortUserDto;
 import com.forum.server.dto.user.UserUpdateDto;
 import com.forum.server.services.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import static com.forum.server.utils.ResponseBuilder.buildResponseGet;
 import static com.forum.server.utils.ResponseBuilder.buildResponsePostAndPut;
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.PUT;
 
@@ -47,6 +44,13 @@ public class UsersController {
     @RequestMapping(value = "/", method = GET)
     public ResponseEntity<QueryResultDto> verifyUser(@RequestHeader(name = "Auth-Token", required = false) String token) {
         userService.verify(token);
+        return buildResponseGet(null);
+    }
+
+    @RequestMapping(value = "/ban", method = POST)
+    public ResponseEntity<QueryResultDto> banUser(@RequestHeader(name = "Auth-Token") String token,
+                                                  @RequestParam("nickname") String nickname ) {
+        userService.ban(token, nickname);
         return buildResponseGet(null);
     }
 }

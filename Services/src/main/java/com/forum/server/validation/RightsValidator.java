@@ -36,6 +36,13 @@ public class RightsValidator {
         }
     }
 
+    public void banUser(String rights) {
+        int right = map.get(rights);
+        if (right < 4) {
+            throw new AuthException("Вы не можете забанить полльзователя");
+        }
+    }
+
     public void updateMessage(String rights) {
         int right = map.get(rights);
         if (right < 3) {

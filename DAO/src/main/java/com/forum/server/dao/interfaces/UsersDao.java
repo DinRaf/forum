@@ -51,4 +51,6 @@ public interface UsersDao {
     String getNicknameByMail(String mail);
 
     void updateWithHash(UserUpdate userUpdate, long userId);
+
+    void banUser(String nickname);
 }
