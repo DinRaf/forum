@@ -5,7 +5,9 @@ import com.forum.server.security.exceptions.AuthException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 /**
  * 12.09.16
@@ -13,7 +15,7 @@ import org.springframework.stereotype.Component;
  * @author Dinar Rafikov (First Software Engineering Platform)
  * @version 1.0
  */
-@Component
+@Service
 public class MessageSender {
 
     @Autowired
@@ -28,6 +30,7 @@ public class MessageSender {
     @Autowired
     private ConfirmationDao confirmationDao;
 
+    @Async
     public void sendMessage(long userId, String mail, String nickname) {
         SimpleMailMessage message = new SimpleMailMessage(mailMessage);
         message.setTo(mail);
@@ -47,6 +50,7 @@ public class MessageSender {
 
     }
 
+    @Async
     public void sendMessageRecoveryPass(long userId, String mail, String nickname) {
         SimpleMailMessage message = new SimpleMailMessage(mailMessage);
         message.setTo(mail);

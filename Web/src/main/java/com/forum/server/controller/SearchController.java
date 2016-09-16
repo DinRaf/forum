@@ -14,8 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 
-import static com.forum.server.utils.ResponseBuilder.buildResponseGetWithCount;
-import static com.forum.server.utils.ResponseBuilder.buildResponseGetWithCountAndSubsection;
+import static com.forum.server.utils.ResponseBuilder.*;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
 /**
@@ -36,7 +35,10 @@ public class SearchController {
                                                        @RequestParam(value = "section-url", required = false) String sectionUrl,
                                                        @RequestParam(value = "subsection-url", required = false) String subsectionUrl) {
         ThemeSearchResultDto themeSearchResultDto = searchService.searchThemes(keyword, offset, count, sectionUrl, subsectionUrl);
-        return buildResponseGetWithCountAndSubsection(themeSearchResultDto.getThemesSearchDto(), themeSearchResultDto.getCount(), themeSearchResultDto.getSubsection());
+        if (themeSearchResultDto.getSubsection() == null) {
+            return buildResponseGetWithCount(themeSearchResultDto.getThemesSearchDto(), themeSearchResultDto.getCount());
+        }
+        return buildResponseGetWithSubsection(themeSearchResultDto.getThemesSearchDto(), themeSearchResultDto.getCount(), themeSearchResultDto.getSubsection());
     }
 
     @RequestMapping(value = "/users", method = GET)

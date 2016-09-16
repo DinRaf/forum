@@ -78,7 +78,7 @@ public class SearchServiceImpl implements SearchService {
         }
 
         try {
-            if (keyword != null && keyword != "") {
+            if (keyword != null) {
                 keyword = new String(keyword.getBytes("ISO-8859-1"), "UTF-8");
             }
         } catch (UnsupportedEncodingException e) {
@@ -136,13 +136,18 @@ public class SearchServiceImpl implements SearchService {
                 }
             }
         }
-        ThemesSearchDto themesSearchDto = new ThemesSearchDto(themeSearchDtos);
-        String subsection = (subsectionUrl == null) ? null : staticInfoDao.getSubsectionByUrl(subsectionUrl);
+        if (subsectionUrl != null) {
+            String subsection = staticInfoDao.getSubsectionByUrl(subsectionUrl);
+            return new ThemeSearchResultDto.Builder()
+                    .Count(resultCount)
+                    .Subsection(subsection)
+                    .ThemesSearhDto(new ThemesSearchDto(themeSearchDtos))
+                    .build();
+        }
 
         return new ThemeSearchResultDto.Builder()
                 .Count(resultCount)
-                .ThemesSearhDto(themesSearchDto)
-                .Subsection(subsection)
+                .ThemesSearhDto(new ThemesSearchDto(themeSearchDtos))
                 .build();
     }
 

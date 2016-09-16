@@ -13,6 +13,11 @@ public class ThemeSearchDto implements Data {
     private long date;
     private long messagesCount;
     private boolean status;
+    private String subsectionUrl;
+
+    public String getSubsectionUrl() {
+        return subsectionUrl;
+    }
 
     public String getNickname() {
         return nickname;
@@ -52,6 +57,7 @@ public class ThemeSearchDto implements Data {
         this.title = builder.title;
         this.id = builder.id;
         this.nickname = builder.nickname;
+        this.subsectionUrl = builder.subsectionUrl;
     }
 
     public static class Builder {
@@ -62,6 +68,12 @@ public class ThemeSearchDto implements Data {
         private boolean status;
         private long id;
         private String nickname;
+        private String subsectionUrl;
+
+        public Builder SubsectionUrl(String subsectionUrl) {
+            this.subsectionUrl = subsectionUrl;
+            return this;
+        }
 
         public Builder Nickname(String nickname) {
             this.nickname = nickname;

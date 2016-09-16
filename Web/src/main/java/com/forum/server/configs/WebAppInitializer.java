@@ -1,5 +1,6 @@
 package com.forum.server.configs;
 
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
@@ -11,6 +12,7 @@ import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatche
  * @version 1.0
  */
 @EnableWebMvc
+@EnableAsync
 @Component
 public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
     @Override
