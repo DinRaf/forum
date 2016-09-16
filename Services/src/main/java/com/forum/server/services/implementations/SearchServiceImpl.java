@@ -78,7 +78,7 @@ public class SearchServiceImpl implements SearchService {
         }
 
         try {
-            if (keyword != null) {
+            if (keyword != null && keyword != "") {
                 keyword = new String(keyword.getBytes("ISO-8859-1"), "UTF-8");
             }
         } catch (UnsupportedEncodingException e) {
