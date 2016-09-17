@@ -37,10 +37,10 @@ public class MessageSender {
         String confirmHash = confirmHashGenerator.generateHash()
                 + confirmHashGenerator.generateHash();
         confirmationDao.saveConfirmHash(userId, confirmHash);
-        message.setText(
-                "Здравствуйте, " + nickname + "!\n" +
-                        "Для подтверждения аккаунта перейдите пожалуйста по ссылке ниже:\n" +
-                        "http://www.labooda.ru/#confirm/" + confirmHash
+        message.setText("<p style=\"margin-left: 40px;\"><font size=\"4\"><font face=\"Times New Roman, Times, serif\"><b><span style=\"font-family: Arial, Tahoma, Verdana, sans-serif; font-size: 15px; background-color: #ffffff;\">&nbsp; &nbsp; Здравствуйте, "+ nickname +"!</span></b></font></font><br style=\"font-family: Arial, Tahoma, Verdana, sans-serif; font-size: 15px; background-color: #ffffff;\">" +
+	"<span style=\"font-family: Arial, Tahoma, Verdana, sans-serif; font-size: 15px; background-color: #ffffff;\">Для подтверждения аккаунта перейдите пожалуйста по ссылке ниже:</span><br style=\"font-family: Arial, Tahoma, Verdana, sans-serif; font-size: 15px; background-color: #ffffff;\">" +
+	"<a href=\"http://www.labooda.ru/#confirm/"+ confirmHash +"\" rel=\"noopener\" style=\"color: #0077cc; font-family: Arial, Tahoma, Verdana, sans-serif; font-size: 15px; background-color: #ffffff;\" target=\"_blank\">http://www.labooda.ru/#confirm/"+ confirmHash +"</a></p>"
+
         );
         try {
             mailSender.send(message);
