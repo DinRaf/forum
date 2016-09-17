@@ -38,9 +38,26 @@ public class MessageSender {
                 + confirmHashGenerator.generateHash();
         confirmationDao.saveConfirmHash(userId, confirmHash);
         message.setText(
-                "Здравствуйте, " + nickname + "!\n" +
-                        "Для подтверждения аккаунта перейдите пожалуйста по ссылке ниже:\n" +
-                        "http://www.labooda.ru/#confirm/" + confirmHash
+                "<div id=\"style_14738465600000000856_BODY\">" +
+					"<table align=\"left\" border=\"2\" cellpadding=\"1\" cellspacing=\"1\" style=\"width: 500px\">" +
+						"<caption>Здравствуйте, "+ nickname +"!</caption>" +
+						"<thead>" +
+							"tr>" +
+								"<th scope=\"col\" style=\"width: 500px;\">" +
+									"<div class=\"b-letter__details\">" +
+										"<div class=\"b-letter__body\" style=\"padding: 15px; line-height: 20.8px; overflow: auto;\">" +
+											"<div class=\"js-body b-letter__body__wrap\" style=\"overflow-x: auto; position: relative; font-size: 15px;\">" +
+												"<div id=\"style_14738465600000000856_BODY\">Для подтверждения аккаунта перейдите пожалуйста по ссылке ниже:<br>" +
+													"<a href=\"http://www.labooda.ru/#confirm/"+ confirmHash +"\" rel=\"noopener\" style=\"color: #0077cc;\" target=\"_blank\">Вот сюда!</a></div>" +
+											"</div>" +
+										"</div>" +
+									"</div>" +
+								"</th>" +
+							"</tr>" +
+						"</thead>" +
+					"</table>" +
+                "</div>" +
+                "<p>&nbsp;</p>"
         );
         try {
             mailSender.send(message);
