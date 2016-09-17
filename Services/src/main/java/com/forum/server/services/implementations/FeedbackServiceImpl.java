@@ -39,7 +39,7 @@ public class FeedbackServiceImpl implements FeedbackService {
     public FeedbacksDto getFeedbacks(int count, Integer offset, String token) {
         tokenValidator.verifyOnExistence(token);
         rightsValidator.getFeedbacks(token);
-        if (offset == null) {
+        if (offset == null || offset < 0) {
             offset = 0;
         }
         return new FeedbacksDto(feedbackDao.getFeedbacksWithLimitOffset(count, offset));

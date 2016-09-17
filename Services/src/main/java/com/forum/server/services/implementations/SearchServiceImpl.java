@@ -61,7 +61,7 @@ public class SearchServiceImpl implements SearchService {
 
     public ThemeSearchResultDto searchThemes(String keyword, Integer offset, int count, String sectionUrl, String subsectionUrl) {
 
-        if (offset == null) {
+        if (offset == null || offset < 0) {
             offset = 0;
         }
         searchValidator.verifyOnExistenceSectionUrl(sectionUrl);
@@ -155,7 +155,7 @@ public class SearchServiceImpl implements SearchService {
         tokenValidator.verifyOnExistence(token);
         String rights = usersDao.getRightsByToken(token);
         rightsValidator.searchUsers(rights);
-        if (offset == null) {
+        if (offset == null || offset < 0) {
             offset = 0;
         }
         sorting = sortingMap.get(sorting);

@@ -36,7 +36,7 @@ public class StaticInfoDaoImpl implements StaticInfoDao {
     private static final String SQL_DELETE_SECTION_BY_URL = "DELETE FROM section WHERE url = ?;";
     private static final String SQL_DELETE_SUBSECTION_BY_URL = "DELETE FROM subsection WHERE url = ?;";
     private static final String SQL_DELETE_INFO_BY_IDENTIFIER = "DELETE FROM info WHERE identifier = ?;";
-    private static final String SQL_IS_EXISTS_SUBSECTION_URL = "SELECT CASE WHEN EXISTS(SELECT section_id FROM subsection WHERE url = ?);";
+    private static final String SQL_IS_EXISTS_SUBSECTION_URL = "SELECT CASE WHEN EXISTS(SELECT section_id FROM subsection WHERE url = ?)THEN TRUE ELSE FALSE END;";
     private static final String SQL_ADD_INFO = "INSERT INTO info (identifier, title, text) VALUES (?, ?, ?);";
 
     private RowMapper<Section> sectionRowMapper() {
@@ -117,7 +117,7 @@ public class StaticInfoDaoImpl implements StaticInfoDao {
     }
 
     public boolean isExistsSubsectionUrl(String url) {
-        return jdbcTemplate.queryForObject(SQL_IS_EXISTS_SUBSECTION_URL, boolean.class, url);
+        return jdbcTemplate.queryForObject(SQL_IS_EXISTS_SUBSECTION_URL, boolean.class, url.toLowerCase());
     }
 
     public void saveInfo(InfoCreateDto infoCreateDto) {
