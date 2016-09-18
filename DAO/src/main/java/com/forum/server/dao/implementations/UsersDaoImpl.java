@@ -11,6 +11,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -44,7 +45,6 @@ public class UsersDaoImpl implements UsersDao {
     private static final String SQL_UPDATE_SHORT_USER = "UPDATE short_user SET avatar = ? WHERE user_id = ?;;";
     private static final String SQL_ADD_USER_INFO = "INSERT INTO user_info (user_id, mail, birth_date, info, registration_time, last_session, messages_count, themes_count, pass_hash, name) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
     private static final String SQL_UPDATE_USER_INFO_WITH_PASS_HASH = "UPDATE user_info SET mail = ?, pass_hash = ?, birth_date = ?, info = ?, name = ? WHERE user_id = ?;";
-    private static final String SQL_UPDATE_USER_INFO = "UPDATE user_info SET mail = ?, birth_date = ?, info = ?, name = ? WHERE user_id = ?;";
     private static final String SQL_GET_USER_BY_THEME_ID = "SELECT * FROM short_user WHERE user_id = (SELECT user_id FROM theme WHERE theme_id = ?) ;";
     private static final String SQL_GET_RIGHTS_BY_TOKEN = "SELECT rights FROM short_user WHERE user_id = (SELECT user_id FROM auth WHERE token = ?);";
     private static final String SQL_GET_RIGHTS_BY_EMAIL = "SELECT rights FROM short_user WHERE user_id = (SELECT user_id FROM user_info WHERE mail = ?);";
@@ -149,29 +149,42 @@ public class UsersDaoImpl implements UsersDao {
     }
 
     public void update(UserUpdate user, long userId) {
+
         jdbcTemplate.update(SQL_UPDATE_SHORT_USER,
                 new Object[]{user.getAvatar(),
                         userId});
-        jdbcTemplate.update(SQL_UPDATE_USER_INFO,
-                new Object[]{user.getMail(),
-                        user.getDateOfBirth(),
-                        user.getInfo(),
-                        user.getName(),
-                        userId});
+        String query = "UPDATE user_info SET";
+        List<Object> objects = new LinkedList<>();
+        Map<String, Object> params = new HashMap<>();
+        params.put(" name = ?,", user.getName());
+        params.put(" birth_date = ?,", user.getDateOfBirth());
+        params.put(" pass_hash = ?,", user.getHashPassword());
+        params.put(" info = ?,", user.getInfo());
+        params.put(" mail = ?,", user.getMail());
+        for (Map.Entry entry:
+             params.entrySet()) {
+            if (entry.getValue() != null) {
+                query += entry.getKey();
+                objects.add(entry.getValue());
+            }
+        }
+        objects.add(userId);
+        jdbcTemplate.update(query.substring(0, query.length() - 1) + " WHERE user_id = ?;", objects.toArray());
     }
-
 
     public void updateWithHash(UserUpdate user, long userId) {
         jdbcTemplate.update(SQL_UPDATE_SHORT_USER,
                 new Object[]{user.getAvatar(),
                         userId});
-        jdbcTemplate.update(SQL_UPDATE_USER_INFO_WITH_PASS_HASH,
-                new Object[]{user.getMail(),
-                        user.getHashPassword(),
-                        user.getDateOfBirth(),
-                        user.getInfo(),
-                        user.getName(),
-                        userId});
+        Object[] objects = new Object[]{user.getMail(),
+                user.getHashPassword(),
+                user.getDateOfBirth(),
+                user.getInfo(),
+                user.getName(),
+                userId};
+
+        jdbcTemplate.update(SQL_UPDATE_USER_INFO_WITH_PASS_HASH,objects);
+
     }
 
     public String getRightsByToken(String token) {
