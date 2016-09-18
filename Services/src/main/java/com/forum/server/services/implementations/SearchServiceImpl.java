@@ -1,24 +1,16 @@
 package com.forum.server.services.implementations;
 
 import com.forum.server.converters.ConversionListResultFactory;
-import com.forum.server.converters.ConversionResultFactory;
 import com.forum.server.dao.interfaces.SearchDao;
 import com.forum.server.dao.interfaces.StaticInfoDao;
-import com.forum.server.dao.interfaces.ThemesDao;
-import com.forum.server.dao.interfaces.UsersDao;
 import com.forum.server.dto.theme.ThemeSearchDto;
 import com.forum.server.dto.theme.ThemeSearchResultDto;
 import com.forum.server.dto.theme.ThemesSearchDto;
 import com.forum.server.dto.user.SearchUsersDto;
-import com.forum.server.dto.user.ShortUsersDto;
 import com.forum.server.services.interfaces.SearchService;
-import com.forum.server.validation.RightsValidator;
 import com.forum.server.validation.SearchValidator;
-import com.forum.server.validation.TokenValidator;
-import org.apache.commons.codec.Decoder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import sun.nio.cs.ext.DoubleByte;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
@@ -36,9 +28,6 @@ import java.util.Map;
 public class SearchServiceImpl implements SearchService {
 
     @Autowired
-    private UsersDao usersDao;
-
-    @Autowired
     private StaticInfoDao staticInfoDao;
 
     @Autowired
@@ -48,12 +37,6 @@ public class SearchServiceImpl implements SearchService {
     private SearchValidator searchValidator;
 
     @Autowired
-    private TokenValidator tokenValidator;
-
-    @Autowired
-    private RightsValidator rightsValidator;
-
-    @Autowired
     private Map<String, String> sortingMap;
 
     @Autowired
@@ -61,7 +44,7 @@ public class SearchServiceImpl implements SearchService {
 
     public ThemeSearchResultDto searchThemes(String keyword, Integer offset, int count, String sectionUrl, String subsectionUrl) {
 
-        if (offset == null) {
+        if (offset == null || offset < 0) {
             offset = 0;
         }
         searchValidator.verifyOnExistenceSectionUrl(sectionUrl);
@@ -151,15 +134,11 @@ public class SearchServiceImpl implements SearchService {
                 .build();
     }
 
-    public SearchUsersDto searchUsers(String token, String keyword, Integer offset, int count, String sorting) {
-        tokenValidator.verifyOnExistence(token);
-        String rights = usersDao.getRightsByToken(token);
-        rightsValidator.searchUsers(rights);
-        if (offset == null) {
+    public SearchUsersDto searchUsers(String keyword, Integer offset, int count, String sorting) {
+        if (offset == null || offset < 0) {
             offset = 0;
         }
         sorting = sortingMap.get(sorting);
-        ShortUsersDto shortUsersDto;
         if (keyword == null) {
             return new SearchUsersDto.Builder()
                     .Count(searchDao.getUsersCount())

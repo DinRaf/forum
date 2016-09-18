@@ -3,6 +3,7 @@ package com.forum.server.services.implementations;
 import com.forum.server.converters.ConversionListResultFactory;
 import com.forum.server.converters.ConversionResultFactory;
 import com.forum.server.validation.RightsValidator;
+import com.forum.server.validation.StaticInfoValidator;
 import com.forum.server.validation.ThemeValidator;
 import com.forum.server.validation.TokenValidator;
 import com.forum.server.dao.interfaces.MessagesDao;
@@ -58,12 +59,18 @@ public class ThemeServiceImpl implements ThemeService {
     @Autowired
     private RightsValidator rightsValidator;
 
+    @Autowired
+    private StaticInfoValidator staticInfoValidator;
+
     public ThemeDto createTheme(String token, ThemeCreateDto themeCreateDto) {
         tokenValidator.verifyOnExistence(token);
         String rights = usersDao.getRightsByToken(token);
         rightsValidator.createTheme(rights);
         themeValidator.verifyTitleOnNotNull(themeCreateDto.getTitle());
         themeValidator.verifyMessageOnNotNull(themeCreateDto.getMessage());
+        String sectionUrl = themeCreateDto.getSectionUrl();
+        staticInfoValidator.verifySubsectionOnExistence(sectionUrl + "/" + themeCreateDto.getSubsectionUrl());
+        staticInfoValidator.verifySectionOnExistence(sectionUrl);
         ShortUser user = usersDao.findShortUserByToken(token);
         Theme theme = conversionResultFactory.convert(themeCreateDto);
         long userId = user.getUserId();
@@ -99,7 +106,7 @@ public class ThemeServiceImpl implements ThemeService {
 
     public ThemeDto getTheme(long themeId, Integer offset, int count) {
         themeValidator.verifyOnExistence(themeId);
-        if (offset == null) {
+        if (offset == null || offset < 0) {
             offset = 0;
         }
         ThemeDto themeDto = conversionResultFactory.convert(themesDao.getThemeByThemeId(themeId));

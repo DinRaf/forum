@@ -12,7 +12,7 @@ public class Message {
     private long themeId;
     private long date;
     private String body;
-    private long update;
+    private Long update;
     private long rating;
     private Long updaterId;
     private String updaterNickname;
@@ -33,7 +33,7 @@ public class Message {
         this.updaterId = updaterId;
     }
 
-    public void setUpdate(long update) {
+    public void setUpdate(Long update) {
         this.update = update;
     }
 
@@ -69,7 +69,7 @@ public class Message {
         return body;
     }
 
-    public long getUpdate() {
+    public Long getUpdate() {
         return update;
     }
 
@@ -98,7 +98,7 @@ public class Message {
         private long themeId;
         private long date;
         private String body;
-        private long update;
+        private Long update;
         private long rating;
         private Long updaterId;
         private String updaterNickname;
@@ -138,7 +138,7 @@ public class Message {
             return this;
         }
 
-        public Builder Update(long update) {
+        public Builder Update(Long update) {
             this.update = update;
             return this;
         }
