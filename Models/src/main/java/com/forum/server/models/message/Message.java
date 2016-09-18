@@ -14,7 +14,7 @@ public class Message {
     private String body;
     private long update;
     private long rating;
-    private long updaterId;
+    private Long updaterId;
     private String updaterNickname;
 
     public void setMessageId(long messageId) {
@@ -29,7 +29,7 @@ public class Message {
         this.themeId = themeId;
     }
 
-    public void setUpdaterId(long updaterId) {
+    public void setUpdaterId(Long updaterId) {
         this.updaterId = updaterId;
     }
 
@@ -41,7 +41,7 @@ public class Message {
         this.updaterNickname = updaterNickname;
     }
 
-    public long getUpdaterId() {
+    public Long getUpdaterId() {
         return updaterId;
     }
 
@@ -100,7 +100,7 @@ public class Message {
         private String body;
         private long update;
         private long rating;
-        private long updaterId;
+        private Long updaterId;
         private String updaterNickname;
 
         public Builder MessageId(long messageId) {
@@ -108,7 +108,7 @@ public class Message {
             return this;
         }
 
-        public Builder UpdaterId(long updaterId) {
+        public Builder UpdaterId(Long updaterId) {
             this.updaterId = updaterId;
             return this;
         }

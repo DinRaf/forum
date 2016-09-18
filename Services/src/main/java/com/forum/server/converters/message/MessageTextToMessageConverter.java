@@ -19,6 +19,7 @@ public class MessageTextToMessageConverter implements Converter<String, Message>
                 .Body(message)
                 .Date(System.currentTimeMillis())
                 .Rating(0l)
+                .UpdaterId(null)
                 .build();
     }
 }

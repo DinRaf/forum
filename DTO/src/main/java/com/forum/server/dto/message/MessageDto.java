@@ -22,6 +22,10 @@ public class MessageDto implements Data{
         return message;
     }
 
+    public long getMessageId() {
+        return messageId;
+    }
+
     public long getDate() {
         return date;
     }
