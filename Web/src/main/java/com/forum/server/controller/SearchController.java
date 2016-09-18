@@ -45,10 +45,9 @@ public class SearchController {
     public ResponseEntity<QueryResultDto> searchUsers(@RequestParam(value = "find", required = false) String keyword,
                                                       @RequestParam(value = "sort") String sorting,
                                                       @RequestParam(value = "offset", required = false) Integer offset,
-                                                      @RequestParam(value = "count") int count,
-                                                      @RequestHeader(name = "Auth-Token") String token) {
+                                                      @RequestParam(value = "count") int count) {
 
-        SearchUsersDto searchUserDto = searchService.searchUsers(token, keyword, offset, count, sorting);
+        SearchUsersDto searchUserDto = searchService.searchUsers(keyword, offset, count, sorting);
         return buildResponseGetWithCount(searchUserDto.getShortUsersDto(), searchUserDto.getCount());
     }
 }
