@@ -104,15 +104,23 @@ public class ThemeServiceImpl implements ThemeService {
                 .build();
     }
 
-    public ThemeDto getTheme(long themeId, Integer offset, int count) {
+    public ThemeDto getTheme(String token, long themeId, Integer offset, int count) {
         themeValidator.verifyOnExistence(themeId);
         if (offset == null || offset < 0) {
             offset = 0;
         }
+        if (token == null) {
+            ThemeDto themeDto = conversionResultFactory.convert(themesDao.getThemeByThemeId(themeId));
+            themeDto.setMessages(conversionListResultFactory
+                    .convertMessages(messagesDao
+                            .getMessagesWithLimitOffset(themeId, count, offset)));
+            return themeDto;
+        }
+        tokenValidator.verifyOnExistence(token);
         ThemeDto themeDto = conversionResultFactory.convert(themesDao.getThemeByThemeId(themeId));
         themeDto.setMessages(conversionListResultFactory
                 .convertMessages(messagesDao
-                        .getMessagesWithLimitOffset(themeId, count, offset)));
+                        .getMessagesWithLikedLimitOffset(usersDao.findIdByToken(token), themeId, count, offset)));
         return themeDto;
     }
 

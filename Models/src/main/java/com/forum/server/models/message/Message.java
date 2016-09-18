@@ -16,6 +16,15 @@ public class Message {
     private long rating;
     private Long updaterId;
     private String updaterNickname;
+    private Boolean isLiked;
+
+    public Boolean getLiked() {
+        return isLiked;
+    }
+
+    public void setLiked(Boolean liked) {
+        isLiked = liked;
+    }
 
     public void setMessageId(long messageId) {
         this.messageId = messageId;
@@ -89,6 +98,7 @@ public class Message {
         this.rating = builder.rating;
         this.updaterId = builder.updaterId;
         this.updaterNickname = builder.updaterNickname;
+        this.isLiked = builder.isLiked;
     }
 
     public static class Builder {
@@ -102,6 +112,12 @@ public class Message {
         private long rating;
         private Long updaterId;
         private String updaterNickname;
+        private Boolean isLiked;
+
+        public Builder Liked(Boolean liked) {
+            isLiked = liked;
+            return this;
+        }
 
         public Builder MessageId(long messageId) {
             this.messageId = messageId;

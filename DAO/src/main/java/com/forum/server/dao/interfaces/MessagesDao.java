@@ -32,4 +32,6 @@ public interface MessagesDao {
     long getOffsetById(long messageId);
 
     List<Long> getMessagesIdsByThemeId(long themeId);
+
+    List<Message> getMessagesWithLikedLimitOffset(long idByToken, long themeId, int count, Integer offset);
 }

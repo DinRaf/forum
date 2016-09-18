@@ -128,4 +128,17 @@ public class MessagesDaoImpl implements MessagesDao {
         return jdbcTemplate.queryForList(SQL_GET_MESSAGES_IDS_BY_THEME_ID, long.class, themeId);
     }
 
+    public List<Message> getMessagesWithLikedLimitOffset(long userId, long themeId, int count, Integer offset) {
+        Map<String, Number> params = new HashMap<>();
+        params.put("userId", userId);
+        params.put("themeId", themeId);
+        params.put("offset", offset);
+        params.put("count", count);
+        List<Message> messages = namedJdbcTemplate.query(SQL_GET_MESSAGES_WITH_LIMIT_OFFSET, params, messageRowMapper());
+        for (Message m: messages) {
+            m.setLiked(jdbcTemplate.queryForObject("SELECT CASE WHEN EXISTS(SELECT mark FROM message_mark WHERE message_id = ? AND user_id = ?)THEN (SELECT mark FROM message_mark WHERE message_id = ? AND user_id = ?) ELSE NULL END ;", Boolean.class, new Object[]{m.getMessageId(), userId, m.getMessageId(), userId}));
+        }
+        return messages;
+    }
+
 }

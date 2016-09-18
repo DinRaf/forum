@@ -35,8 +35,9 @@ public class ThemesController {
     @RequestMapping(value = "/themes/{theme-id}", method = GET)
     public ResponseEntity<QueryResultDto> getTheme(@PathVariable("theme-id") long themeId,
                                                    @RequestParam(value = "offset", required = false) Integer offset,
-                                                   @RequestParam(value = "count") int count) {
-        ThemeDto theme = themeService.getTheme(themeId, offset, count);
+                                                   @RequestParam(value = "count") int count,
+                                                   @RequestHeader(name = "Auth-Token", required = false) String token) {
+        ThemeDto theme = themeService.getTheme(token, themeId, offset, count);
         return buildResponseGet(theme);
     }
 

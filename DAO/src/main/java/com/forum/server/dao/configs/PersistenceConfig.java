@@ -20,25 +20,20 @@ import java.util.Map;
 @Configuration
 @ComponentScan(basePackages = "com.forum.server")
 public class PersistenceConfig {
+//    private static final String DRIVER_CLASS_NAME = "org.postgresql.Driver";
+//    private static final String URL = "jdbc:postgresql://localhost:5432/mydb";
+//    private static final String USER_NAME = "admin";
+//    private static final String PASSWORD = "12345678";
+
+//    private static final String DRIVER_CLASS_NAME = "org.postgresql.Driver";
+//    private static final String URL = "jdbc:postgresql://localhost:5432/forum_db";
+//    private static final String USER_NAME = "admin";
+//    private static final String PASSWORD = "12345678";
+
     private static final String DRIVER_CLASS_NAME = "org.postgresql.Driver";
-    private static final String URL = "jdbc:postgresql://localhost:5432/mydb";
-    private static final String USER_NAME = "admin";
-    private static final String PASSWORD = "12345678";
-
-//    private static final String DRIVER_CLASS_NAME = "org.postgresql.Driver";
-//    private static final String URL = "jdbc:postgresql://localhost:5432/forum_db";
-//    private static final String USER_NAME = "admin";
-//    private static final String PASSWORD = "12345678";
-
-//    private static final String DRIVER_CLASS_NAME = "org.postgresql.Driver";
-//    private static final String URL = "jdbc:postgresql://localhost:5432/forum_db";
-//    private static final String USER_NAME = "admin";
-//    private static final String PASSWORD = "12345678";
-
-//    private static final String DRIVER_CLASS_NAME = "org.postgresql.Driver";
-//    private static final String URL = "jdbc:postgresql://127.6.189.130:5432/forums";
-//    private static final String USER_NAME = "adminit4u8sr";
-//    private static final String PASSWORD = "CMHqI1DI3PeL";
+    private static final String URL = "jdbc:postgresql://127.6.189.130:5432/forums";
+    private static final String USER_NAME = "adminit4u8sr";
+    private static final String PASSWORD = "CMHqI1DI3PeL";
 
     @Bean
     public DataSource DataSource() {
