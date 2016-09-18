@@ -14,6 +14,10 @@ public class MessageDto implements Data{
     private long rating;
     private FixMessageDto updated;
 
+    public long getMessageId() {
+        return messageId;
+    }
+
     public ShortUserDto getAuthor() {
         return author;
     }
