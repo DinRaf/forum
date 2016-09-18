@@ -7,10 +7,12 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
+import javax.mail.MessagingException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -63,14 +65,6 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         javaMailSenderImpl.getJavaMailProperties().setProperty("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
         javaMailSenderImpl.getJavaMailProperties().setProperty("mail.smtp.socketFactory.fallback", "false");
         return javaMailSenderImpl;
-    }
-
-    @Bean
-    public SimpleMailMessage simpleMailMessage() {
-        SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
-        simpleMailMessage.setFrom("forum.labooda@mail.ru");
-        simpleMailMessage.setSubject("Пожалуйста, подвтердите почту");
-        return simpleMailMessage;
     }
 
     @Override
