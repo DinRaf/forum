@@ -13,6 +13,11 @@ public class MessageDto implements Data{
     private long date;
     private long rating;
     private FixMessageDto updated;
+    private Boolean isLiked;
+
+    public Boolean getLiked() {
+        return isLiked;
+    }
 
     public long getMessageId() {
         return messageId;
@@ -48,6 +53,7 @@ public class MessageDto implements Data{
         this.date = builder.date;
         this.rating = builder.rating;
         this.updated = builder.updated;
+        this.isLiked = builder.isLiked;
     }
 
     public static class Builder {
@@ -57,6 +63,12 @@ public class MessageDto implements Data{
         private long date;
         private long rating;
         private FixMessageDto updated;
+        private Boolean isLiked;
+
+        public Builder Liked(Boolean liked) {
+            isLiked = liked;
+            return this;
+        }
 
         public Builder MessageId(long messageId) {
             this.messageId = messageId;

@@ -13,7 +13,7 @@ public interface ThemeService {
 
     ThemeDto createTheme(String token, ThemeCreateDto theme);
 
-    ThemeDto getTheme(long themeId, Integer offset, int count);
+    ThemeDto getTheme(String token, long themeId, Integer offset, int count);
 
     ThemeDto updateTheme(String token, long themeId, String title, long count);
 

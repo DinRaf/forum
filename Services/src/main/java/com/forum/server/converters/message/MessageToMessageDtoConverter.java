@@ -28,6 +28,7 @@ public class MessageToMessageDtoConverter implements Converter<Message, MessageD
                 .Date(message.getDate())
                 .Rating(message.getRating())
                 .Updated(fixMessageDto)
+                .Liked(message.getLiked())
                 .build();
 
 
