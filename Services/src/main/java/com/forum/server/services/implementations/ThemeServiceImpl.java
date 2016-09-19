@@ -109,7 +109,7 @@ public class ThemeServiceImpl implements ThemeService {
         if (offset == null || offset < 0) {
             offset = 0;
         }
-        if (token.equals("") || token == null) {
+        if (token == null || token.equals("")) {
             ThemeDto themeDto = conversionResultFactory.convert(themesDao.getThemeByThemeId(themeId));
             themeDto.setMessages(conversionListResultFactory
                     .convertMessages(messagesDao
