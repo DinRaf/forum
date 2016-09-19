@@ -25,9 +25,11 @@ public class FeedBackController {
     @Autowired
     FeedbackService feedbackService;
 
-    @RequestMapping(value = "/feedback}", method = POST)
-    public ResponseEntity<QueryResultDto> createFeedback(@RequestBody MessageCreateDto messageCreateDto) {
-        feedbackService.createFeedback(messageCreateDto);
+    @RequestMapping(value = "/feedback", method = POST)
+    public ResponseEntity<QueryResultDto> createFeedback(@RequestBody MessageCreateDto messageCreateDto,
+                                                         @RequestParam(value = "anonymous") boolean anon,
+                                                         @RequestHeader(name = "Auth-Token") String token) {
+        feedbackService.createFeedback(messageCreateDto, token, anon);
         return buildResponseDelete();
     }
 

@@ -11,13 +11,10 @@ import com.forum.server.security.exceptions.AuthException;
 import com.forum.server.security.exceptions.NotFoundException;
 import com.forum.server.security.generators.TokenGenerator;
 import com.forum.server.services.interfaces.RegistrationService;
-import com.forum.server.services.utils.ConfirmHashGenerator;
 import com.forum.server.services.utils.EmailValidator;
 import com.forum.server.services.utils.MessageSender;
 import com.forum.server.validation.RightsValidator;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.MailSender;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -102,7 +99,8 @@ public class RegistrationServiceImpl implements RegistrationService {
         }
     }
 
-    public LoginDto addUser(AuthDto authDto) {
+    public LoginDto addUser(String hash, AuthDto authDto) {
+        rightsValidator.register(hash);
         if (!passwordMeetsRequirements(authDto.getPassword())) {
             throw new AuthException("Пароль слишком короткий");
         }

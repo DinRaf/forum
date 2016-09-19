@@ -50,6 +50,7 @@ public class UsersDaoImpl implements UsersDao {
     private static final String SQL_GET_RIGHTS_BY_EMAIL = "SELECT rights FROM short_user WHERE user_id = (SELECT user_id FROM user_info WHERE mail = ?);";
     private static final String SQL_GET_RIGHTS_BY_USER_ID = "SELECT rights FROM short_user WHERE user_id = ?;";
     private static final String SQL_GET_NICKNAME_BY_MAIL = "SELECT nick_name FROM short_user WHERE user_id = (SELECT user_id FROM user_info WHERE mail = ?);";
+    private static final String SQL_GET_NICKNAME_BY_TOKEN = "SELECT nick_name FROM short_user WHERE user_id = (SELECT user_id FROM auth WHERE token = ?);";
 
     private RowMapper<User> userRowMapper() {
         return (rs, i) -> new User.Builder()
@@ -185,6 +186,10 @@ public class UsersDaoImpl implements UsersDao {
 
         jdbcTemplate.update(SQL_UPDATE_USER_INFO_WITH_PASS_HASH,objects);
 
+    }
+
+    public String getNicknameByToken(String token) {
+        return jdbcTemplate.queryForObject(SQL_GET_NICKNAME_BY_TOKEN, String.class, token);
     }
 
     public String getRightsByToken(String token) {

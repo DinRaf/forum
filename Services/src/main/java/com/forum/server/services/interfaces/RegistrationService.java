@@ -13,7 +13,7 @@ public interface RegistrationService {
 
     LoginDto login(String identifier, String password);
 
-    LoginDto addUser(AuthDto authDto);
+    LoginDto addUser(String hash, AuthDto authDto);
 
     void confirmUser(String confirmHash);
 

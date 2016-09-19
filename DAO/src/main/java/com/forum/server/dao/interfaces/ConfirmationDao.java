@@ -18,4 +18,8 @@ public interface ConfirmationDao {
     void updatePassHash(long userId, String password);
 
     void unconfirm(long userId);
+
+    boolean isExistsTicket(String ticket);
+
+    void deleteTicket(String ticket);
 }

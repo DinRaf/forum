@@ -21,8 +21,10 @@ public class ConfirmationDaoImpl implements ConfirmationDao {
     private static final String SQL_CONFIRM_USER = "UPDATE short_user SET rights = 'user' WHERE user_id = (SELECT user_id FROM confirm WHERE confirm_hash = ?);";
     private static final String SQL_UNCONFIRM = "UPDATE short_user SET rights = 'unverified' WHERE user_id = ?;";
     private static final String SQL_IS_EXISTS_HASH = "SELECT CASE WHEN EXISTS(SELECT user_id FROM confirm WHERE confirm_hash = ?) THEN TRUE ELSE FALSE END ;";
+    private static final String SQL_IS_EXISTS_TICKET = "SELECT CASE WHEN EXISTS(SELECT ticket FROM tickets WHERE ticket = ?) THEN TRUE ELSE FALSE END ;";
     private static final String SQL_GET_ID_BY_HASH = "SELECT user_id FROM confirm WHERE confirm_hash = ?;";
     private static final String SQL_UPDATE_HASH = "UPDATE user_info SET pass_hash = ? WHERE user_id = ?;";
+    private static final String SQL_DELETE_TICKET = "DELETE FROM tickets WHERE ticket = ?;";
 
 
     public void confirmUser(String confirmHash) {
@@ -47,5 +49,13 @@ public class ConfirmationDaoImpl implements ConfirmationDao {
 
     public void unconfirm(long userId) {
         jdbcTemplate.update(SQL_UNCONFIRM, userId);
+    }
+
+    public boolean isExistsTicket(String ticket) {
+        return jdbcTemplate.queryForObject(SQL_IS_EXISTS_TICKET, boolean.class, ticket);
+    }
+
+    public void deleteTicket(String ticket) {
+        jdbcTemplate.update(SQL_DELETE_TICKET, ticket);
     }
 }

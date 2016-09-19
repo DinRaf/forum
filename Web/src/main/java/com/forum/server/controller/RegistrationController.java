@@ -31,10 +31,11 @@ public class RegistrationController {
         return buildResponseLogin(token);
     }
 
-    @RequestMapping(value = "/users", method = POST)
-    public ResponseEntity<QueryResultDto> addUser(@RequestBody AuthDto authDto) {
+    @RequestMapping(value = "/users/{confirm-hash}", method = POST)
+    public ResponseEntity<QueryResultDto> addUser(@RequestBody AuthDto authDto,
+                                                  @PathVariable("confirm-hash") String hash) {
 
-        LoginDto token = registrationService.addUser(authDto);
+        LoginDto token = registrationService.addUser(hash, authDto);
         return buildResponseLogin(token);
     }
 

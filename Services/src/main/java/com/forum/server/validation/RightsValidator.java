@@ -1,6 +1,8 @@
 package com.forum.server.validation;
 
+import com.forum.server.dao.interfaces.ConfirmationDao;
 import com.forum.server.security.exceptions.AuthException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -14,6 +16,9 @@ public class RightsValidator {
     
     @Resource(name = "map")
     private Map<String, Integer> map;
+
+    @Autowired
+    private ConfirmationDao confirmationDao;
 
     public void createMessage(String rights) {
         int right = map.get(rights);
@@ -111,5 +116,12 @@ public class RightsValidator {
         if (right != 4) {
             throw new AuthException("Недостаточно прав для добавления");
         }
+    }
+
+    public void register(String ticket) {
+        if (!confirmationDao.isExistsTicket(ticket)) {
+            throw new AuthException("Это закрытое альфа тестирование");
+        }
+        confirmationDao.deleteTicket(ticket);
     }
 }
