@@ -35,7 +35,7 @@ public class Message {
                     "\t\t\t\t\t<td align=\"center\" style=\"font-size: 25px; font-family: Helvetica, Arial, sans-serif; color: #333333; padding-top: 30px;\" class=\"padding-copy\">Здравствуйте, "+nickname +"</td>\n"+
                     "\t\t\t\t</tr>\n"+
                     "\t\t\t\t<tr>\n"+
-                    "\t\t\t\t\t<td align=\"center\" style=\"padding: 20px 0 0 0; font-size: 16px; line-height: 25px; font-family: Helvetica, Arial, sans-serif; color: #666666;\" class=\"padding-copy\">Вы зарегистрировались на сайте <b>labooda.ru</b>. Перейдите по ссылке ниже, чтобы подтвердить e-mail и завершить регистрацию</td>\n"+
+                    "\t\t\t\t\t<td align=\"center\" style=\"padding: 20px 0 0 0; font-size: 16px; line-height: 25px; font-family: Helvetica, Arial, sans-serif; color: #666666;\" class=\"padding-copy\">Вы зарегистрировались на сайте <b>www.labooda.ru</b>. Перейдите по ссылке ниже, чтобы подтвердить e-mail и завершить регистрацию</td>\n"+
                     "\t\t\t\t</tr>\n"+
                     "\t\t\t</table>\n"+
                     "\t\t</td>\n"+
@@ -70,7 +70,7 @@ public class Message {
 
     public static void main(String[] args) {
         ConfirmHashGenerator generator = new ConfirmHashGenerator();
-        int size = 28;
+        int size = 8;
         String[] hashes = new String[size];
         for (int i = 0; i < size; i++) {
             hashes[i] =  generator.generateHash();

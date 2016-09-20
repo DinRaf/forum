@@ -35,7 +35,7 @@ public class ThemesDaoImpl implements ThemesDao {
     private static final String SQL_NUMBER_OF_MESSAGES_IN_THEME = "SELECT messages_count FROM theme WHERE theme_id = ?;" ;
     private static final String SQL_GET_THEME_BY_THEME_ID = "SELECT * FROM theme INNER JOIN short_user ON short_user.user_id = theme.user_id WHERE theme.theme_id = ?;";
     private static final String SQL_GET_THEME_ID_BY_MESSAGE_ID = "SELECT theme_id FROM message WHERE message_id = ?;;";
-    private static final String SQL_GET_USER_ID_BY_THEME_ID = "SELECT updater_id FROM theme WHERE theme_id = ?;";
+    private static final String SQL_GET_USER_ID_BY_THEME_ID = "SELECT user_id FROM theme WHERE theme_id = ?;";
     private static final String SQL_SAVE_UPDATE = "UPDATE theme SET title = :title WHERE theme_id = :theme_id RETURNING true;";
     private static final String SQL_IS_EXISTS_THEME = "SELECT CASE WHEN EXISTS(SELECT user_id FROM theme WHERE theme_id = ?)THEN TRUE ELSE FALSE END ;";
     private static final String SQL_DELETE_MARKS_FROM_MESSAGES_IN_THEME = "DELETE FROM message_mark WHERE message_id = :message_id;";

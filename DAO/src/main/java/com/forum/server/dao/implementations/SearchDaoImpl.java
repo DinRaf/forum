@@ -97,7 +97,7 @@ public class SearchDaoImpl implements SearchDao {
         Map<String, Object> params = new HashMap<>();
         params.put("offset", offset);
         params.put("count", count);
-        params.put("sorting", "short_user." + sorting);
+        params.put("sorting", sorting);
         return namedJdbcTemplate.query(SQL_GET_SHORT_USER_SORTED_LIMIT_OFFSET, params, shortUserRowMapper());
 
     }
@@ -107,7 +107,7 @@ public class SearchDaoImpl implements SearchDao {
         params.put("keyword", keyword.trim().replaceAll("\\s+", ":*|") + ":*");
         params.put("offset", offset);
         params.put("count", count);
-        params.put("sorting", "short_user." + sorting);
+        params.put("sorting", sorting);
         return namedJdbcTemplate.query(SQL_GET_SHORT_USER_BY_KEYWORD_SORTED_LIMIT_OFFSET, params, shortUserRowMapper());
     }
 

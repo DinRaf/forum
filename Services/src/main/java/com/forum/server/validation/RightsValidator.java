@@ -64,7 +64,7 @@ public class RightsValidator {
 
     public void login(String rights) {
         int right = map.get(rights);
-        if (right < 2) {
+        if (right < 1) {
             throw new AuthException("Недостаточно прав для входа");
         }
     }

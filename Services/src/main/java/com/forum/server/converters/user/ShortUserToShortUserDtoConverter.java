@@ -17,6 +17,7 @@ public class ShortUserToShortUserDtoConverter implements Converter<ShortUser, Sh
         return new ShortUserDto.Builder()
                 .Avatar(shortUser.getAvatar())
                 .Nickname(shortUser.getNickname())
+                .Rating(shortUser.getRating())
                 .UserId(shortUser.getUserId())
                 .Rights(shortUser.getRights())
                 .build();

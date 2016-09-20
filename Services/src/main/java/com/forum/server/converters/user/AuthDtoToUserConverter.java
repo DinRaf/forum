@@ -17,7 +17,7 @@ import org.springframework.stereotype.Component;
 public class AuthDtoToUserConverter implements Converter<AuthDto, User> {
 
 //    @Autowired
-    private PasswordEncoder encoder = new BCryptPasswordEncoder();
+    private static PasswordEncoder encoder = new BCryptPasswordEncoder();
 
     @Override
     public User convert(AuthDto authDto) {

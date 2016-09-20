@@ -57,10 +57,10 @@ public class RegistrationServiceImpl implements RegistrationService {
     @Override
     public LoginDto login(String identifier, String password) {
         if (identifier == null || password == null) {
-            throw new AuthException("Логин или пароль отсутствует");
+            throw new AuthException("Заполните все поля");
         } else if (identifier.contains("@")) {
             if (!usersDao.isExistsMail(identifier)) {
-                throw new AuthException("Неверный e-mail адрес");
+                throw new AuthException("Неверный e-mail или пароль");
             }
             String rights = usersDao.getRightsByEmail(identifier);
             rightsValidator.login(rights);
@@ -69,7 +69,7 @@ public class RegistrationServiceImpl implements RegistrationService {
                 String token = tokenGenerator.generateToken();
                 Integer userId = usersDao.getIdByMail(identifier);
                 if (userId == null) {
-                    throw new AuthException("Неверный логин или пароль");
+                    throw new AuthException("Неверный e-mail или пароль");
                 }
                 tokensDao.addToken(userId, token);
                 return new LoginDto.Builder()
@@ -77,17 +77,17 @@ public class RegistrationServiceImpl implements RegistrationService {
                         .UserId(userId)
                         .build();
             }
-            throw new AuthException("Неверный логин или пароль");
+            throw new AuthException("Неверный e-mail или пароль");
         } else {
             if (!usersDao.isExistsNickName(identifier)) {
-                throw new AuthException("Неверный никнейм");
+                throw new AuthException("Неверный никнейм или пароль");
             }
             String passwordHash = usersDao.getHashByNickName(identifier);
             if (encoder.matches(password, passwordHash)) {
                 String token = tokenGenerator.generateToken();
                 Integer userId = usersDao.getIdByNickName(identifier);
                 if (userId == null) {
-                    throw new AuthException("Неверный логин или пароль");
+                    throw new AuthException("Неверный никнейм или пароль");
                 }
                 tokensDao.addToken(userId, token);
                 return new LoginDto.Builder()
@@ -95,7 +95,7 @@ public class RegistrationServiceImpl implements RegistrationService {
                         .UserId(userId)
                         .build();
             }
-            throw new AuthException("Неверный логин или пароль");
+            throw new AuthException("Неверный никнейм или пароль");
         }
     }
 
@@ -165,16 +165,9 @@ public class RegistrationServiceImpl implements RegistrationService {
     }
 
     public static boolean nicknameMeetsRequirements(String nickname) {
-        if (nickname == null || (nickname.length() < 4) && (nickname.length() > 64)) {
-            return false;
+        if (nickname != null && nickname.matches("[a-zA-Z0-9_-]{4,64}")) {
+            return true;
         }
-        for (int i = 0; i < nickname.length(); i++) {
-            if (!((nickname.charAt(i) >= 'a' && nickname.charAt(i) <= 'z') ||
-                    (nickname.charAt(i) >= '0' && nickname.charAt(i) <= '9') ||
-                    (nickname.charAt(i) >= 'A' && nickname.charAt(i) <= 'Z') ||
-                    nickname.charAt(i) == '.' || nickname.charAt(i) == '_' || nickname.charAt(i) == '-'))
-            return false;
-            }
-        return true;
+        return false;
     }
 }

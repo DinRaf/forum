@@ -136,7 +136,7 @@ public class MessagesDaoImpl implements MessagesDao {
         params.put("count", count);
         List<Message> messages = namedJdbcTemplate.query(SQL_GET_MESSAGES_WITH_LIMIT_OFFSET, params, messageRowMapper());
         for (Message m: messages) {
-            m.setLiked(jdbcTemplate.queryForObject("SELECT CASE WHEN EXISTS(SELECT mark FROM message_mark WHERE message_id = ? AND user_id = ?)THEN (SELECT mark FROM message_mark WHERE message_id = ? AND user_id = ?) ELSE NULL END ;", Boolean.class, new Object[]{m.getMessageId(), userId, m.getMessageId(), userId}));
+            m.setLiked(jdbcTemplate.queryForObject("SELECT CASE WHEN EXISTS(SELECT mark FROM message_mark WHERE message_id = ? AND user_id = ?)THEN (SELECT mark FROM message_mark WHERE message_id = ? AND user_id = ? LIMIT 1) ELSE NULL END ;", Boolean.class, new Object[]{m.getMessageId(), userId, m.getMessageId(), userId}));
         }
         return messages;
     }
