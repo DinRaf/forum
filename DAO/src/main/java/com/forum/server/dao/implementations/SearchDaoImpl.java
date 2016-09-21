@@ -28,8 +28,10 @@ public class SearchDaoImpl implements SearchDao {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    private static final String SQL_GET_SHORT_USER_SORTED_LIMIT_OFFSET = "SELECT * FROM short_user LEFT JOIN user_info ON short_user.user_id = user_info.user_id ORDER BY :sorting DESC LIMIT :count OFFSET :offset ;";
-    private static final String SQL_GET_SHORT_USER_BY_KEYWORD_SORTED_LIMIT_OFFSET = "SELECT * FROM short_user LEFT JOIN user_info ON short_user.user_id = user_info.user_id, to_tsquery('russian', :keyword) q WHERE s_user_fts @@ q OR user_fts @@ q ORDER BY ts_rank_cd(s_user_fts, q, 2) DESC, ts_rank_cd(user_fts, q, 2) DESC , :sorting LIMIT :count OFFSET :offset ;";
+    private static final String SQL_GET_SHORT_USER_PART_1 = "SELECT * FROM short_user LEFT JOIN user_info ON short_user.user_id = user_info.user_id ORDER BY ";
+    private static final String SQL_GET_SHORT_USER_PART_2 = " DESC LIMIT :count OFFSET :offset ;";
+    private static final String SQL_GET_SHORT_USER_BY_KEYWORD_PART_1 = "SELECT * FROM short_user LEFT JOIN user_info ON short_user.user_id = user_info.user_id, to_tsquery('russian', :keyword) q WHERE s_user_fts @@ q OR user_fts @@ q ORDER BY ts_rank_cd(s_user_fts, q, 2) DESC, ts_rank_cd(user_fts, q, 2) DESC , ;";
+    private static final String SQL_GET_SHORT_USER_BY_KEYWORD_PART_2 = " LIMIT :count OFFSET :offset ;";
     private static final String SQL_GET_USERS_COUNT = "SELECT count(*) FROM short_user;";
     private static final String SQL_GET_USERS_COUNT_BY_KEYWORD = "SELECT count(*) FROM short_user LEFT JOIN user_info ON short_user.user_id = user_info.user_id, to_tsquery('russian', ?) q WHERE s_user_fts @@ q OR user_fts @@ q;";
     private static final String SQL_GET_THEMES_BY_KEYWORD_SECTION_URL_SUBSECTION_URL_WITH_LIMIT_OFFSET = "SELECT theme.theme_id, subsection.url, theme.user_id, theme.date, messages_count, status, title, nick_name " +
@@ -97,9 +99,7 @@ public class SearchDaoImpl implements SearchDao {
         Map<String, Object> params = new HashMap<>();
         params.put("offset", offset);
         params.put("count", count);
-        params.put("sorting", sorting);
-        return namedJdbcTemplate.query(SQL_GET_SHORT_USER_SORTED_LIMIT_OFFSET, params, shortUserRowMapper());
-
+        return namedJdbcTemplate.query(SQL_GET_SHORT_USER_PART_1 + sorting + SQL_GET_SHORT_USER_PART_2, params, shortUserRowMapper());
     }
 
     public List<ShortUser> getShortUsersByKeywordSortedLimitOffset(String keyword, Integer offset, int count, String sorting) {
@@ -107,8 +107,7 @@ public class SearchDaoImpl implements SearchDao {
         params.put("keyword", keyword.trim().replaceAll("\\s+", ":*|") + ":*");
         params.put("offset", offset);
         params.put("count", count);
-        params.put("sorting", sorting);
-        return namedJdbcTemplate.query(SQL_GET_SHORT_USER_BY_KEYWORD_SORTED_LIMIT_OFFSET, params, shortUserRowMapper());
+        return namedJdbcTemplate.query(SQL_GET_SHORT_USER_BY_KEYWORD_PART_1 + sorting + SQL_GET_SHORT_USER_BY_KEYWORD_PART_2, params, shortUserRowMapper());
     }
 
 

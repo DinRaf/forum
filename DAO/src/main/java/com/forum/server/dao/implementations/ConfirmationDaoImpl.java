@@ -25,6 +25,7 @@ public class ConfirmationDaoImpl implements ConfirmationDao {
     private static final String SQL_GET_ID_BY_HASH = "SELECT user_id FROM confirm WHERE confirm_hash = ?;";
     private static final String SQL_UPDATE_HASH = "UPDATE user_info SET pass_hash = ? WHERE user_id = ?;";
     private static final String SQL_DELETE_TICKET = "DELETE FROM tickets WHERE ticket = ?;";
+    private static final String SQL_DELETE_HASH_BY_ID = "DELETE FROM confirm WHERE user_id = ?;";
 
 
     public void confirmUser(String confirmHash) {
@@ -57,5 +58,9 @@ public class ConfirmationDaoImpl implements ConfirmationDao {
 
     public void deleteTicket(String ticket) {
         jdbcTemplate.update(SQL_DELETE_TICKET, ticket);
+    }
+
+    public void deleteHashById(long userId) {
+        jdbcTemplate.update(SQL_DELETE_HASH_BY_ID, userId);
     }
 }

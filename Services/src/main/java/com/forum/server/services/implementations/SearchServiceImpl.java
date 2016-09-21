@@ -10,8 +10,10 @@ import com.forum.server.dto.user.SearchUsersDto;
 import com.forum.server.services.interfaces.SearchService;
 import com.forum.server.validation.SearchValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.LinkedList;

@@ -1,6 +1,7 @@
 package com.forum.server.dao;
 
 import com.forum.server.dao.configs.PersistenceConfig;
+import com.forum.server.dao.interfaces.SearchDao;
 import com.forum.server.dao.interfaces.UsersDao;
 import com.forum.server.models.user.ShortUser;
 import com.forum.server.models.user.User;
@@ -39,6 +40,9 @@ public class UsersDaoImplTest {
 
     @Autowired
     private UsersDao usersDao;
+
+    @Autowired
+    private SearchDao searchDao;
 
     @Test
     public void findByToken() throws Exception {

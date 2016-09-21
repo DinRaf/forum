@@ -42,7 +42,7 @@ public class MessageSender {
         try {
             messageHelper = new MimeMessageHelper(message, true, "UTF-8");
             messageHelper.setFrom("forum.labooda@mail.ru");
-            messageHelper.setSubject("Пожалуйста, подвтердите почту");
+            messageHelper.setSubject("Пожалуйста, подтвердите почту");
             messageHelper.setTo(mail);
             String confirmHash = confirmHashGenerator.generateHash()
                     + confirmHashGenerator.generateHash();
@@ -65,10 +65,11 @@ public class MessageSender {
         try {
             messageHelper = new MimeMessageHelper(message, true, "UTF-8");
             messageHelper.setFrom("forum.labooda@mail.ru");
-            messageHelper.setSubject("Пожалуйста, подвтердите почту");
+            messageHelper.setSubject("Смена пароля");
             messageHelper.setTo(mail);
             String confirmHash = confirmHashGenerator.generateHash()
                     + confirmHashGenerator.generateHash();
+            confirmationDao.deleteHashById(userId);
             confirmationDao.saveConfirmHash(userId, confirmHash);
             messageHelper.setText(RECOVERY_PASS(confirmHash, nickname), true);
         } catch (MessagingException e) {

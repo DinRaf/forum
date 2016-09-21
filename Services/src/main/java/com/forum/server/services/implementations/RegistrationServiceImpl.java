@@ -145,7 +145,7 @@ public class RegistrationServiceImpl implements RegistrationService {
 
     public void recoveryPass(String mail) {
         if (!usersDao.isExistsMail(mail)) {
-            throw new NotFoundException("Пользовтель с данным адресом почты не найден");
+            throw new NotFoundException("Пользователь с данным адресом почты не найден");
         }
         messageSender.sendMessageRecoveryPass(usersDao.getIdByMail(mail), mail, usersDao.getNicknameByMail(mail));
     }

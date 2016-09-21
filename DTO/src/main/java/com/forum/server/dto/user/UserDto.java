@@ -12,7 +12,6 @@ public class UserDto extends ShortUserDto {
     private Long dateOfBirth;
     private String info;
     private long registrationTime;
-    private long lastSession;
     private long messagesCount;
     private long themesCount;
 
@@ -36,10 +35,6 @@ public class UserDto extends ShortUserDto {
         return registrationTime;
     }
 
-    public Long getLastSession() {
-        return lastSession;
-    }
-
     public long getMessagesCount() {
         return messagesCount;
     }
@@ -58,7 +53,6 @@ public class UserDto extends ShortUserDto {
         this.dateOfBirth = builder.dateOfBirth;
         this.info = builder.info;
         this.registrationTime = builder.registrationTime;
-        this.lastSession = builder.lastSession;
         this.messagesCount = builder.messagesCount;
         this.themesCount = builder.themesCount;
     }
@@ -71,7 +65,6 @@ public class UserDto extends ShortUserDto {
         private Long dateOfBirth;
         private String info;
         private long registrationTime;
-        private long lastSession;
         private long messagesCount;
         private long themesCount;
 
@@ -127,11 +120,6 @@ public class UserDto extends ShortUserDto {
 
         public Builder RegistrationTime(long registrationTime) {
             this.registrationTime = registrationTime;
-            return this;
-        }
-
-        public Builder LastSession(long lastSession) {
-            this.lastSession = lastSession;
             return this;
         }
 

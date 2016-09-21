@@ -25,11 +25,14 @@ public class AuthDtoToUserConverter implements Converter<AuthDto, User> {
                 .Mail(authDto.getMail())
                 .HashPassword(encoder.encode(authDto.getPassword()))
                 .RegistrationTime(System.currentTimeMillis())
-                .LastSession(System.currentTimeMillis())
                 .MessagesCount(0l)
                 .ThemesCount(0l)
                 .Rating(0l)
                 .Rights("unverified")
                 .build();
+    }
+
+    public static void main(String[] args) {
+        System.out.println(encoder.encode("123456"));
     }
 }

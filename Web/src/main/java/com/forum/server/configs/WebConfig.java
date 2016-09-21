@@ -14,6 +14,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 
 import javax.mail.MessagingException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
@@ -43,10 +44,10 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     @Bean(name = "ratingMap")
     public Map<String, String> ratingMap() {
         Map<String, String> params = new HashMap<>();
-        params.put("byRating", "rating");
-        params.put("byRegTime", "registration_time");
-        params.put("byThemesCount", "themes_count");
-        params.put("byMessagesCount", "messages_count");
+        params.put("byRating", "short_user.rating");
+        params.put("byRegTime", "user)info.registration_time");
+        params.put("byThemesCount", "user_info.themes_count");
+        params.put("byMessagesCount", "user_info.messages_count");
         return params;
     }
     @Bean

@@ -20,7 +20,6 @@ public class UserToUserDtoConverter implements Converter<User, UserDto> {
                 .Avatar(user.getAvatar())
                 .DateOfBirth(user.getDateOfBirth())
                 .Info(user.getInfo())
-                .LastSession(user.getLastSession())
                 .Mail(user.getMail())
                 .MessagesCount(user.getMessagesCount())
                 .Name(user.getName())

@@ -22,4 +22,6 @@ public interface ConfirmationDao {
     boolean isExistsTicket(String ticket);
 
     void deleteTicket(String ticket);
+
+    void deleteHashById(long userId);
 }

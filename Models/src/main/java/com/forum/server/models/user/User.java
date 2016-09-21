@@ -12,17 +12,12 @@ public class User extends ShortUser{
     private Long dateOfBirth;
     private String info;
     private long registrationTime;
-    private long lastSession;
     private long messagesCount;
     private long themesCount;
     private String hashPassword;
 
     public void setRegistrationTime(long registrationTime) {
         this.registrationTime = registrationTime;
-    }
-
-    public void setLastSession(long lastSession) {
-        this.lastSession = lastSession;
     }
 
     public void setMessagesCount(long messagesCount) {
@@ -53,10 +48,6 @@ public class User extends ShortUser{
         return registrationTime;
     }
 
-    public Long getLastSession() {
-        return lastSession;
-    }
-
     public long getMessagesCount() {
         return messagesCount;
     }
@@ -79,7 +70,6 @@ public class User extends ShortUser{
         this.dateOfBirth = builder.dateOfBirth;
         this.info = builder.info;
         this.registrationTime = builder.registrationTime;
-        this.lastSession = builder.lastSession;
         this.messagesCount = builder.messagesCount;
         this.themesCount = builder.themesCount;
         this.hashPassword = builder.hashPassword;
@@ -93,7 +83,6 @@ public class User extends ShortUser{
         private Long dateOfBirth;
         private String info;
         private long registrationTime;
-        private long lastSession;
         private long messagesCount;
         private long themesCount;
         private String hashPassword;
@@ -144,11 +133,6 @@ public class User extends ShortUser{
 
         public Builder RegistrationTime(long registrationTime) {
             this.registrationTime = registrationTime;
-            return this;
-        }
-
-        public Builder LastSession(long lastSession) {
-            this.lastSession = lastSession;
             return this;
         }
 

@@ -64,7 +64,6 @@ public class UsersDaoImpl implements UsersDao {
                 .Info(rs.getString("info"))
                 .Rights(rs.getString("rights"))
                 .RegistrationTime(rs.getLong("registration_time"))
-                .LastSession(rs.getLong("last_session"))
                 .MessagesCount(rs.getLong("messages_count"))
                 .ThemesCount(rs.getLong("themes_count"))
                 .HashPassword(rs.getString("pass_hash"))
@@ -129,7 +128,6 @@ public class UsersDaoImpl implements UsersDao {
                         user.getDateOfBirth(),
                         user.getInfo(),
                         user.getRegistrationTime(),
-                        user.getLastSession(),
                         user.getMessagesCount(),
                         user.getThemesCount(),
                         user.getHashPassword(),
