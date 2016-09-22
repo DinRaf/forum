@@ -1,5 +1,6 @@
 package com.forum.server.dao.interfaces;
 
+import com.forum.server.dto.user.UserVerifyResultDto;
 import com.forum.server.models.user.ShortUser;
 import com.forum.server.models.user.User;
 import com.forum.server.models.user.UserUpdate;
@@ -53,4 +54,6 @@ public interface UsersDao {
     void updateWithHash(UserUpdate userUpdate, long userId);
 
     String getNicknameByToken(String token);
+
+    UserVerifyResultDto getNicknameAndRightsByToken(String token);
 }

@@ -1,9 +1,9 @@
 package com.forum.server.controller;
 
 import com.forum.server.dto.response.QueryResultDto;
-import com.forum.server.dto.user.UserDto;
 import com.forum.server.dto.user.ShortUserDto;
 import com.forum.server.dto.user.UserUpdateDto;
+import com.forum.server.dto.user.UserVerifyResultDto;
 import com.forum.server.services.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -46,7 +46,7 @@ public class UsersController {
 
     @RequestMapping(value = "/", method = GET)
     public ResponseEntity<QueryResultDto> verifyUser(@RequestHeader(name = "Auth-Token", required = false) String token) {
-        userService.verify(token);
-        return buildResponseGet(null);
+        UserVerifyResultDto userVerifyResultDto =  userService.verify(token);
+        return buildResponseGet(userVerifyResultDto);
     }
 }

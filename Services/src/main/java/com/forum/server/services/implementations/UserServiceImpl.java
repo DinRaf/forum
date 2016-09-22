@@ -2,6 +2,7 @@ package com.forum.server.services.implementations;
 
 import com.forum.server.converters.ConversionResultFactory;
 import com.forum.server.dao.interfaces.ConfirmationDao;
+import com.forum.server.dto.user.UserVerifyResultDto;
 import com.forum.server.services.utils.ConfirmHashGenerator;
 import com.forum.server.services.utils.MessageSender;
 import com.forum.server.validation.RightsValidator;
@@ -99,7 +100,8 @@ public class UserServiceImpl implements UserService {
         return conversionResultFactory.convertUser(usersDao.getUserById(userId));
     }
 
-    public void verify(String token) {
+    public UserVerifyResultDto verify(String token) {
         tokenValidator.verifyOnExistence(token);
+        return usersDao.getNicknameAndRightsByToken(token);
     }
 }
