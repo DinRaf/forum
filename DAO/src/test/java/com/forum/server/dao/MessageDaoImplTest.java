@@ -24,12 +24,13 @@ public class MessageDaoImplTest {
     @Autowired
     private MessagesDao messagesDao;
 
-    private static final long USER_ID = 11;
+    private static final long USER_ID = 1;
     private static final long THEME_ID = 1;
     private static final long DATE = 25082016;
-    private static final long MESSAGE_ID = 7;
+    private static final long MESSAGE_ID = 1;
     private static final long OFFSET = 2;
     private static final long COUNT = 3;
+    private static final String TOKEN = "asdfghjk";
 
     @Test
     public void save() throws Exception {
@@ -76,6 +77,10 @@ public class MessageDaoImplTest {
         assertEquals(USER_ID, messagesDao.getAuthorIdByMessageId(MESSAGE_ID));
     }
 
+    @Test
+    public void isAuthorByMessageIdAndToken() {
+        assertTrue(messagesDao.isAuthorByMessageIdAndToken(MESSAGE_ID, TOKEN));
+    }
 
     @Test
     public void getMessagesIdsByThemeId() {

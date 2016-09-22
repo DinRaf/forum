@@ -36,6 +36,7 @@ public class MessagesDaoImpl implements MessagesDao {
     private static final String SQL_GET_USER_ID_BY_MESSAGE_ID = "SELECT user_id FROM message WHERE message_id = ?;";
     private static final String SQL_GET_OFFSET_BY_ID = "SELECT count(*) FROM message WHERE theme_id = (SELECT theme_id FROM message WHERE message_id = :messageId) AND message_id < :messageId;";
     private static final String SQL_GET_MESSAGES_IDS_BY_THEME_ID = "SELECT message_id FROM message WHERE theme_id = ?;";
+    private static final String SQL_IS_AUTHOR_BY_TOKEN_MESSAGEID = "SELECT CASE WHEN EXISTS(SELECT theme_id FROM message WHERE message_id = ? AND user_id = (SELECT user_id FROM auth WHERE token = ?)) THEN TRUE ELSE FALSE END;";
 
     private RowMapper<Message> messageRowMapper(){
         return (rs, rowNum) -> {
@@ -139,6 +140,10 @@ public class MessagesDaoImpl implements MessagesDao {
             m.setLiked(jdbcTemplate.queryForObject("SELECT CASE WHEN EXISTS(SELECT mark FROM message_mark WHERE message_id = ? AND user_id = ?)THEN (SELECT mark FROM message_mark WHERE message_id = ? AND user_id = ? LIMIT 1) ELSE NULL END ;", Boolean.class, new Object[]{m.getMessageId(), userId, m.getMessageId(), userId}));
         }
         return messages;
+    }
+
+    public boolean isAuthorByMessageIdAndToken(long messageId, String token) {
+        return jdbcTemplate.queryForObject(SQL_IS_AUTHOR_BY_TOKEN_MESSAGEID, boolean.class, new Object[]{messageId, token});
     }
 
 }

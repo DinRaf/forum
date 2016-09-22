@@ -10,6 +10,7 @@ import com.forum.server.models.message.Message;
 import com.forum.server.models.message.MessageUpdate;
 import com.forum.server.models.theme.Theme;
 import com.forum.server.models.user.ShortUser;
+import com.forum.server.security.exceptions.AuthException;
 import com.forum.server.services.interfaces.MessageService;
 import com.forum.server.validation.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -126,6 +127,9 @@ public class MessageServiceImpl implements MessageService {
     public void updateMessageRating(String token, long messageId, boolean grade) {
         tokenValidator.verifyOnExistence(token);
         messageValidator.verifyOnExistence(messageId);
+        if (messagesDao.isAuthorByMessageIdAndToken(messageId, token)) {
+            throw new AuthException("Вы не можете изменить свой рейтинг");
+        }
         String rights = usersDao.getRightsByToken(token);
         rightsValidator.updateMessageRating(rights);
 

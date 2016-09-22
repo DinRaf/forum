@@ -22,7 +22,8 @@ import java.util.Map;
  * @version 1.0
  */
 @Repository
-public class ThemesDaoImpl implements ThemesDao {
+public class
+ThemesDaoImpl implements ThemesDao {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;

@@ -34,4 +34,6 @@ public interface MessagesDao {
     List<Long> getMessagesIdsByThemeId(long themeId);
 
     List<Message> getMessagesWithLikedLimitOffset(long idByToken, long themeId, int count, Integer offset);
+
+    boolean isAuthorByMessageIdAndToken(long messageId, String token);
 }
