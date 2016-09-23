@@ -46,7 +46,8 @@ public class MessageSender {
             messageHelper.setTo(mail);
             String confirmHash = confirmHashGenerator.generateHash()
                     + confirmHashGenerator.generateHash();
-            confirmationDao.saveConfirmHash(userId, confirmHash);
+            confirmationDao.deleteHashById(userId, true);
+            confirmationDao.saveConfirmHash(userId, confirmHash, true);
             messageHelper.setText(CONFIRM_MAIL(confirmHash, nickname), true);
         } catch (MessagingException e) {
             throw new RuntimeException("Отправка сообщения не удалась");
@@ -69,8 +70,8 @@ public class MessageSender {
             messageHelper.setTo(mail);
             String confirmHash = confirmHashGenerator.generateHash()
                     + confirmHashGenerator.generateHash();
-            confirmationDao.deleteHashById(userId);
-            confirmationDao.saveConfirmHash(userId, confirmHash);
+            confirmationDao.deleteHashById(userId, false);
+            confirmationDao.saveConfirmHash(userId, confirmHash, false);
             messageHelper.setText(RECOVERY_PASS(confirmHash, nickname), true);
         } catch (MessagingException e) {
             throw new RuntimeException("Отправка сообщения не удалась");

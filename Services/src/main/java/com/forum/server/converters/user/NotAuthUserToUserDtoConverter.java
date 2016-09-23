@@ -17,7 +17,6 @@ public class NotAuthUserToUserDtoConverter implements Converter<User, UserDto> {
     @Override
     public UserDto convert(User user) {
         return new UserDto.Builder()
-                .UserId(user.getUserId())
                 .Rating(user.getRating())
                 .Avatar(user.getAvatar())
                 .Info(user.getInfo())

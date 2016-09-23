@@ -25,8 +25,8 @@ public class UserValidator {
         }
     }
 
-    public void verifyOnExistence(long userId) {
-        if (!usersDao.isExistsId(userId)) {
+    public void verifyOnExistence(String nickname) {
+        if (!usersDao.isExistsNickName(nickname)) {
             throw new NotFoundException("Пользователь не найден");
         }
     }

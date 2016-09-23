@@ -2,7 +2,7 @@ package com.forum.server.utils;
 
 import com.forum.server.dto.Data;
 import com.forum.server.dto.auth.LoginDto;
-import com.forum.server.dto.auth.UserIdDto;
+import com.forum.server.dto.auth.UserNicknameDto;
 import com.forum.server.dto.response.QueryResultDto;
 import com.forum.server.dto.response.QueryResultInfoDto;
 import org.springframework.http.HttpHeaders;
@@ -64,7 +64,7 @@ public class ResponseBuilder {
         HttpHeaders headers = AdditionalUtil.createHttpHeaders();
         headers.add("Auth-Token", token.getToken());
         QueryResultInfoDto responseInfo = new QueryResultInfoDto("201", "success");
-        UserIdDto userIdDto = new UserIdDto.Builder().setUserId(token.getUserId()).build();
+        UserNicknameDto userIdDto = new UserNicknameDto.Builder().Nickname(token.getNickname()).build();
         QueryResultDto queryResultDto = new QueryResultDto(responseInfo, userIdDto);
         return new ResponseEntity<>(queryResultDto, headers, CREATED);
     }

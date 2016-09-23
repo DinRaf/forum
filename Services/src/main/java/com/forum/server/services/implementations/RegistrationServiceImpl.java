@@ -74,7 +74,7 @@ public class RegistrationServiceImpl implements RegistrationService {
                 tokensDao.addToken(userId, token);
                 return new LoginDto.Builder()
                         .Token(token)
-                        .UserId(userId)
+                        .Nickname(usersDao.getNicknameByMail(identifier))
                         .build();
             }
             throw new AuthException("Неверный e-mail или пароль");
@@ -92,7 +92,7 @@ public class RegistrationServiceImpl implements RegistrationService {
                 tokensDao.addToken(userId, token);
                 return new LoginDto.Builder()
                         .Token(token)
-                        .UserId(userId)
+                        .Nickname(identifier)
                         .build();
             }
             throw new AuthException("Неверный никнейм или пароль");
@@ -111,7 +111,7 @@ public class RegistrationServiceImpl implements RegistrationService {
             throw new AuthException("Никнейм уже занят, попробуйте другой");
         }
         String mail = authDto.getMail();
-        if (mail == null || !emailValidator.validate(mail)) {
+        if (mail == null || !emailValidator.validate(mail) || mail.length() > 250) {
             throw new AuthException("E-mail не удовлетворяет необходимым условиям");
         } else if (usersDao.isExistsMail(mail)) {
             throw new AuthException("E-mail уже занят, попробуйте другой");
@@ -125,12 +125,12 @@ public class RegistrationServiceImpl implements RegistrationService {
         messageSender.sendMessage(userId, mail, nickName);
         return new LoginDto.Builder()
                 .Token(token)
-                .UserId(userId)
+                .Nickname(authDto.getNickname())
                 .build();
     }
 
     public void confirmUser(String confirmHash) {
-        if (!confirmationDao.isExistsHash(confirmHash)) {
+        if (!confirmationDao.isExistsHash(confirmHash, true)) {
             throw new AuthException("Ссылка более не действительна");
         }
         confirmationDao.confirmUser(confirmHash);
@@ -151,13 +151,19 @@ public class RegistrationServiceImpl implements RegistrationService {
     }
 
     public void changePass(String confirmHash, String password) {
-        if (!confirmationDao.isExistsHash(confirmHash)) {
+        if (!confirmationDao.isExistsHash(confirmHash, false)) {
             throw new AuthException("Ссылка более не действительна");
         }
         confirmationDao.updatePassHash(confirmationDao.getIdByHash(confirmHash), encoder.encode(password));
     }
 
-
+    public void sendAgain(String token) {
+        if (!tokensDao.isExistsToken(token)) {
+            throw new AuthException("Токен не валиден");
+        }
+        String mail = usersDao.getMailByToken(token);
+        messageSender.sendMessage(usersDao.getIdByMail(mail), mail, usersDao.getNicknameByMail(mail));
+    }
 
 
     public static boolean passwordMeetsRequirements(String password) {
@@ -165,9 +171,6 @@ public class RegistrationServiceImpl implements RegistrationService {
     }
 
     public static boolean nicknameMeetsRequirements(String nickname) {
-        if (nickname != null && nickname.matches("[a-zA-Z0-9_-]{4,64}")) {
-            return true;
-        }
-        return false;
+        return nickname != null && nickname.matches("[a-zA-Z0-9_-]{4,64}");
     }
 }

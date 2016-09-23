@@ -56,4 +56,8 @@ public interface UsersDao {
     String getNicknameByToken(String token);
 
     UserVerifyResultDto getNicknameAndRightsByToken(String token);
+
+    String getMailByToken(String token);
+
+    User getUserByNickname(String nickname);
 }

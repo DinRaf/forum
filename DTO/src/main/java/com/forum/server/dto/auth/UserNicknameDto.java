@@ -8,39 +8,28 @@ import com.forum.server.dto.Data;
  * @author Dinar Rafikov (First Software Engineering Platform)
  * @version 1.0
  */
-public class LoginDto implements Data {
-    private String token;
+public class UserNicknameDto implements Data{
     private String nickname;
-
-    public String getToken() {
-        return token;
-    }
 
     public String getNickname() {
         return nickname;
     }
 
-    protected LoginDto() {
+    protected UserNicknameDto() {
     }
 
-    private LoginDto(Builder builder) {
-        this.token = builder.token;
+    private UserNicknameDto(Builder builder) {
         this.nickname = builder.nickname;
     }
 
     public static class Builder {
-        private String token;
         private String nickname;
-
-        public Builder Token(String token) {
-            this.token = token;
-            return this;
-        }
 
         public Builder Nickname(String nickname) {
             this.nickname = nickname;
             return this;
         }
-        public LoginDto build() { return new LoginDto(this); }
+
+        public UserNicknameDto build() { return new UserNicknameDto(this); }
     }
 }

@@ -12,9 +12,9 @@ import com.forum.server.dto.user.UserVerifyResultDto;
  */
 public interface UserService {
 
-    ShortUserDto getUser(String token, long userId);
+    ShortUserDto getUser(String token, String nickname);
 
-    ShortUserDto updateUser(String token, long userId, UserUpdateDto userInfo);
+    ShortUserDto updateUser(String token, String nickname, UserUpdateDto userInfo);
 
     UserVerifyResultDto verify(String token);
 }

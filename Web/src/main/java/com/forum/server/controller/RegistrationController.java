@@ -67,4 +67,11 @@ public class RegistrationController {
         registrationService.confirmUser(confirmHash);
         return buildResponseGet(null);
     }
+
+    @RequestMapping(value = "/confirmation/email", method = GET)
+    public ResponseEntity<QueryResultDto> sendAgain(@RequestHeader(name = "Auth-Token") String token) {
+
+        registrationService.sendAgain(token);
+        return buildResponseGet(null);
+    }
 }

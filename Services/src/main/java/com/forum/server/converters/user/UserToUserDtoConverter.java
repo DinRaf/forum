@@ -15,7 +15,6 @@ public class UserToUserDtoConverter implements Converter<User, UserDto> {
     @Override
     public UserDto convert(User user) {
         return new UserDto.Builder()
-                .UserId(user.getUserId())
                 .Rating(user.getRating())
                 .Avatar(user.getAvatar())
                 .DateOfBirth(user.getDateOfBirth())

@@ -38,6 +38,7 @@ public class UsersDaoImpl implements UsersDao {
     private static final String SQL_GET_HASH_BY_MAIL = "SELECT pass_hash FROM user_info WHERE mail = ?;";
     private static final String SQL_FIND_BY_TOKEN = "SELECT * FROM user_info INNER JOIN short_user ON user_info.user_id = short_user.user_id WHERE short_user.user_id = (SELECT user_id FROM auth WHERE token = ?);";
     private static final String SQL_FIND_BY_ID = "SELECT * FROM user_info INNER JOIN short_user ON user_info.user_id = short_user.user_id WHERE short_user.user_id = ?;";
+    private static final String SQL_FIND_BY_NICKNAME = "SELECT * FROM user_info INNER JOIN short_user ON user_info.user_id = short_user.user_id WHERE LOWER(nick_name) = ?;";
     private static final String SQL_FIND_SHORT_USER_BY_TOKEN = "SELECT * FROM short_user WHERE user_id = (SELECT user_id FROM auth WHERE token = ?);";
     private static final String SQL_GET_ID_BY_MAIL = "SELECT user_id FROM user_info WHERE mail = ?;";
     private static final String SQL_GET_ID_BY_NICKNAME = "SELECT user_id FROM short_user WHERE LOWER(nick_name) = ?;";
@@ -53,6 +54,7 @@ public class UsersDaoImpl implements UsersDao {
     private static final String SQL_GET_NICKNAME_BY_MAIL = "SELECT nick_name FROM short_user WHERE user_id = (SELECT user_id FROM user_info WHERE mail = ?);";
     private static final String SQL_GET_NICKNAME_BY_TOKEN = "SELECT nick_name FROM short_user WHERE user_id = (SELECT user_id FROM auth WHERE token = ?);";
     private static final String SQL_GET_NICKNAME_AND_RIGHTS_BY_TOKEN = "SELECT nick_name, rights FROM short_user WHERE user_id = (SELECT user_id FROM auth WHERE token = ?);";
+    private static final String SQL_GET_MAIL_BY_TOKEN = "SELECT mail FROM user_info WHERE user_id = (SELECT user_id FROM auth WHERE token = ?);";
 
     private RowMapper<User> userRowMapper() {
         return (rs, i) -> new User.Builder()
@@ -201,6 +203,14 @@ public class UsersDaoImpl implements UsersDao {
 
     public UserVerifyResultDto getNicknameAndRightsByToken(String token) {
         return jdbcTemplate.queryForObject(SQL_GET_NICKNAME_AND_RIGHTS_BY_TOKEN, userVerifyResultDtoRowMapper(), token);
+    }
+
+    public String getMailByToken(String token) {
+        return jdbcTemplate.queryForObject(SQL_GET_MAIL_BY_TOKEN, String.class, token);
+    }
+
+    public User getUserByNickname(String nickname) {
+        return jdbcTemplate.queryForObject(SQL_FIND_BY_NICKNAME, userRowMapper(), nickname.toLowerCase());
     }
 
     public String getRightsByToken(String token) {

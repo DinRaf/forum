@@ -29,18 +29,18 @@ public class UsersController {
     @Autowired
     private UserService userService;
 
-    @RequestMapping(value = "/users/{user-id}", method = GET)
-    public ResponseEntity<QueryResultDto> getUser(@PathVariable("user-id") long userId,
+    @RequestMapping(value = "/users/{nickname}", method = GET)
+    public ResponseEntity<QueryResultDto> getUser(@PathVariable("nickname") String nickname,
                                                   @RequestHeader(name = "Auth-Token", required = false) String token) {
-        ShortUserDto user = userService.getUser(token, userId);
+        ShortUserDto user = userService.getUser(token, nickname);
         return buildResponseGet(user);
     }
 
-    @RequestMapping(value = "/users/{user-id}", method = PUT)
-    public ResponseEntity<QueryResultDto> updateUser(@PathVariable("user-id") long userId,
+    @RequestMapping(value = "/users/{nickname}", method = PUT)
+    public ResponseEntity<QueryResultDto> updateUser(@PathVariable("nickname") String nickname,
                                                      @RequestHeader(name = "Auth-Token") String token,
                                                      @RequestBody UserUpdateDto userInfo) {
-        ShortUserDto user = userService.updateUser(token, userId, userInfo);
+        ShortUserDto user = userService.updateUser(token, nickname, userInfo);
         return buildResponsePostAndPut(user);
     }
 

@@ -22,4 +22,6 @@ public interface RegistrationService {
     void recoveryPass(String mail);
 
     void changePass(String hash, String password);
+
+    void sendAgain(String token);
 }

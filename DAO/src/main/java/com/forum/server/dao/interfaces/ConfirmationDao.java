@@ -9,9 +9,9 @@ package com.forum.server.dao.interfaces;
 public interface ConfirmationDao {
     void confirmUser(String confirmHash);
 
-    boolean isExistsHash(String confirmHash);
+    boolean isExistsHash(String confirmHash, boolean isMail);
 
-    void saveConfirmHash(long userId, String confirmHash);
+    void saveConfirmHash(long userId, String confirmHash, boolean isMail);
 
     long getIdByHash(String confirmHash);
 
@@ -23,5 +23,5 @@ public interface ConfirmationDao {
 
     void deleteTicket(String ticket);
 
-    void deleteHashById(long userId);
+    void deleteHashById(long userId, boolean isMail);
 }

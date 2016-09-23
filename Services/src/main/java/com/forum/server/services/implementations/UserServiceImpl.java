@@ -3,7 +3,6 @@ package com.forum.server.services.implementations;
 import com.forum.server.converters.ConversionResultFactory;
 import com.forum.server.dao.interfaces.ConfirmationDao;
 import com.forum.server.dto.user.UserVerifyResultDto;
-import com.forum.server.services.utils.ConfirmHashGenerator;
 import com.forum.server.services.utils.MessageSender;
 import com.forum.server.validation.RightsValidator;
 import com.forum.server.validation.TokenValidator;
@@ -15,14 +14,11 @@ import com.forum.server.dto.user.UserUpdateDto;
 import com.forum.server.security.exceptions.AuthException;
 import com.forum.server.services.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.MailSender;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.Map;
 
-import static com.forum.server.services.implementations.RegistrationServiceImpl.nicknameMeetsRequirements;
 import static com.forum.server.services.implementations.RegistrationServiceImpl.passwordMeetsRequirements;
 
 /**
@@ -61,33 +57,34 @@ public class UserServiceImpl implements UserService {
     @Resource(name = "map")
     private Map<String, Integer> map;
 
-    public ShortUserDto getUser(String token, long userId) {
-        userValidator.verifyOnExistence(userId);
+    public ShortUserDto getUser(String token, String nickname) {
+        userValidator.verifyOnExistence(nickname);
         String rightsString = usersDao.getRightsByToken(token);
         int rights = map.get(rightsString);
         if (token != null && tokensDao.isExistsToken(token)) {
-            if (usersDao.findIdByToken(token) == userId && rights > 0) {
-                return conversionResultFactory.convertUser(usersDao.getUserById(userId));
+            if (usersDao.getNicknameByToken(token).toLowerCase().equals(nickname.toLowerCase()) && rights > 0) {
+                return conversionResultFactory.convertUser(usersDao.getUserByNickname(nickname));
             } else if (rights > 1) {
-                return conversionResultFactory.convertUser(usersDao.getUserById(userId));
+                return conversionResultFactory.convertUser(usersDao.getUserByNickname(nickname));
             }
             throw new AuthException("Недостаточно прав для получения информации о пользователе");
         } else {
-            return conversionResultFactory.convertNotAuth(usersDao.getUserById(userId));
+            return conversionResultFactory.convertNotAuth(usersDao.getUserByNickname(nickname));
         }
     }
 
-    public ShortUserDto updateUser(String token, long userId, UserUpdateDto userInfo) {
+    public ShortUserDto updateUser(String token, String nickname, UserUpdateDto userInfo) {
         verify(token);
-        if (usersDao.findIdByToken(token) != userId) {
+        if (usersDao.getNicknameByToken(token).toLowerCase().equals(nickname.toLowerCase())) {
             String rights = usersDao.getRightsByToken(token);
             rightsValidator.updateUser(rights);
         }
-        userValidator.verifyOnExistence(userId);
+        userValidator.verifyOnExistence(nickname);
         String identifier = userInfo.getMail();
         userValidator.verifyEmailPut(identifier);
+        long userId = usersDao.getIdByNickName(nickname);
         if (!usersDao.isExistsMail(identifier)) {
-            messageSender.sendMessage(userId, identifier, usersDao.getNicknameByMail(identifier));
+            messageSender.sendMessage(userId, identifier, nickname);
             confirmationDao.unconfirm(userId);
         }
         if (userInfo.getPassword() == null) {

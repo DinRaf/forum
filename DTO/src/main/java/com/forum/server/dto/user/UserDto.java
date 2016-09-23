@@ -75,12 +75,6 @@ public class UserDto extends ShortUserDto {
         }
 
         @Override
-        public Builder UserId(long UserDtoId) {
-            super.UserId(UserDtoId);
-            return this;
-        }
-
-        @Override
         public Builder Nickname(String nickname) {
             super.Nickname(nickname);
             return this;
