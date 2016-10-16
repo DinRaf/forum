@@ -25,6 +25,7 @@ public class ThemesController {
     @Autowired
     private ThemeService themeService;
 
+    //TODO Выпилить подкатегории
     @RequestMapping(value = "/themes", method = POST)
     public ResponseEntity<QueryResultDto> createTheme(@RequestHeader(name = "Auth-Token") String token,
                                                       @RequestBody ThemeCreateDto themeCreateDto) {

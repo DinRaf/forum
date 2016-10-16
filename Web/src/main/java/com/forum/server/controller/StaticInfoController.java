@@ -35,7 +35,7 @@ public class StaticInfoController {
         staticInfoService.createSection(token, createDto);
         return buildResponseGet(null);
     }
-
+    //TODO Убрать
     @RequestMapping(value = "/subsections", method = POST)
     public ResponseEntity<QueryResultDto> createSubsection(@RequestBody SubsectionCreateDto createDto,
                                                       @RequestHeader(name = "Auth-Token") String token) {
@@ -50,12 +50,14 @@ public class StaticInfoController {
         return buildResponseDelete();
     }
 
+    //TODO Убрать
     @RequestMapping(value = "/{section-url}/subsections", method = GET)
     public ResponseEntity<QueryResultDto> getSubsections(@PathVariable("section-url") String url) {
         SubsectionsWithMetaDto subsections = staticInfoService.getSubsections(url);
         return buildResponseGetWithSection(subsections.getSubsections(), subsections.getSection());
     }
 
+    //TODO Убрать
     @RequestMapping(value = "/subsections", method = DELETE)
     public ResponseEntity<QueryResultDto> deleteSubsection(@RequestParam("url") String url,
                                                            @RequestHeader(name = "Auth-Token") String token) {

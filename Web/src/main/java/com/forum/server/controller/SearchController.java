@@ -28,6 +28,7 @@ public class SearchController {
     @Autowired
     private SearchService searchService;
 
+    // TODO Выпилить из поиска подкатегории
     @RequestMapping(value = "/themes", method = GET)
     public ResponseEntity<QueryResultDto> searchThemes(@RequestParam(value = "find", required = false) String keyword,
                                                        @RequestParam(value = "offset", required = false) Integer offset,
