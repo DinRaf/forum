@@ -1,6 +1,7 @@
 package com.forum.server.dto.staticInfo;
 
 import com.forum.server.dto.Data;
+import com.forum.server.dto.tag.TagsDto;
 
 import java.util.List;
 
@@ -14,13 +15,7 @@ public class SectionDto implements Data{
     private long id;
     private String name;
     private long themesCount;
-    private long subsectionsCount;
     private String url;
-    private List<SubsectionDto> subsections;
-
-    public List<SubsectionDto> getSubsections() {
-        return subsections;
-    }
 
     public String getUrl() {
         return url;
@@ -38,10 +33,6 @@ public class SectionDto implements Data{
         return themesCount;
     }
 
-    public long getSubsectionsCount() {
-        return subsectionsCount;
-    }
-
     protected SectionDto() {
     }
 
@@ -49,23 +40,14 @@ public class SectionDto implements Data{
         this.id = builder.id;
         this.name = builder.name;
         this.themesCount = builder.themesCount;
-        this.subsectionsCount = builder.subsectionsCount;
         this.url = builder.url;
-        this.subsections = builder.subsections;
     }
 
     public static class Builder {
         private long id;
         private String name;
         private long themesCount;
-        private long subsectionsCount;
         private String url;
-        private List<SubsectionDto> subsections;
-
-        public Builder Subsections(List<SubsectionDto> subsections) {
-            this.subsections = subsections;
-            return this;
-        }
 
         public Builder Url(String url) {
             this.url = url;
@@ -84,11 +66,6 @@ public class SectionDto implements Data{
 
         public Builder ThemesCount(long themesCount) {
             this.themesCount = themesCount;
-            return this;
-        }
-
-        public Builder SubsectionsCount(long subsectionsCount) {
-            this.subsectionsCount = subsectionsCount;
             return this;
         }
 

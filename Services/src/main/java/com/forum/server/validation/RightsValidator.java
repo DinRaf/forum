@@ -117,11 +117,4 @@ public class RightsValidator {
             throw new AuthException("Недостаточно прав для добавления");
         }
     }
-
-    public void register(String ticket) {
-        if (!confirmationDao.isExistsTicket(ticket)) {
-            throw new AuthException("Это закрытое альфа тестирование");
-        }
-        confirmationDao.deleteTicket(ticket);
-    }
 }

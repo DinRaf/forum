@@ -31,12 +31,10 @@ public class RegistrationController {
         return buildResponseLogin(token);
     }
 
-    //TODO Вернуть нормальную регистрацию
-    @RequestMapping(value = "/users/{confirm-hash}", method = POST)
-    public ResponseEntity<QueryResultDto> addUser(@RequestBody AuthDto authDto,
-                                                  @PathVariable("confirm-hash") String hash) {
+    @RequestMapping(value = "/users", method = POST)
+    public ResponseEntity<QueryResultDto> addUser(@RequestBody AuthDto authDto) {
 
-        LoginDto token = registrationService.addUser(hash, authDto);
+        LoginDto token = registrationService.addUser(authDto);
         return buildResponseLogin(token);
     }
 

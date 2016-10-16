@@ -11,17 +11,11 @@ import com.forum.server.dto.staticInfo.*;
 public interface StaticInfoService {
     SectionsDto getSections();
 
-    SubsectionsWithMetaDto getSubsections(String url);
-
     InfoDto getInfo(String identifier);
 
     void createSection(String token, SectionCreateDto createDto);
 
-    void createSubsection(String token, SubsectionCreateDto createDto);
-
     void deleteSection(String token, String section_url);
-
-    void deleteSubsection(String token, String url);
 
     void deleteInfo(String token, String identifier);
 

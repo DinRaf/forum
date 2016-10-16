@@ -99,8 +99,7 @@ public class RegistrationServiceImpl implements RegistrationService {
         }
     }
 
-    public LoginDto addUser(String hash, AuthDto authDto) {
-        rightsValidator.register(hash);
+    public LoginDto addUser(AuthDto authDto) {
         if (!passwordMeetsRequirements(authDto.getPassword())) {
             throw new AuthException("Пароль слишком короткий");
         }

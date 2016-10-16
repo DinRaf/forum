@@ -30,11 +30,8 @@ public class StaticInfoDaoImpl implements StaticInfoDao {
     private static final String SQL_IS_EXISTS_INFO = "SELECT CASE WHEN EXISTS(SELECT identifier FROM info WHERE identifier = ?)THEN TRUE ELSE FALSE END;";
     private static final String SQL_IS_EXISTS_SECTION_URL = "SELECT CASE WHEN EXISTS(SELECT url FROM section WHERE LOWER(url) = ?)THEN TRUE ELSE FALSE END;";
     private static final String SQL_GET_SUBSECTION_BY_URL = "SELECT name FROM subsection WHERE LOWER(url) = ?;";
-    private static final String SQL_GET_SECTION_NAME_BY_URL = "SELECT name FROM section WHERE LOWER(url) = ?;";
     private static final String SQL_CREATE_SECTION = "INSERT INTO section (name, themes_count, subsections_count, url) VALUES (?, 0, 0, ?);";
-    private static final String SQL_CREATE_SUBSECTION = "INSERT INTO subsection (section_id, name, themes_count, url) VALUES ((SELECT section_id FROM section WHERE LOWER(url) = ?), ?, 0, ?);";
     private static final String SQL_DELETE_SECTION_BY_URL = "DELETE FROM section WHERE url = ?;";
-    private static final String SQL_DELETE_SUBSECTION_BY_URL = "DELETE FROM subsection WHERE url = ?;";
     private static final String SQL_DELETE_INFO_BY_IDENTIFIER = "DELETE FROM info WHERE identifier = ?;";
     private static final String SQL_IS_EXISTS_SUBSECTION_URL = "SELECT CASE WHEN EXISTS(SELECT section_id FROM subsection WHERE url = ?)THEN TRUE ELSE FALSE END;";
     private static final String SQL_ADD_INFO = "INSERT INTO info (identifier, title, text) VALUES (?, ?, ?);";
@@ -92,24 +89,12 @@ public class StaticInfoDaoImpl implements StaticInfoDao {
         return jdbcTemplate.queryForObject(SQL_GET_SUBSECTION_BY_URL, String.class, subsectionUrl.toLowerCase());
     }
 
-    public String getSectionBySectionUrl(String url) {
-        return jdbcTemplate.queryForObject(SQL_GET_SECTION_NAME_BY_URL, String.class, url.toLowerCase());
-    }
-
     public void createSection(String name, String url) {
         jdbcTemplate.update(SQL_CREATE_SECTION, new Object[]{name, url});
     }
 
-    public void createSubsection(String name, String sectionUrl, String url) {
-        jdbcTemplate.update(SQL_CREATE_SUBSECTION, new Object[]{sectionUrl, name, sectionUrl + "/" + url});
-    }
-
     public void deleteSectionByUrl(String section_url) {
         jdbcTemplate.update(SQL_DELETE_SECTION_BY_URL, section_url);
-    }
-
-    public void deleteSubsectionByUrl(String url) {
-        jdbcTemplate.update(SQL_DELETE_SUBSECTION_BY_URL, url);
     }
 
     public void deleteInfoByIdentifier(String identifier) {

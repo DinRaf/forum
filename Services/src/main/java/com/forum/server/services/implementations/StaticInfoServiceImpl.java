@@ -6,7 +6,6 @@ import com.forum.server.dao.interfaces.UsersDao;
 import com.forum.server.dto.staticInfo.*;
 import com.forum.server.validation.RightsValidator;
 import com.forum.server.dto.staticInfo.InfoCreateDto;
-import com.forum.server.dto.staticInfo.SubsectionsWithMetaDto;
 import com.forum.server.validation.StaticInfoValidator;
 import com.forum.server.dao.interfaces.StaticInfoDao;
 import com.forum.server.models.staticInfo.Section;
@@ -55,14 +54,6 @@ public class StaticInfoServiceImpl implements StaticInfoService {
         return conversionListResultFactory.convertSections(sections);
     }
 
-    public SubsectionsWithMetaDto getSubsections(String url) {
-        staticInfoValidator.verifySectionOnExistence(url);
-        return new SubsectionsWithMetaDto.Builder()
-                .Subsections(conversionListResultFactory.convertSubsections(staticInfoDao.getSubsections(url)))
-                .Section(staticInfoDao.getSectionBySectionUrl(url))
-                .build();
-    }
-
     public InfoDto getInfo(String identifier) {
         staticInfoValidator.verifyInfoOnExistence(identifier);
         return conversionResultFactory.convert(staticInfoDao.getInfo(identifier));
@@ -75,27 +66,11 @@ public class StaticInfoServiceImpl implements StaticInfoService {
 
     }
 
-    public void createSubsection(String token, SubsectionCreateDto createDto) {
-        tokenValidator.verifyOnExistence(token);
-        rightsValidator.createStatic(usersDao.getRightsByToken(token));
-        String sectionUrl = createDto.getSectionUrl();
-        staticInfoValidator.verifySectionOnExistence(sectionUrl);
-        staticInfoDao.createSubsection(createDto.getName(), sectionUrl, createDto.getUrl());
-
-    }
-
     public void deleteSection(String token, String section_url) {
         tokenValidator.verifyOnExistence(token);
         rightsValidator.workWithStaticInfo(usersDao.getRightsByToken(token));
         staticInfoValidator.verifyInfoOnExistence(section_url);
         staticInfoDao.deleteSectionByUrl(section_url);
-    }
-
-    public void deleteSubsection(String token, String url) {
-        tokenValidator.verifyOnExistence(token);
-        rightsValidator.workWithStaticInfo(usersDao.getRightsByToken(token));
-        staticInfoValidator.verifySubsectionOnExistence(url);
-        staticInfoDao.deleteSubsectionByUrl(url);
     }
 
     public void deleteInfo(String token, String identifier) {
