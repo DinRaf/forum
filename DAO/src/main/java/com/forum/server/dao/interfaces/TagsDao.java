@@ -1,5 +1,6 @@
 package com.forum.server.dao.interfaces;
 
+import com.forum.server.dto.tag.TagDto;
 import com.forum.server.dto.tag.TagsDto;
 import com.forum.server.models.tag.Tag;
 
@@ -16,5 +17,5 @@ public interface TagsDao {
 
     void deleteTagsFromThemeByThemeId(long themeId);
 
-    void addTags(long themeId, TagsDto tags);
+    void addTags(long themeId, List<TagDto> tags);
 }

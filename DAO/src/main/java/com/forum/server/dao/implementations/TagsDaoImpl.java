@@ -1,6 +1,7 @@
 package com.forum.server.dao.implementations;
 
 import com.forum.server.dao.interfaces.TagsDao;
+import com.forum.server.dto.tag.TagDto;
 import com.forum.server.dto.tag.TagsDto;
 import com.forum.server.models.tag.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,8 +24,8 @@ public class TagsDaoImpl implements TagsDao {
     private JdbcTemplate jdbcTemplate;
     private static final String SQL_GET_TAGS_BY_THEME_ID = "SELECT name FROM tag LEFT JOIN theme_tag ON id = tag_id WHERE theme_id = ?;";
     private static final String SQL_DELETE_TAGS_FROM_THEME_BY_THEME_ID = "DELETE FROM theme_tag WHERE theme_id = ?;";
-    private static final String SQL_IS_EXISTS_TAG = "SELECT CASE WHEN EXISTS(SELECT id FROM tag WHERE LOWER(name) = ?)";
-    private static final String SQL_SET_TAG_TO_THEME_BY_THEME_ID = "INSERT INTO theme_tag (theme_id, tag_id) VALUES (?, ?)";
+    private static final String SQL_IS_EXISTS_TAG = "SELECT COALESCE((SELECT id FROM tag WHERE LOWER(name) = ?), -1);";
+    private static final String SQL_SET_TAG_TO_THEME_BY_THEME_ID = "INSERT INTO theme_tag (theme_id, tag_id) VALUES (?, ?);";
     private static final String SQL_CREATE_TAG = "INSERT INTO tag (name) VALUES (?) RETURNING id";
 
     private RowMapper<Tag> tagRowMapper() {
@@ -41,11 +42,11 @@ public class TagsDaoImpl implements TagsDao {
         jdbcTemplate.update(SQL_DELETE_TAGS_FROM_THEME_BY_THEME_ID, themeId);
     }
 
-    public void addTags(long themeId, TagsDto tags) {
-        tags.getThemes().forEach(tagDto -> {
+    public void addTags(long themeId, List<TagDto> tags) {
+        tags.forEach(tagDto -> {
             String tagName = tagDto.getName();
-            Integer id = getTagIdIfExisits(tagName);
-            if (id == null) {
+            int id = getTagIdIfExisits(tagName);
+            if (id == -1) {
                 addTag(themeId, tagName);
             } else {
                 setTag(themeId, id);

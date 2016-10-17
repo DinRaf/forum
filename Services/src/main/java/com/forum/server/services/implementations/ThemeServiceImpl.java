@@ -9,6 +9,7 @@ import com.forum.server.dao.interfaces.UsersDao;
 import com.forum.server.dto.message.FixMessageDto;
 import com.forum.server.dto.message.MessageDto;
 import com.forum.server.dto.message.MessagesDto;
+import com.forum.server.dto.tag.TagsDto;
 import com.forum.server.dto.theme.ThemeCreateDto;
 import com.forum.server.dto.theme.ThemeDto;
 import com.forum.server.dto.theme.ThemeUpdateDto;
@@ -148,7 +149,7 @@ public class ThemeServiceImpl implements ThemeService {
         themeDto.setMessages(conversionListResultFactory
                 .convertMessages(messagesDao
                         .getMessagesWithLimitOffset(themeId, count, offset)));
-        themeDto.setTags(theme.getTags());
+        themeDto.setTags(new TagsDto(theme.getTags()));
         return themeDto;
     }
 

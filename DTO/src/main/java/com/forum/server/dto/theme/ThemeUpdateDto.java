@@ -1,7 +1,10 @@
 package com.forum.server.dto.theme;
 
 import com.forum.server.dto.Data;
+import com.forum.server.dto.tag.TagDto;
 import com.forum.server.dto.tag.TagsDto;
+
+import java.util.List;
 
 /**
  * 16/10/16
@@ -12,7 +15,7 @@ import com.forum.server.dto.tag.TagsDto;
 public class ThemeUpdateDto implements Data {
     private String title;
     private String sectionUrl;
-    private TagsDto tags;
+    private List<TagDto> tags;
 
     public String getTitle() {
         return title;
@@ -22,7 +25,7 @@ public class ThemeUpdateDto implements Data {
         return sectionUrl;
     }
 
-    public TagsDto getTags() {
+    public List<TagDto> getTags() {
         return tags;
     }
 
@@ -38,7 +41,7 @@ public class ThemeUpdateDto implements Data {
     public static class Builder {
         private String title;
         private String sectionUrl;
-        private TagsDto tags;
+        private List<TagDto> tags;
 
         public ThemeUpdateDto.Builder Title(String title) {
             this.title = title;
@@ -50,7 +53,7 @@ public class ThemeUpdateDto implements Data {
             return this;
         }
 
-        public ThemeUpdateDto.Builder Tags(TagsDto tags) {
+        public ThemeUpdateDto.Builder Tags(List<TagDto> tags) {
             this.tags = tags;
             return this;
         }
