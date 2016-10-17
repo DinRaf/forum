@@ -3,6 +3,7 @@ package com.forum.server.controller;
 import com.forum.server.dto.response.QueryResultDto;
 import com.forum.server.dto.theme.ThemeCreateDto;
 import com.forum.server.dto.theme.ThemeDto;
+import com.forum.server.dto.theme.ThemeUpdateDto;
 import com.forum.server.services.interfaces.ThemeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +26,6 @@ public class ThemesController {
     @Autowired
     private ThemeService themeService;
 
-    //TODO Выпилить подкатегории
     @RequestMapping(value = "/themes", method = POST)
     public ResponseEntity<QueryResultDto> createTheme(@RequestHeader(name = "Auth-Token") String token,
                                                       @RequestBody ThemeCreateDto themeCreateDto) {
@@ -44,10 +44,10 @@ public class ThemesController {
 
     @RequestMapping(value = "/themes/{theme-id}", method = PUT)
     public ResponseEntity<QueryResultDto> updateTheme(@PathVariable("theme-id") long themeId,
-                                                      @RequestParam(value = "title") String title,
+                                                      @RequestBody ThemeUpdateDto themeUpdateDto,
                                                       @RequestParam(value = "count") long count,
                                                       @RequestHeader(name = "Auth-Token") String token) {
-        ThemeDto theme = themeService.updateTheme(token, themeId, title, count);
+        ThemeDto theme = themeService.updateTheme(token, themeId, themeUpdateDto, count);
         return buildResponseGet(theme);
     }
 

@@ -1,40 +1,47 @@
 package com.forum.server.models.theme;
 
-import com.forum.server.models.user.ShortUser;
+import com.forum.server.models.tag.Tag;
+
+import java.util.List;
 
 /**
- * 29.08.16
+ * 16/10/16
  *
  * @author Dinar Rafikov (First Software Engineering Platform)
  * @version 1.0
  */
-public class Theme {
-    private long themeId;
-    private ShortUser user;
-    private String sectionUrl;
+public class ThemeSearch {
+    private long id;
     private String title;
+    private String nickname;
+    private long authorId;
     private long date;
     private long messagesCount;
     private boolean status;
+    private List<Tag> tags;
 
-    public void setUser(ShortUser user) {
-        this.user = user;
+    public void setTags(List<Tag> tags) {
+        this.tags = tags;
     }
 
-    public long getThemeId() {
-        return themeId;
+    public List<Tag> getTags() {
+        return tags;
     }
 
-    public ShortUser getUser() {
-        return user;
+    public String getNickname() {
+        return nickname;
     }
 
-    public String getSectionUrl() {
-        return sectionUrl;
+    public long getId() {
+        return id;
     }
 
     public String getTitle() {
         return title;
+    }
+
+    public long getAuthorId() {
+        return authorId;
     }
 
     public long getDate() {
@@ -49,45 +56,51 @@ public class Theme {
         return status;
     }
 
-    protected Theme() {
-    }
+    protected ThemeSearch(){}
 
-    private Theme(Builder builder) {
-        this.themeId = builder.themeId;
-        this.user = builder.user;
-        this.sectionUrl = builder.sectionUrl;
-        this.title = builder.title;
+    private  ThemeSearch(Builder builder){
+        this.authorId = builder.authorId;
         this.date = builder.date;
         this.messagesCount = builder.messagesCount;
         this.status = builder.status;
+        this.title = builder.title;
+        this.id = builder.id;
+        this.nickname = builder.nickname;
+        this.tags = builder.tags;
     }
 
     public static class Builder {
-        private long themeId;
-        private ShortUser user;
-        private String sectionUrl;
         private String title;
+        private long authorId;
         private long date;
         private long messagesCount;
         private boolean status;
+        private long id;
+        private String nickname;
+        private List<Tag> tags;
 
-        public Builder ThemeId(long themeId) {
-            this.themeId = themeId;
+        public Builder Tags(List<Tag> tags) {
+            this.tags = tags;
             return this;
         }
 
-        public Builder User(ShortUser user) {
-            this.user = user;
+        public Builder Nickname(String nickname) {
+            this.nickname = nickname;
             return this;
         }
 
-        public Builder SectionUrl(String sectionUrl) {
-            this.sectionUrl = sectionUrl;
+        public Builder Id(long id) {
+            this.id = id;
             return this;
         }
 
         public Builder Title(String title) {
             this.title = title;
+            return this;
+        }
+
+        public Builder AuthorId(long authorId) {
+            this.authorId = authorId;
             return this;
         }
 
@@ -106,6 +119,6 @@ public class Theme {
             return this;
         }
 
-        public Theme build() { return new Theme(this); }
+        public ThemeSearch build(){return new ThemeSearch(this);}
     }
 }

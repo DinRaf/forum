@@ -28,18 +28,13 @@ public class SearchController {
     @Autowired
     private SearchService searchService;
 
-    // TODO Выпилить из поиска подкатегории
     @RequestMapping(value = "/themes", method = GET)
     public ResponseEntity<QueryResultDto> searchThemes(@RequestParam(value = "find", required = false) String keyword,
                                                        @RequestParam(value = "offset", required = false) Integer offset,
                                                        @RequestParam(value = "count") int count,
-                                                       @RequestParam(value = "section-url", required = false) String sectionUrl,
-                                                       @RequestParam(value = "subsection-url", required = false) String subsectionUrl) {
-        ThemeSearchResultDto themeSearchResultDto = searchService.searchThemes(keyword, offset, count, sectionUrl, subsectionUrl);
-        if (themeSearchResultDto.getSubsection() == null) {
-            return buildResponseGetWithCount(themeSearchResultDto.getThemesSearchDto(), themeSearchResultDto.getCount());
-        }
-        return buildResponseGetWithSubsection(themeSearchResultDto.getThemesSearchDto(), themeSearchResultDto.getCount(), themeSearchResultDto.getSubsection());
+                                                       @RequestParam(value = "section-url", required = false) String sectionUrl) {
+        ThemeSearchResultDto themeSearchResultDto = searchService.searchThemes(keyword, offset, count, sectionUrl);
+        return buildResponseGetWithCount(themeSearchResultDto.getThemesSearchDto(), themeSearchResultDto.getCount());
     }
 
     @RequestMapping(value = "/users", method = GET)

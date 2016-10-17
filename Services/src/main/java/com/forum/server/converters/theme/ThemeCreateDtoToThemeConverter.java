@@ -16,7 +16,6 @@ public class ThemeCreateDtoToThemeConverter  implements Converter<ThemeCreateDto
     public Theme convert(ThemeCreateDto themeCreateDto) {
         return new Theme.Builder()
                 .SectionUrl(themeCreateDto.getSectionUrl())
-                .SubsectionUrl(themeCreateDto.getSubsectionUrl())
                 .Title(themeCreateDto.getTitle())
                 .Date(System.currentTimeMillis())
                 .MessagesCount(0l)

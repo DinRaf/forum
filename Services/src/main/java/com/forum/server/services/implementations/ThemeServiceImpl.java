@@ -2,6 +2,9 @@ package com.forum.server.services.implementations;
 
 import com.forum.server.converters.ConversionListResultFactory;
 import com.forum.server.converters.ConversionResultFactory;
+import com.forum.server.dao.interfaces.TagsDao;
+import com.forum.server.dto.tag.TagsDto;
+import com.forum.server.dto.theme.ThemeUpdateDto;
 import com.forum.server.validation.RightsValidator;
 import com.forum.server.validation.StaticInfoValidator;
 import com.forum.server.validation.ThemeValidator;
@@ -62,21 +65,23 @@ public class ThemeServiceImpl implements ThemeService {
     @Autowired
     private StaticInfoValidator staticInfoValidator;
 
+    @Autowired
+    private TagsDao tagsDao;
+
     public ThemeDto createTheme(String token, ThemeCreateDto themeCreateDto) {
         tokenValidator.verifyOnExistence(token);
-        String rights = usersDao.getRightsByToken(token);
-        rightsValidator.createTheme(rights);
+        rightsValidator.createTheme(usersDao.getRightsByToken(token));
         themeValidator.verifyTitleOnNotNull(themeCreateDto.getTitle());
         themeValidator.verifyMessageOnNotNull(themeCreateDto.getMessage());
-        String sectionUrl = themeCreateDto.getSectionUrl();
-        staticInfoValidator.verifySubsectionOnExistence(sectionUrl + "/" + themeCreateDto.getSubsectionUrl());
-        staticInfoValidator.verifySectionOnExistence(sectionUrl);
+        staticInfoValidator.verifySectionOnExistence(themeCreateDto.getSectionUrl());
         ShortUser user = usersDao.findShortUserByToken(token);
         Theme theme = conversionResultFactory.convert(themeCreateDto);
         long userId = user.getUserId();
         theme.setUser(user);
+        //TODO Возравщать id сразу же
         themesDao.save(theme);
         long themeId = themesDao.getIdByDateAndUserId(userId, theme.getDate());
+        tagsDao.addTags(themeId, themeCreateDto.getTags());
         Message message = conversionResultFactory.convert(themeCreateDto.getMessage());
         message.setUser(user);
         message.setThemeId(themeId);
@@ -109,39 +114,43 @@ public class ThemeServiceImpl implements ThemeService {
         if (offset == null || offset < 0) {
             offset = 0;
         }
+        ThemeDto themeDto = conversionResultFactory.convert(themesDao.getThemeByThemeId(themeId));
+        themeDto.setTags(conversionListResultFactory.convertTags(tagsDao.getTagsByThemeId(themeId)));
         if (token == null || token.equals("")) {
-            ThemeDto themeDto = conversionResultFactory.convert(themesDao.getThemeByThemeId(themeId));
             themeDto.setMessages(conversionListResultFactory
                     .convertMessages(messagesDao
                             .getMessagesWithLimitOffset(themeId, count, offset)));
             return themeDto;
         }
         tokenValidator.verifyOnExistence(token);
-        ThemeDto themeDto = conversionResultFactory.convert(themesDao.getThemeByThemeId(themeId));
         themeDto.setMessages(conversionListResultFactory
                 .convertMessages(messagesDao
                         .getMessagesWithLikedLimitOffset(usersDao.findIdByToken(token), themeId, count, offset)));
         return themeDto;
     }
 
-    public ThemeDto updateTheme(String token, long themeId, String title, long count) {
+    public ThemeDto updateTheme(String token, long themeId, ThemeUpdateDto theme, long count) {
         tokenValidator.verifyOnExistence(token);
         if(themesDao.getAuthorIdByThemeId(themeId) != usersDao.findIdByToken(token)) {
             String rights = usersDao.getRightsByToken(token);
             rightsValidator.updateTheme(rights);
         }
-        themeValidator.verifyTitleOnNotNull(title);
+        themeValidator.verifyTitleOnNotNull(theme.getTitle());
         themeValidator.verifyOnExistence(themeId);
-
+        //TODO Проверка обновленной url section
+        //TODO Обновление url section
         themesDao.saveUpdate(new ThemeUpdate.Builder()
-                .Title(title)
+                .Title(theme.getTitle())
                 .build(),
                 themeId);
+        tagsDao.deleteTagsFromThemeByThemeId(themeId);
+        tagsDao.addTags(themeId, theme.getTags());
         long offset = 0;
         ThemeDto themeDto = conversionResultFactory.convert(themesDao.getThemeByThemeId(themeId));
         themeDto.setMessages(conversionListResultFactory
                 .convertMessages(messagesDao
                         .getMessagesWithLimitOffset(themeId, count, offset)));
+        themeDto.setTags(theme.getTags());
         return themeDto;
     }
 
@@ -157,6 +166,7 @@ public class ThemeServiceImpl implements ThemeService {
             rightsValidator.deleteTheme(rights);
         }
         //удаляем тему
+        //TODO clear tags
         themesDao.deleteTheme(themeId);
     }
 }

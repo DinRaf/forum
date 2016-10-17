@@ -2,6 +2,7 @@ package com.forum.server.dto.theme;
 
 import com.forum.server.dto.Data;
 import com.forum.server.dto.message.MessagesDto;
+import com.forum.server.dto.tag.TagsDto;
 
 /**
  * 07.08.16
@@ -17,6 +18,15 @@ public class ThemeDto implements Data{
     private long messagesCount;
     private MessagesDto messages;
     private boolean status;
+    private TagsDto tags;
+
+    public void setTags(TagsDto tags) {
+        this.tags = tags;
+    }
+
+    public TagsDto getTags() {
+        return tags;
+    }
 
     public long getThemeId() {
         return themeId;
@@ -57,6 +67,7 @@ public class ThemeDto implements Data{
         this.messagesCount = builder.messagesCount;
         this.messages = builder.messages;
         this.status = builder.status;
+        this.tags = builder.tags;
     }
 
     public void setMessages(MessagesDto messages) {
@@ -71,6 +82,12 @@ public class ThemeDto implements Data{
         private long messagesCount;
         private MessagesDto messages;
         private boolean status;
+        private TagsDto tags;
+
+        public Builder Tags(TagsDto tags) {
+            this.tags = tags;
+            return this;
+        }
 
         public Builder ThemeId(long themeId) {
             this.themeId = themeId;

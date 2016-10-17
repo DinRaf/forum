@@ -1,6 +1,7 @@
 package com.forum.server.dto.theme;
 
 import com.forum.server.dto.Data;
+import com.forum.server.dto.tag.TagsDto;
 
 /**
  * Created by root on 02.09.16.
@@ -13,10 +14,10 @@ public class ThemeSearchDto implements Data {
     private long date;
     private long messagesCount;
     private boolean status;
-    private String subsectionUrl;
+    private TagsDto tags;
 
-    public String getSubsectionUrl() {
-        return subsectionUrl;
+    public TagsDto getTags() {
+        return tags;
     }
 
     public String getNickname() {
@@ -57,7 +58,7 @@ public class ThemeSearchDto implements Data {
         this.title = builder.title;
         this.id = builder.id;
         this.nickname = builder.nickname;
-        this.subsectionUrl = builder.subsectionUrl;
+        this.tags = builder.tags;
     }
 
     public static class Builder {
@@ -68,10 +69,10 @@ public class ThemeSearchDto implements Data {
         private boolean status;
         private long id;
         private String nickname;
-        private String subsectionUrl;
+        private TagsDto tags;
 
-        public Builder SubsectionUrl(String subsectionUrl) {
-            this.subsectionUrl = subsectionUrl;
+        public Builder Tags(TagsDto tags) {
+            this.tags = tags;
             return this;
         }
 

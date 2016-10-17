@@ -64,12 +64,12 @@ ThemesDaoImpl implements ThemesDao {
                     .build();
         };
     }
-
+    //FIXME Поправить запрос, убрать subsectionURL
     public void save(Theme theme) {
         jdbcTemplate.update(SQL_ADD_THEME,
                 new Object[]{theme.getUser().getUserId(),
                         theme.getSectionUrl().toLowerCase(),
-                        theme.getSectionUrl().toLowerCase() + "/" + theme.getSubsectionUrl().toLowerCase(),
+                        theme.getSectionUrl().toLowerCase(),
                         theme.getTitle(),
                         theme.getDate(),
                         theme.getMessagesCount(),

@@ -2,6 +2,7 @@ package com.forum.server.services.interfaces;
 
 import com.forum.server.dto.theme.ThemeCreateDto;
 import com.forum.server.dto.theme.ThemeDto;
+import com.forum.server.dto.theme.ThemeUpdateDto;
 
 /**
  * 07.08.16
@@ -15,7 +16,7 @@ public interface ThemeService {
 
     ThemeDto getTheme(String token, long themeId, Integer offset, int count);
 
-    ThemeDto updateTheme(String token, long themeId, String title, long count);
+    ThemeDto updateTheme(String token, long themeId, ThemeUpdateDto theme, long count);
 
     void deleteTheme(String token, long themeId);
 }

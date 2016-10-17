@@ -4,24 +4,18 @@ import com.forum.server.dto.Data;
 import com.forum.server.dto.tag.TagsDto;
 
 /**
- * 07.08.16
+ * 16/10/16
  *
  * @author Dinar Rafikov (First Software Engineering Platform)
  * @version 1.0
  */
-public class ThemeCreateDto implements Data{
-
+public class ThemeUpdateDto implements Data {
     private String title;
-    private String message;
     private String sectionUrl;
     private TagsDto tags;
 
     public String getTitle() {
         return title;
-    }
-
-    public String getMessage() {
-        return message;
     }
 
     public String getSectionUrl() {
@@ -32,44 +26,37 @@ public class ThemeCreateDto implements Data{
         return tags;
     }
 
-    protected ThemeCreateDto() {
+    protected ThemeUpdateDto() {
     }
-    
-    private ThemeCreateDto(Builder builder) {
+
+    private ThemeUpdateDto(Builder builder) {
         this.title = builder.title;
-        this.message = builder.message;
         this.sectionUrl = builder.sectionUrl;
         this.tags = builder.tags;
     }
-    
+
     public static class Builder {
         private String title;
-        private String message;
         private String sectionUrl;
         private TagsDto tags;
 
-        public Builder Title(String title) {
+        public ThemeUpdateDto.Builder Title(String title) {
             this.title = title;
             return this;
         }
 
-        public Builder Message(String message) {
-            this.message = message;
-            return this;
-        }
-
-        public Builder SectionId(String sectionUrl) {
+        public ThemeUpdateDto.Builder SectionId(String sectionUrl) {
             this.sectionUrl = sectionUrl;
             return this;
         }
 
-        public Builder Tags(TagsDto tags) {
+        public ThemeUpdateDto.Builder Tags(TagsDto tags) {
             this.tags = tags;
             return this;
         }
 
-        public ThemeCreateDto build() {
-            return new ThemeCreateDto(this);
+        public ThemeUpdateDto build() {
+            return new ThemeUpdateDto(this);
         }
     }
 }

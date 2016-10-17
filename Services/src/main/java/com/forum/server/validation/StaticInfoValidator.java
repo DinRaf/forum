@@ -25,10 +25,4 @@ public class StaticInfoValidator {
             throw new NotFoundException("Информация не найдена");
         }
     }
-
-    public void verifySubsectionOnExistence(String url) {
-        if (!staticInfoDao.isExistsSubsectionUrl(url)) {
-            throw new NotFoundException("Несуществующий подраздел");
-        }
-    }
 }

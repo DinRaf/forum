@@ -11,7 +11,7 @@ import com.forum.server.dto.user.SearchUsersDto;
  */
 public interface SearchService {
 
-    ThemeSearchResultDto searchThemes(String keyword, Integer offset, int count, String sectionUrl, String subsectionUrl);
+    ThemeSearchResultDto searchThemes(String keyword, Integer offset, int count, String sectionUrl);
 
     SearchUsersDto searchUsers(String keyword, Integer offset, int count, String sorting);
 }
