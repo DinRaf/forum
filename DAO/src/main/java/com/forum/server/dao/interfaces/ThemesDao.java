@@ -1,10 +1,7 @@
 package com.forum.server.dao.interfaces;
 
-import com.forum.server.dto.theme.ThemeSearchDto;
 import com.forum.server.models.theme.Theme;
 import com.forum.server.models.theme.ThemeUpdate;
-
-import java.util.List;
 
 /**
  * 30.08.16
@@ -13,10 +10,10 @@ import java.util.List;
  * @version 1.0
  */
 public interface ThemesDao {
-    void save(Theme theme);
+    long saveReturnId(Theme theme);
 
     long getIdByDateAndUserId(long userId, long date);
-    
+
     long findTheNumberOfMessagesInTheme(long themeId);
 
     long getAuthorIdByThemeId(long themeId);

@@ -32,12 +32,12 @@ ThemesDaoImpl implements ThemesDao {
     private NamedParameterJdbcTemplate namedJdbcTemplate;
 
     private static final String SQL_GET_ID_BY_DATE_AND_USER_ID = "SELECT theme_id FROM theme WHERE user_id = :userId AND date = :date;";
-    private static final String SQL_ADD_THEME = "INSERT INTO theme (user_id, section_id, subsection_id, title, date, messages_count, status) VALUES (?, (SELECT section_id FROM section WHERE LOWER(url) = ?), (SELECT subsection_id FROM subsection WHERE LOWER(url) = ?), ?, ?, ?, ?);";
+    private static final String SQL_ADD_THEME = "INSERT INTO theme (user_id, section_id, title, date, messages_count, status) VALUES (?, (SELECT section_id FROM section WHERE LOWER(url) = ?), ?, ?, ?, ?) RETURNING theme_id;";
     private static final String SQL_NUMBER_OF_MESSAGES_IN_THEME = "SELECT messages_count FROM theme WHERE theme_id = ?;" ;
     private static final String SQL_GET_THEME_BY_THEME_ID = "SELECT * FROM theme INNER JOIN short_user ON short_user.user_id = theme.user_id WHERE theme.theme_id = ?;";
     private static final String SQL_GET_THEME_ID_BY_MESSAGE_ID = "SELECT theme_id FROM message WHERE message_id = ?;;";
     private static final String SQL_GET_USER_ID_BY_THEME_ID = "SELECT user_id FROM theme WHERE theme_id = ?;";
-    private static final String SQL_SAVE_UPDATE = "UPDATE theme SET title = :title WHERE theme_id = :theme_id RETURNING true;";
+    private static final String SQL_SAVE_UPDATE = "UPDATE theme SET title = :title, section_id = (SELECT section_id FROM section WHERE LOWER(url) = :sectionUrl) WHERE theme_id = :theme_id RETURNING true;";
     private static final String SQL_IS_EXISTS_THEME = "SELECT CASE WHEN EXISTS(SELECT user_id FROM theme WHERE theme_id = ?)THEN TRUE ELSE FALSE END ;";
     private static final String SQL_DELETE_MARKS_FROM_MESSAGES_IN_THEME = "DELETE FROM message_mark WHERE message_id = :message_id;";
     private static final String SQL_DELETE_MESSAGES_IN_THEME = "DELETE FROM message WHERE theme_id = :theme_id;";
@@ -64,11 +64,9 @@ ThemesDaoImpl implements ThemesDao {
                     .build();
         };
     }
-    //FIXME Поправить запрос, убрать subsectionURL
-    public void save(Theme theme) {
-        jdbcTemplate.update(SQL_ADD_THEME,
+    public long saveReturnId(Theme theme) {
+        return jdbcTemplate.queryForObject(SQL_ADD_THEME, long.class,
                 new Object[]{theme.getUser().getUserId(),
-                        theme.getSectionUrl().toLowerCase(),
                         theme.getSectionUrl().toLowerCase(),
                         theme.getTitle(),
                         theme.getDate(),
@@ -98,6 +96,7 @@ ThemesDaoImpl implements ThemesDao {
 
     public void saveUpdate(ThemeUpdate themeUpdate, long themeId) {
         Map<String, Object> params = new  HashMap<>();
+        params.put("sectionUrl", themeUpdate.getSectionUrl().toLowerCase());
         params.put("title", themeUpdate.getTitle());
         params.put("theme_id", themeId);
         namedJdbcTemplate.queryForObject(SQL_SAVE_UPDATE, params, boolean.class);

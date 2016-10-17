@@ -11,9 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.util.LinkedList;
-import java.util.List;
-
 import static org.junit.Assert.*;
 
 /**
@@ -54,7 +51,7 @@ public class ThemesDaoImplTest {
                 .MessagesCount(MESSAGES_COUNT)
                 .Status(STATUS)
                 .build();
-        themesDao.save(theme);
+        themesDao.saveReturnId(theme);
     }
 
     @Test

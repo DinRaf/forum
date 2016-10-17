@@ -5,25 +5,32 @@ package com.forum.server.models.theme;
  */
 public class ThemeUpdate {
     private String title;
+    private String sectionUrl;
 
-    public void setTitle(String title) {
-        this.title = title;
+    public String getSectionUrl() {
+        return sectionUrl;
     }
 
     public String getTitle() {
-
         return title;
     }
 
-    protected ThemeUpdate(ThemeUpdate themeUpdate) {
+    protected ThemeUpdate() {
     }
 
     private ThemeUpdate(Builder builder) {
         this.title = builder.title;
+        this.sectionUrl = builder.sectionUrl;
     }
 
     public static class Builder {
         private String title;
+        private String sectionUrl;
+
+        public Builder SectionUrl(String sectionUrl) {
+            this.sectionUrl = sectionUrl;
+            return this;
+        }
 
         public Builder Title(String title) {
             this.title = title;

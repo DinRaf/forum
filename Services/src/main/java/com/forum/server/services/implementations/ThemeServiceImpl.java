@@ -77,9 +77,8 @@ public class ThemeServiceImpl implements ThemeService {
         Theme theme = conversionResultFactory.convert(themeCreateDto);
         long userId = user.getUserId();
         theme.setUser(user);
-        //TODO Возравщать id сразу же
-        themesDao.save(theme);
-        long themeId = themesDao.getIdByDateAndUserId(userId, theme.getDate());
+        themesDao.saveReturnId(theme);
+        long themeId = themesDao.saveReturnId(theme);
         tagsDao.addTags(themeId, themeCreateDto.getTags());
         Message message = conversionResultFactory.convert(themeCreateDto.getMessage());
         message.setUser(user);
@@ -130,17 +129,17 @@ public class ThemeServiceImpl implements ThemeService {
 
     public ThemeDto updateTheme(String token, long themeId, ThemeUpdateDto theme, long count) {
         tokenValidator.verifyOnExistence(token);
-        if(themesDao.getAuthorIdByThemeId(themeId) != usersDao.findIdByToken(token)) {
+        if (themesDao.getAuthorIdByThemeId(themeId) != usersDao.findIdByToken(token)) {
             String rights = usersDao.getRightsByToken(token);
             rightsValidator.updateTheme(rights);
         }
         themeValidator.verifyTitleOnNotNull(theme.getTitle());
         themeValidator.verifyOnExistence(themeId);
-        //TODO Проверка обновленной url section
-        //TODO Обновление url section
+        staticInfoValidator.verifySectionOnExistence(theme.getSectionUrl());
         themesDao.saveUpdate(new ThemeUpdate.Builder()
-                .Title(theme.getTitle())
-                .build(),
+                        .Title(theme.getTitle())
+                        .SectionUrl(theme.getSectionUrl())
+                        .build(),
                 themeId);
         tagsDao.deleteTagsFromThemeByThemeId(themeId);
         tagsDao.addTags(themeId, theme.getTags());
@@ -167,5 +166,10 @@ public class ThemeServiceImpl implements ThemeService {
         //удаляем тему
         tagsDao.deleteTagsFromThemeByThemeId(themeId);
         themesDao.deleteTheme(themeId);
+    }
+
+    public static void main(String[] args) {
+        String lolo = "ЛолХЪ";
+        System.out.println(lolo.matches("[A-Za-z0-9А-Яа-яёЁ]+"));
     }
 }
