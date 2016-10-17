@@ -2,14 +2,8 @@ package com.forum.server.services.implementations;
 
 import com.forum.server.converters.ConversionListResultFactory;
 import com.forum.server.converters.ConversionResultFactory;
-import com.forum.server.dao.interfaces.TagsDao;
-import com.forum.server.dto.tag.TagsDto;
-import com.forum.server.dto.theme.ThemeUpdateDto;
-import com.forum.server.validation.RightsValidator;
-import com.forum.server.validation.StaticInfoValidator;
-import com.forum.server.validation.ThemeValidator;
-import com.forum.server.validation.TokenValidator;
 import com.forum.server.dao.interfaces.MessagesDao;
+import com.forum.server.dao.interfaces.TagsDao;
 import com.forum.server.dao.interfaces.ThemesDao;
 import com.forum.server.dao.interfaces.UsersDao;
 import com.forum.server.dto.message.FixMessageDto;
@@ -17,12 +11,17 @@ import com.forum.server.dto.message.MessageDto;
 import com.forum.server.dto.message.MessagesDto;
 import com.forum.server.dto.theme.ThemeCreateDto;
 import com.forum.server.dto.theme.ThemeDto;
+import com.forum.server.dto.theme.ThemeUpdateDto;
 import com.forum.server.dto.user.ShortUserDto;
 import com.forum.server.models.message.Message;
 import com.forum.server.models.theme.Theme;
 import com.forum.server.models.theme.ThemeUpdate;
 import com.forum.server.models.user.ShortUser;
 import com.forum.server.services.interfaces.ThemeService;
+import com.forum.server.validation.RightsValidator;
+import com.forum.server.validation.StaticInfoValidator;
+import com.forum.server.validation.ThemeValidator;
+import com.forum.server.validation.TokenValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -103,7 +102,7 @@ public class ThemeServiceImpl implements ThemeService {
                 .Date(theme.getDate())
                 .AuthorId(userId)
                 .Status(theme.isStatus())
-                .MessagesCount(1l)
+                .MessagesCount(1L)
                 .Title(theme.getTitle())
                 .Messages(new MessagesDto(messageDtos))
                 .build();
@@ -166,7 +165,7 @@ public class ThemeServiceImpl implements ThemeService {
             rightsValidator.deleteTheme(rights);
         }
         //удаляем тему
-        //TODO clear tags
+        tagsDao.deleteTagsFromThemeByThemeId(themeId);
         themesDao.deleteTheme(themeId);
     }
 }
