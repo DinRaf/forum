@@ -2,13 +2,10 @@ package com.forum.server.services.implementations;
 
 import com.forum.server.converters.ConversionListResultFactory;
 import com.forum.server.dao.interfaces.SearchDao;
-import com.forum.server.dao.interfaces.StaticInfoDao;
 import com.forum.server.dao.interfaces.TagsDao;
-import com.forum.server.dto.theme.ThemeSearchDto;
+import com.forum.server.dto.tag.TagsDto;
 import com.forum.server.dto.theme.ThemeSearchResultDto;
-import com.forum.server.dto.theme.ThemesSearchDto;
 import com.forum.server.dto.user.SearchUsersDto;
-import com.forum.server.models.tag.Tag;
 import com.forum.server.models.theme.ThemeSearch;
 import com.forum.server.services.interfaces.SearchService;
 import com.forum.server.validation.SearchValidator;
@@ -119,5 +116,17 @@ public class SearchServiceImpl implements SearchService {
         }
 
 
+    }
+
+    @Override
+    public TagsDto searchTags(String keyword, Integer offset, int count) {
+        if (offset == null) {
+            offset = 0;
+        }
+        if (keyword == null || keyword.isEmpty()) {
+            return conversionListResultFactory.convertTags(tagsDao.getTagsByCountAndOffset(count, offset));
+        } else {
+            return conversionListResultFactory.convertTags(tagsDao.getTagsByKeywordAndCountAndOffset(keyword, count, offset));
+        }
     }
 }

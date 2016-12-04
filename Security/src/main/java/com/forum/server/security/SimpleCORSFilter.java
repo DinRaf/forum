@@ -26,9 +26,9 @@ public class SimpleCORSFilter implements Filter {
         response.setHeader("Access-Control-Allow-Credentials", "true");
         response.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT, OPTIONS, DELETE");
         response.setHeader("Access-Control-Max-Age", "3600");
-        response.setHeader("Access-Control-Expose-Headers", "ticket, tempauth-token, auth-token, password, nickname, Confirm-Code");
-        response.setHeader("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-With, remember-me, " +
-                "access-control-allow-origin, tempauth-token, auth-token, ticket, password, nickname, Confirm-Code, phone");
+        response.setHeader("Access-Control-Expose-Headers", "Access-Control-Allow-Origin,Access-Control-Allow-Credentials,Auth-Token");
+        response.setHeader("Access-Control-Allow-Headers", "Content-Type,X-Requested-With,accept,Origin,Access-Control-Request-Method," +
+                "Access-Control-Request-Headers,identifier,password,Auth-Token");
         if (!request.getMethod().equals("OPTIONS")) {
             chain.doFilter(req, res);
         }

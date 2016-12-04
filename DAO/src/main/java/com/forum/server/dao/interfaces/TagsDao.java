@@ -18,4 +18,8 @@ public interface TagsDao {
     void deleteTagsFromThemeByThemeId(long themeId);
 
     void addTags(long themeId, List<TagDto> tags);
+
+    List<Tag> getTagsByCountAndOffset(int count, Integer offset);
+
+    List<Tag> getTagsByKeywordAndCountAndOffset(String keyword, int count, Integer offset);
 }

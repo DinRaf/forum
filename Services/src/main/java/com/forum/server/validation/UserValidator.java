@@ -33,19 +33,19 @@ public class UserValidator {
 
     public void verifyEmail(String identifier) {
         if (identifier == null) {
-            throw new AuthException("Введите e-mail");
+            throw new AuthException("Введите email");
         } else if (!emailValidator.validate(identifier)) {
-            throw new AuthException("Некорректный e-mail");
+            throw new AuthException("Некорректный email");
         } else if (usersDao.isExistsMail(identifier)) {
-            throw new AuthException("Пользователь с таким e-mail уже существует");
+            throw new AuthException("Пользователь с таким email уже существует");
         }
     }
 
     public void verifyEmailPut(String identifier) {
         if (identifier == null) {
-            throw new AuthException("Введите e-mail");
+            throw new AuthException("Введите email");
         } else if (!emailValidator.validate(identifier)) {
-            throw new AuthException("Некорректный e-mail");
+            throw new AuthException("Некорректный email");
         }
     }
 }

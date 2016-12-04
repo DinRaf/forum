@@ -60,7 +60,7 @@ public class RegistrationServiceImpl implements RegistrationService {
             throw new AuthException("Заполните все поля");
         } else if (identifier.contains("@")) {
             if (!usersDao.isExistsMail(identifier)) {
-                throw new AuthException("Неверный e-mail или пароль");
+                throw new AuthException("Неверный email или пароль");
             }
             String rights = usersDao.getRightsByEmail(identifier);
             rightsValidator.login(rights);
@@ -69,7 +69,7 @@ public class RegistrationServiceImpl implements RegistrationService {
                 String token = tokenGenerator.generateToken();
                 Integer userId = usersDao.getIdByMail(identifier);
                 if (userId == null) {
-                    throw new AuthException("Неверный e-mail или пароль");
+                    throw new AuthException("Неверный email или пароль");
                 }
                 tokensDao.addToken(userId, token);
                 return new LoginDto.Builder()
@@ -77,7 +77,7 @@ public class RegistrationServiceImpl implements RegistrationService {
                         .Nickname(usersDao.getNicknameByMail(identifier))
                         .build();
             }
-            throw new AuthException("Неверный e-mail или пароль");
+            throw new AuthException("Неверный email или пароль");
         } else {
             if (!usersDao.isExistsNickName(identifier)) {
                 throw new AuthException("Неверный никнейм или пароль");
@@ -111,9 +111,9 @@ public class RegistrationServiceImpl implements RegistrationService {
         }
         String mail = authDto.getMail();
         if (mail == null || !emailValidator.validate(mail) || mail.length() > 250) {
-            throw new AuthException("E-mail не удовлетворяет необходимым условиям");
+            throw new AuthException("Email не удовлетворяет необходимым условиям");
         } else if (usersDao.isExistsMail(mail)) {
-            throw new AuthException("E-mail уже занят, попробуйте другой");
+            throw new AuthException("Email уже занят, попробуйте другой");
         }
 
         User user = conversionResultFactory.convert(authDto);

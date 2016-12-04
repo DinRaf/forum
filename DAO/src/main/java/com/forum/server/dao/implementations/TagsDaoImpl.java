@@ -54,6 +54,18 @@ public class TagsDaoImpl implements TagsDao {
         });
     }
 
+    @Override
+    public List<Tag> getTagsByCountAndOffset(int count, Integer offset) {
+        //TODO реализуй, Саня
+        return null;
+    }
+
+    @Override
+    public List<Tag> getTagsByKeywordAndCountAndOffset(String keyword, int count, Integer offset) {
+        //TODO реализуй, Саня
+        return null;
+    }
+
     private void addTag(long themeId, String name) {
         setTag(themeId, createTag(name));
     }

@@ -1,6 +1,7 @@
 package com.forum.server.controller;
 
 import com.forum.server.dto.response.QueryResultDto;
+import com.forum.server.dto.tag.TagsDto;
 import com.forum.server.dto.theme.ThemeSearchResultDto;
 import com.forum.server.dto.user.SearchUsersDto;
 import com.forum.server.services.interfaces.SearchService;
@@ -35,6 +36,14 @@ public class SearchController {
                                                        @RequestParam(value = "section-url", required = false) String sectionUrl) {
         ThemeSearchResultDto themeSearchResultDto = searchService.searchThemes(keyword, offset, count, sectionUrl);
         return buildResponseGetWithCount(themeSearchResultDto.getThemesSearchDto(), themeSearchResultDto.getCount());
+    }
+
+    @RequestMapping(value = "/tags", method = GET)
+    public ResponseEntity<QueryResultDto> searchThemes(@RequestParam(value = "find", required = false) String keyword,
+                                                       @RequestParam(value = "offset", required = false) Integer offset,
+                                                       @RequestParam(value = "count") int count) {
+        TagsDto tagsDto = searchService.searchTags(keyword, offset, count);
+        return buildResponseGet(tagsDto);
     }
 
     @RequestMapping(value = "/users", method = GET)

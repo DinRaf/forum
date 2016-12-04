@@ -2,6 +2,7 @@ package com.forum.server.dto.tag;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonValue;
+import com.forum.server.dto.Data;
 
 import java.util.List;
 
@@ -12,7 +13,7 @@ import java.util.List;
  * @version 1.0
  */
 @JsonFormat(shape = JsonFormat.Shape.ARRAY)
-public class TagsDto {
+public class TagsDto implements Data{
 
     private List<TagDto> tags;
 
