@@ -1,7 +1,6 @@
 package com.forum.server.converters.theme;
 
 import com.forum.server.converters.tags.ListTagToTagsDtoConverter;
-import com.forum.server.converters.tags.TagToTagDtoConverter;
 import com.forum.server.dto.theme.ThemeSearchDto;
 import com.forum.server.models.theme.ThemeSearch;
 import org.springframework.core.convert.converter.Converter;
@@ -25,6 +24,7 @@ public class ThemeSearchToThemeSearchDtoConverter implements Converter<ThemeSear
                 .MessagesCount(themeSearch.getMessagesCount())
                 .Status(themeSearch.isStatus())
                 .Title(themeSearch.getTitle())
+                .SectionUrl(themeSearch.getSectionUrl())
                 .build();
     }
 }

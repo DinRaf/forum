@@ -12,17 +12,7 @@ public class Section {
     private long sectionId;
     private String name;
     private long themesCount;
-    private long subsectionsCount;
     private String url;
-    private List<Subsection> subsections;
-
-    public void setSubsections(List<Subsection> subsections) {
-        this.subsections = subsections;
-    }
-
-    public List<Subsection> getSubsections() {
-        return subsections;
-    }
 
     public String getUrl() {
         return url;
@@ -40,10 +30,6 @@ public class Section {
         return themesCount;
     }
 
-    public long getSubsectionsCount() {
-        return subsectionsCount;
-    }
-
     protected Section() {
     }
 
@@ -51,23 +37,14 @@ public class Section {
         this.sectionId = builder.sectionId;
         this.name = builder.name;
         this.themesCount = builder.themesCount;
-        this.subsectionsCount = builder.subsectionsCount;
         this.url = builder.url;
-        this.subsections = builder.subsections;
     }
 
     public static class Builder {
         private long sectionId;
         private String name;
         private long themesCount;
-        private long subsectionsCount;
         private String url;
-        private List<Subsection> subsections;
-
-        public Builder Subsections(List<Subsection> subsections) {
-            this.subsections = subsections;
-            return this;
-        }
 
         public Builder Url(String url) {
             this.url = url;
@@ -86,11 +63,6 @@ public class Section {
 
         public Builder ThemesCount(long themesCount) {
             this.themesCount = themesCount;
-            return this;
-        }
-
-        public Builder SubsectionsCount(long subsectionsCount) {
-            this.subsectionsCount = subsectionsCount;
             return this;
         }
 

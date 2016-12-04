@@ -48,9 +48,6 @@ public class StaticInfoServiceImpl implements StaticInfoService {
 
     public SectionsDto getSections() {
         List<Section> sections = staticInfoDao.getSections();
-        for (Section s: sections) {
-            s.setSubsections(staticInfoDao.getSubsections(s.getUrl()));
-        }
         return conversionListResultFactory.convertSections(sections);
     }
 

@@ -37,12 +37,12 @@ public class SearchDaoImpl implements SearchDao {
     private static final String SQL_GET_SHORT_USER_BY_KEYWORD_PART_2 = " LIMIT :count OFFSET :offset ;";
     private static final String SQL_GET_USERS_COUNT = "SELECT count(*) FROM short_user;";
     private static final String SQL_GET_USERS_COUNT_BY_KEYWORD = "SELECT count(*) FROM short_user LEFT JOIN user_info ON short_user.user_id = user_info.user_id, to_tsquery('russian', ?) q WHERE s_user_fts @@ q OR user_fts @@ q;";
-    private static final String SQL_GET_THEMES_BY_KEYWORD_WITH_LIMIT_OFFSET = "SELECT theme.theme_id, theme.user_id, theme.date, messages_count, status, title, nick_name FROM theme INNER JOIN short_user ON short_user.user_id = theme.user_id , to_tsquery('russian', :keyword) q WHERE (theme_fts @@ q OR theme.theme_id = ANY(SELECT theme_id FROM message, to_tsquery('russian', :keyword) q WHERE message.message_fts @@ q))  ORDER BY ts_rank_cd(theme_fts, q, 2) DESC LIMIT :count OFFSET :offset;";
-    private static final String SQL_GET_THEMES_BY_KEYWORD_SECTION_URL_WITH_LIMIT_OFFSET = "SELECT theme.theme_id, theme.user_id, theme.date, messages_count, status, title, nick_name FROM theme INNER JOIN short_user ON short_user.user_id = theme.user_id, to_tsquery('russian', :keyword) q WHERE (theme_fts @@ q OR theme.theme_id = ANY(SELECT theme_id FROM message, to_tsquery('russian', :keyword) q WHERE message.message_fts @@ q)) @@ q AND section_id = (SELECT section_id FROM section WHERE LOWER(url) = :urlSection) " +
+    private static final String SQL_GET_THEMES_BY_KEYWORD_WITH_LIMIT_OFFSET = "SELECT theme.theme_id, theme.user_id, theme.date, messages_count, status, title, nick_name, section.url FROM theme INNER JOIN section ON theme.section_id = section.section_id INNER JOIN short_user ON short_user.user_id = theme.user_id , to_tsquery('russian', :keyword) q WHERE (theme_fts @@ q OR theme.theme_id = ANY(SELECT theme_id FROM message, to_tsquery('russian', :keyword) q WHERE message.message_fts @@ q))  ORDER BY ts_rank_cd(theme_fts, q, 2) DESC LIMIT :count OFFSET :offset;";
+    private static final String SQL_GET_THEMES_BY_KEYWORD_SECTION_URL_WITH_LIMIT_OFFSET = "SELECT theme.theme_id, theme.user_id, theme.date, messages_count, status, title, nick_name, section.url FROM theme INNER JOIN section ON theme.section_id = section.section_id INNER JOIN short_user ON short_user.user_id = theme.user_id, to_tsquery('russian', :keyword) q WHERE (theme_fts @@ q OR theme.theme_id = ANY(SELECT theme_id FROM message, to_tsquery('russian', :keyword) q WHERE message.message_fts @@ q)) @@ q AND section.url = :url " +
             "ORDER BY ts_rank_cd(theme_fts, q, 2) DESC LIMIT :count OFFSET :offset;";
-    private static final String SQL_GET_THEMES_WITH_LIMIT_OFFSET = "SELECT theme.theme_id, theme.user_id, date, messages_count, status, title, nick_name FROM theme INNER JOIN short_user ON short_user.user_id = theme.user_id " +
+    private static final String SQL_GET_THEMES_WITH_LIMIT_OFFSET = "SELECT theme.theme_id, theme.user_id, date, messages_count, status, title, nick_name, section.url FROM theme INNER JOIN section ON theme.section_id = section.section_id INNER JOIN short_user ON short_user.user_id = theme.user_id " +
             "ORDER BY theme_id LIMIT :count OFFSET :offset;";
-    private static final String SQL_GET_THEMES_SECTION_URL_WITH_LIMIT_OFFSET = "SELECT theme.theme_id, theme.user_id, date, messages_count, status, title, nick_name FROM theme INNER JOIN short_user ON short_user.user_id = theme.user_id WHERE section_id = (SELECT section_id FROM section WHERE LOWER(url) = :url1) " +
+    private static final String SQL_GET_THEMES_SECTION_URL_WITH_LIMIT_OFFSET = "SELECT theme.theme_id, theme.user_id, date, messages_count, status, title, nick_name, section.url FROM theme INNER JOIN section ON theme.section_id = section.section_id INNER JOIN short_user ON short_user.user_id = theme.user_id WHERE section.url = :url " +
             "ORDER BY theme_id LIMIT :count OFFSET :offset;";
     private static final String SQL_GET_COUNT = "SELECT SUM(themes_count) FROM section;";
     private static final String SQL_GET_COUNT_BY_KEYWORD = "SELECT count(*) FROM theme, to_tsquery('russian', ?) q WHERE theme_fts @@ q OR theme.theme_id = ANY(SELECT theme_id FROM message, to_tsquery('russian', ?) q WHERE message.message_fts @@ q);";
@@ -65,6 +65,7 @@ public class SearchDaoImpl implements SearchDao {
                 .AuthorId(rs.getLong("user_id"))
                 .Nickname(rs.getString("nick_name"))
                 .Date(rs.getLong("date"))
+                .SectionUrl(rs.getString("url"))
                 .MessagesCount(rs.getLong("messages_count"))
                 .Status(rs.getBoolean("status"))
                 .Title(rs.getString("title"))
@@ -120,7 +121,7 @@ public class SearchDaoImpl implements SearchDao {
 
     public List<ThemeSearch> getThemesBySectionUrlWithLimitOffset(String sectionUrl, Integer offset, int count) {
         Map<String, Object> params = new HashMap<>();
-        params.put("url1", sectionUrl.toLowerCase());
+        params.put("url", sectionUrl.toLowerCase());
         params.put("count", count);
         params.put("offset", offset);
         return namedJdbcTemplate.query(SQL_GET_THEMES_SECTION_URL_WITH_LIMIT_OFFSET, params, themeSearchDtoRowMapper());

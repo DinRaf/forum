@@ -14,7 +14,12 @@ public class ThemeSearchDto implements Data {
     private long date;
     private long messagesCount;
     private boolean status;
+    private String sectionUrl;
     private TagsDto tags;
+
+    public String getSectionUrl() {
+        return sectionUrl;
+    }
 
     public TagsDto getTags() {
         return tags;
@@ -59,6 +64,7 @@ public class ThemeSearchDto implements Data {
         this.id = builder.id;
         this.nickname = builder.nickname;
         this.tags = builder.tags;
+        this.sectionUrl = builder.sectionUrl;
     }
 
     public static class Builder {
@@ -69,7 +75,13 @@ public class ThemeSearchDto implements Data {
         private boolean status;
         private long id;
         private String nickname;
+        private String sectionUrl;
         private TagsDto tags;
+
+        public Builder SectionUrl(String sectionUrl) {
+            this.sectionUrl = sectionUrl;
+            return this;
+        }
 
         public Builder Tags(TagsDto tags) {
             this.tags = tags;

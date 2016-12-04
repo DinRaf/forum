@@ -18,7 +18,12 @@ public class ThemeSearch {
     private long date;
     private long messagesCount;
     private boolean status;
+    private String sectionUrl;
     private List<Tag> tags;
+
+    public String getSectionUrl() {
+        return sectionUrl;
+    }
 
     public void setTags(List<Tag> tags) {
         this.tags = tags;
@@ -67,6 +72,7 @@ public class ThemeSearch {
         this.id = builder.id;
         this.nickname = builder.nickname;
         this.tags = builder.tags;
+        this.sectionUrl = builder.sectionUrl;
     }
 
     public static class Builder {
@@ -77,7 +83,13 @@ public class ThemeSearch {
         private boolean status;
         private long id;
         private String nickname;
+        private String sectionUrl;
         private List<Tag> tags;
+
+        public Builder SectionUrl(String sectionUrl) {
+            this.sectionUrl = sectionUrl;
+            return this;
+        }
 
         public Builder Tags(List<Tag> tags) {
             this.tags = tags;

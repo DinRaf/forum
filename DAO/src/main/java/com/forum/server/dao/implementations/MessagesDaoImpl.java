@@ -26,7 +26,7 @@ public class MessagesDaoImpl implements MessagesDao {
     @Autowired
     private NamedParameterJdbcTemplate namedJdbcTemplate;
 
-    private static final String SQL_ADD_MESSAGE = "INSERT INTO message (user_id, theme_id, date, body, update, rating, updater_id, updater_nick_name) VALUES (?, ?, ?, ?, ?, ?, ?, ?) ;";
+    private static final String SQL_ADD_MESSAGE = "INSERT INTO message (user_id, theme_id, date, body, update, rating, updater_nick_name) VALUES (?, ?, ?, ?, ?, ?, ?) ;";
     private static final String SQL_GET_MESSAGE_ID_BY_USER_ID_AND_DATE = "SELECT message_id FROM message WHERE user_id = :userId AND message.date = :date;";
     private static final String SQL_GET_MESSAGES_WITH_OFFSET = "SELECT * FROM message INNER JOIN short_user ON message.user_id = short_user.user_id WHERE theme_id = :themeId ORDER BY message_id OFFSET :offset;";
     private static final String SQL_UPDATE_MESSAGE = "UPDATE message SET update = :update, updater_id = :updater_id, updater_nick_name = :updater_nick_name WHERE message_id = :message_id RETURNING true;";
@@ -54,7 +54,6 @@ public class MessagesDaoImpl implements MessagesDao {
                     .Date(rs.getLong("date"))
                     .Update(rs.getLong("update"))
                     .Rating(rs.getLong("rating"))
-                    .UpdaterId(rs.getLong("updater_id"))
                     .UpdaterNickname(rs.getString("updater_nick_name"))
                     .build();
         };
@@ -69,7 +68,6 @@ public class MessagesDaoImpl implements MessagesDao {
                         message.getBody(),
                         message.getUpdate(),
                         message.getRating(),
-                        message.getUpdaterId(),
                         message.getUpdaterNickname()
                 });
     }

@@ -78,7 +78,6 @@ public class ThemeServiceImpl implements ThemeService {
         Theme theme = conversionResultFactory.convert(themeCreateDto);
         long userId = user.getUserId();
         theme.setUser(user);
-        themesDao.saveReturnId(theme);
         long themeId = themesDao.saveReturnId(theme);
         tagsDao.addTags(themeId, themeCreateDto.getTags());
         Message message = conversionResultFactory.convert(themeCreateDto.getMessage());
@@ -105,6 +104,7 @@ public class ThemeServiceImpl implements ThemeService {
                 .MessagesCount(1L)
                 .Title(theme.getTitle())
                 .Messages(new MessagesDto(messageDtos))
+                .Tags(conversionListResultFactory.convertTags(tagsDao.getTagsByThemeId(themeId)))
                 .build();
     }
 

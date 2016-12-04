@@ -23,16 +23,8 @@ public class SearchValidator {
 
     public void verifyOnExistenceSectionUrl(String sectionUrl) {
         if (sectionUrl != null) {
-            if (staticInfoDao.isExistsSectionUrl(sectionUrl)) {
+            if (!staticInfoDao.isExistsSectionUrl(sectionUrl)) {
                 throw new NotFoundException("Вы ввели неверный адрес секции");
-            }
-        }
-    }
-
-    public void verifyOnExistenceSubsectionUrl(String subsectionUrl) {
-        if (subsectionUrl != null) {
-            if (staticInfoDao.isExistsSectionUrl(subsectionUrl)) {
-                throw new NotFoundException("Вы ввели неверный адрес субсекции");
             }
         }
     }
@@ -40,12 +32,6 @@ public class SearchValidator {
     public void verifyOnNotNullSectionUrl(String sectionUrl) {
         if (sectionUrl == null) {
             throw new AuthException("Введите адрес секции");
-        }
-    }
-
-    public void verifyOnNotNullSubsectionUrl(String subsectionUrl) {
-        if (subsectionUrl == null) {
-            throw new AuthException("Введите адрес субсекции");
         }
     }
 }

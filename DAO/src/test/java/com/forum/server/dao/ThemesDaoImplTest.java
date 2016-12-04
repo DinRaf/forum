@@ -25,15 +25,10 @@ public class ThemesDaoImplTest {
 
     private static final long THEME_ID = 1;
     private static final long USER_ID = 11;
-    private static final int SECTION_ID = 1;
-    private static final int SUBSECTION_ID = 1;
     private static final long THEME_DATE= 1472576342674L;
     private static final long MESSAGES_COUNT= 0;
     private static final String TITLE = "Spring JPA";
     private static final boolean STATUS = true;
-    private static final String KEYWORD = "JPA";
-    private static final int OFFSET = 1;
-    private static final int COUNT = 2;
 
     @Autowired
     private ThemesDao themesDao;
@@ -86,10 +81,4 @@ public class ThemesDaoImplTest {
     public void deleteTheme() {
         themesDao.deleteTheme(THEME_ID);
     }
-
-    @Test
-    public void getThemesByKeywordSectionIdSubsectionIdWithLimitOffset() {
-//        assertNotNull(themesDao.getThemesByKeywordSectionUrlSubsectionUrlWithLimitOffset(KEYWORD, SECTION_ID, SUBSECTION_ID, OFFSET, COUNT));
-    }
-
 }

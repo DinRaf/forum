@@ -43,9 +43,9 @@ public class UsersDaoImpl implements UsersDao {
     private static final String SQL_GET_ID_BY_MAIL = "SELECT user_id FROM user_info WHERE mail = ?;";
     private static final String SQL_GET_ID_BY_NICKNAME = "SELECT user_id FROM short_user WHERE LOWER(nick_name) = ?;";
     private static final String SQL_GET_ID_BY_TOKEN = "SELECT user_id FROM auth WHERE token = ?;";
-    private static final String SQL_ADD_SHORT_USER = "INSERT INTO short_user (nick_name, rating, avatar, rights) VALUES (?, ?, ?, ?);";
+    private static final String SQL_ADD_SHORT_USER_RETURN_ID = "INSERT INTO short_user (nick_name, rating, avatar, rights) VALUES (?, ?, ?, ?) RETURNING user_id;";
     private static final String SQL_UPDATE_SHORT_USER = "UPDATE short_user SET avatar = ? WHERE user_id = ?;;";
-    private static final String SQL_ADD_USER_INFO = "INSERT INTO user_info (user_id, mail, birth_date, info, registration_time, last_session, messages_count, themes_count, pass_hash, name) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+    private static final String SQL_ADD_USER_INFO = "INSERT INTO user_info (user_id, mail, birth_date, info, registration_time, messages_count, themes_count, pass_hash, name) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);";
     private static final String SQL_UPDATE_USER_INFO_WITH_PASS_HASH = "UPDATE user_info SET mail = ?, pass_hash = ?, birth_date = ?, info = ?, name = ? WHERE user_id = ?;";
     private static final String SQL_GET_USER_BY_THEME_ID = "SELECT * FROM short_user WHERE user_id = (SELECT user_id FROM theme WHERE theme_id = ?) ;";
     private static final String SQL_GET_RIGHTS_BY_TOKEN = "SELECT rights FROM short_user WHERE user_id = (SELECT user_id FROM auth WHERE token = ?);";
@@ -128,13 +128,13 @@ public class UsersDaoImpl implements UsersDao {
     }
 
     public void save(User user) {
-        jdbcTemplate.update(SQL_ADD_SHORT_USER,
+        long userId = jdbcTemplate.queryForObject(SQL_ADD_SHORT_USER_RETURN_ID, long.class,
                 new Object[]{user.getNickname(),
                         user.getRating(),
                         user.getAvatar(),
                         user.getRights()});
         jdbcTemplate.update(SQL_ADD_USER_INFO,
-                new Object[]{getIdByNickName(user.getNickname()),
+                new Object[]{userId,
                         user.getMail(),
                         user.getDateOfBirth(),
                         user.getInfo(),

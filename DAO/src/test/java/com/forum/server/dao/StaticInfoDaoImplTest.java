@@ -4,7 +4,6 @@ import com.forum.server.dao.configs.PersistenceConfig;
 import com.forum.server.dao.interfaces.StaticInfoDao;
 import com.forum.server.models.staticInfo.Info;
 import com.forum.server.models.staticInfo.Section;
-import com.forum.server.models.staticInfo.Subsection;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +12,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 /**
  * 31.08.16
@@ -35,12 +35,6 @@ public class StaticInfoDaoImplTest {
     public void getSections() throws Exception {
         List<Section> sections = staticInfoDao.getSections();
         assertNotNull(sections);
-    }
-
-    @Test
-    public void getSubections() throws Exception {
-//        List<Subsection> subsections = staticInfoDao.getSubsections(SECTION_ID);
-//        assertNotNull(subsections);
     }
 
     @Test

@@ -59,9 +59,9 @@ public class UserServiceImpl implements UserService {
 
     public ShortUserDto getUser(String token, String nickname) {
         userValidator.verifyOnExistence(nickname);
-        String rightsString = usersDao.getRightsByToken(token);
-        int rights = map.get(rightsString);
         if (token != null && tokensDao.isExistsToken(token)) {
+            String rightsString = usersDao.getRightsByToken(token);
+            int rights = map.get(rightsString);
             if (usersDao.getNicknameByToken(token).toLowerCase().equals(nickname.toLowerCase()) && rights > 0) {
                 return conversionResultFactory.convertUser(usersDao.getUserByNickname(nickname));
             } else if (rights > 1) {
@@ -75,7 +75,7 @@ public class UserServiceImpl implements UserService {
 
     public ShortUserDto updateUser(String token, String nickname, UserUpdateDto userInfo) {
         verify(token);
-        if (usersDao.getNicknameByToken(token).toLowerCase().equals(nickname.toLowerCase())) {
+        if (!usersDao.getNicknameByToken(token).toLowerCase().equals(nickname.toLowerCase())) {
             String rights = usersDao.getRightsByToken(token);
             rightsValidator.updateUser(rights);
         }

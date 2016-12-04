@@ -16,9 +16,6 @@ public class QueryResultInfoDto {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String section = null;
 
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    private String subsection = null;
-
     public QueryResultInfoDto(String code, String status) {
         this.code = code;
         this.status = status;
@@ -34,13 +31,6 @@ public class QueryResultInfoDto {
         this.code = code;
         this.status = status;
         this.section = section;
-    }
-
-    public QueryResultInfoDto(String code, String status, Integer count, String subsection) {
-        this.code = code;
-        this.status = status;
-        this.count = count;
-        this.subsection = subsection;
     }
 
     /**
@@ -81,17 +71,10 @@ public class QueryResultInfoDto {
         return section;
     }
 
-    public String getSubsection() {
-        return subsection;
-    }
-
     public void setSection(String section) {
         this.section = section;
     }
 
-    public void setSubsection(String subsection) {
-        this.subsection = subsection;
-    }
 
     @Override
     public boolean equals(Object o) {
