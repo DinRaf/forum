@@ -2,6 +2,7 @@ package com.forum.server.services.implementations;
 
 import com.forum.server.converters.ConversionListResultFactory;
 import com.forum.server.dao.interfaces.SearchDao;
+import com.forum.server.dao.interfaces.StaticInfoDao;
 import com.forum.server.dao.interfaces.TagsDao;
 import com.forum.server.dto.tag.TagsDto;
 import com.forum.server.dto.theme.ThemeSearchResultDto;
@@ -42,6 +43,9 @@ public class SearchServiceImpl implements SearchService {
     @Autowired
     private TagsDao tagsDao;
 
+    @Autowired
+    private StaticInfoDao staticInfoDao;
+
     public ThemeSearchResultDto searchThemes(String keyword, Integer offset, int count, String sectionUrl) {
 
         if (offset == null || offset < 0) {
@@ -65,6 +69,7 @@ public class SearchServiceImpl implements SearchService {
         }
         List<ThemeSearch> themeSearches = new LinkedList<>();
         Integer resultCount;
+        String sectionName = null;
         if (sectionUrl == null) {
             if (keyword == null) {
                 resultCount = searchDao.getThemesCount();
@@ -78,6 +83,7 @@ public class SearchServiceImpl implements SearchService {
                 }
             }
         } else {
+            sectionName = staticInfoDao.getSectionNameByUrl(sectionUrl);
             if (keyword == null) {
                 resultCount = searchDao.getCountBySectionUrl(sectionUrl);
                 if (resultCount != 0) {
@@ -93,6 +99,7 @@ public class SearchServiceImpl implements SearchService {
         themeSearches.forEach(themeSearch -> themeSearch.setTags(tagsDao.getTagsByThemeId(themeSearch.getId())));
         return new ThemeSearchResultDto.Builder()
                 .Count(resultCount)
+                .Section(sectionName)
                 .ThemesSearhDto(conversionListResultFactory.convertThemes(themeSearches))
                 .build();
     }
@@ -120,7 +127,7 @@ public class SearchServiceImpl implements SearchService {
 
     @Override
     public TagsDto searchTags(String keyword, Integer offset, int count) {
-        if (offset == null) {
+        if (offset == null || offset < 0) {
             offset = 0;
         }
         if (keyword == null || keyword.isEmpty()) {

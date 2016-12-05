@@ -31,6 +31,7 @@ public class StaticInfoDaoImpl implements StaticInfoDao {
     private static final String SQL_DELETE_SECTION_BY_URL = "DELETE FROM section WHERE url = ?;";
     private static final String SQL_DELETE_INFO_BY_IDENTIFIER = "DELETE FROM info WHERE identifier = ?;";
     private static final String SQL_ADD_INFO = "INSERT INTO info (identifier, title, text) VALUES (?, ?, ?);";
+    private static final String SQL_GET_SECTION_NAME_BY_URL = "SELECT name FROM section WHERE url ILIKE ?;";
 
     private RowMapper<Section> sectionRowMapper() {
         return (rs, i) -> new Section.Builder()
@@ -84,5 +85,9 @@ public class StaticInfoDaoImpl implements StaticInfoDao {
                 infoCreateDto.getTitle(),
                 infoCreateDto.getText(),
         });
+    }
+
+    public String getSectionNameByUrl(String sectionUrl) {
+        return jdbcTemplate.queryForObject(SQL_GET_SECTION_NAME_BY_URL, String.class, sectionUrl);
     }
 }

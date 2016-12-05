@@ -11,6 +11,11 @@ import com.forum.server.dto.Data;
 public class ThemeSearchResultDto implements Data {
     private ThemesSearchDto themesSearchDto;
     private int count;
+    private String section;
+
+    public String getSection() {
+        return section;
+    }
 
     public void setCount(int count) {
         this.count = count;
@@ -30,15 +35,22 @@ public class ThemeSearchResultDto implements Data {
     private ThemeSearchResultDto(Builder builder) {
         this.count = builder.count;
         this.themesSearchDto = builder.themesSearchDto;
+        this.section = builder.section;
     }
 
     public static class Builder {
         private ThemesSearchDto themesSearchDto;
         private int count;
+        private String section;
 
         public Builder ThemesSearhDto(ThemesSearchDto themesSearchDto) {
             this.themesSearchDto = themesSearchDto;
             return  this;
+        }
+
+        public Builder Section(String section) {
+            this.section = section;
+            return this;
         }
 
         public Builder Count(int count) {

@@ -32,6 +32,13 @@ public class ResponseBuilder {
         return new ResponseEntity<>(queryResultDto, headers, HttpStatus.OK);
     }
 
+    public static ResponseEntity<QueryResultDto> buildResponseGetWithCountAndSection(Data data, Integer count, String section) {
+        HttpHeaders headers = AdditionalUtil.createHttpHeaders();
+        QueryResultInfoDto responseInfo = new QueryResultInfoDto("200", "success", count, section);
+        QueryResultDto queryResultDto = new QueryResultDto(responseInfo, data);
+        return new ResponseEntity<>(queryResultDto, headers, HttpStatus.OK);
+    }
+
     public static ResponseEntity<QueryResultDto> buildResponsePostAndPut(Data data) {
         HttpHeaders headers = AdditionalUtil.createHttpHeaders();
         QueryResultInfoDto responseInfo = new QueryResultInfoDto("201", "success");

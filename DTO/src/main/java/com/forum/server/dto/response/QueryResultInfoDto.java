@@ -33,6 +33,13 @@ public class QueryResultInfoDto {
         this.section = section;
     }
 
+    public QueryResultInfoDto(String code, String status, Integer count, String section) {
+        this.code = code;
+        this.status = status;
+        this.count = count;
+        this.section = section;
+    }
+
     /**
      * HTTP-код
      **/

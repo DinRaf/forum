@@ -28,4 +28,6 @@ public interface StaticInfoDao {
     void deleteInfoByIdentifier(String identifier);
 
     void saveInfo(InfoCreateDto infoCreateDto);
+
+    String getSectionNameByUrl(String sectionUrl);
 }

@@ -35,7 +35,7 @@ public class SearchController {
                                                        @RequestParam(value = "count") int count,
                                                        @RequestParam(value = "section-url", required = false) String sectionUrl) {
         ThemeSearchResultDto themeSearchResultDto = searchService.searchThemes(keyword, offset, count, sectionUrl);
-        return buildResponseGetWithCount(themeSearchResultDto.getThemesSearchDto(), themeSearchResultDto.getCount());
+        return buildResponseGetWithCountAndSection(themeSearchResultDto.getThemesSearchDto(), themeSearchResultDto.getCount(), themeSearchResultDto.getSection());
     }
 
     @RequestMapping(value = "/tags", method = GET)
