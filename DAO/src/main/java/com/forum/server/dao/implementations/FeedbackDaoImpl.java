@@ -24,13 +24,13 @@ public class FeedbackDaoImpl implements FeedbackDao {
     @Autowired
     private NamedParameterJdbcTemplate namedJdbcTemplate;
 
-    private static final String SQL_SAVE_FEEDBACK = ("INSERT INTO feedback (feedback) VALUES (?);");
-    private static final String SQL_GET_FEEDBACK_WITH_LIMIT_OFFSET = ("SELECT feedback FROM feedback ORDER BY id LIMIT :count OFFSET :offset;");
+    private static final String SQL_SAVE_FEEDBACK = "INSERT INTO feedback (feedback) VALUES (?);";
+    private static final String SQL_GET_FEEDBACK_WITH_LIMIT_OFFSET = "SELECT feedback FROM feedback ORDER BY id LIMIT :count OFFSET :offset;";
 
     private RowMapper<FeedbackDto> feedbackDtoRowMapper(){
-            return (rs, rowNum) -> new FeedbackDto.Builder()
-                    .feedback(rs.getString("feedback"))
-                    .build();
+        return (rs, rowNum) -> new FeedbackDto.Builder()
+            .feedback(rs.getString("feedback"))
+            .build();
     }
 
     public void saveFeedback(String feedback) {
