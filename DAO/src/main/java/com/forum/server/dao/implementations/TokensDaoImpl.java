@@ -15,7 +15,7 @@ import org.springframework.stereotype.Repository;
 public class TokensDaoImpl implements TokensDao {
 
     @Autowired
-    private JdbcTemplate jdbcTemplate;
+    private final JdbcTemplate jdbcTemplate;
 
     private static final String SQL_IS_EXISTS_TOKEN = "SELECT CASE WHEN EXISTS(SELECT user_id FROM auth WHERE token = ?)THEN TRUE ELSE FALSE END ;";
     private static final String SQL_ADD_TOKEN = "INSERT INTO auth (user_id, token) VALUES (?, ?);";

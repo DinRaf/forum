@@ -26,10 +26,10 @@ public class
 ThemesDaoImpl implements ThemesDao {
 
     @Autowired
-    private JdbcTemplate jdbcTemplate;
+    private final JdbcTemplate jdbcTemplate;
 
     @Autowired
-    private NamedParameterJdbcTemplate namedJdbcTemplate;
+    private final NamedParameterJdbcTemplate namedJdbcTemplate;
 
     private static final String SQL_GET_ID_BY_DATE_AND_USER_ID = "SELECT theme_id FROM theme WHERE user_id = :userId AND date = :date;";
     private static final String SQL_ADD_THEME = "INSERT INTO theme (user_id, section_id, title, date, messages_count, status) VALUES (?, (SELECT section_id FROM section WHERE LOWER(url) = ?), ?, ?, ?, ?) RETURNING theme_id;";
