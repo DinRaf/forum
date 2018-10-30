@@ -24,29 +24,42 @@ public class MarksDaoImpl implements MarksDao {
 
     public boolean isExistsMark(long userId, long messageId, boolean grade) {
         return jdbcTemplate.queryForObject(SQL_IS_EXISTS_MARK,
-                boolean.class,
-                new Object[]{userId,
-                    messageId,
-                    grade});
+            boolean.class,
+            new Object[] {
+                userId,
+                messageId,
+                grade
+            }
+        );
     }
 
     public void save(long userId, long messageId, boolean grade) {
         if (isGraded(userId, messageId)) {
             jdbcTemplate.update(SQL_DELETE_GRADE,
-                    new Object[]{userId,
-                            messageId});
-        } else {
+                new Object[] {
+                    userId,
+                    messageId
+                }
+            );
+        }
+        else {
             jdbcTemplate.update(SQL_ADD_MARK,
-                    new Object[]{userId,
-                            messageId,
-                            grade});
+                    new Object[] {
+                        userId,
+                        messageId,
+                        grade
+                    }
+            );
         }
     }
 
     private boolean isGraded(long userId, long messageId) {
         return jdbcTemplate.queryForObject(SQL_IS_GRADED,
                 boolean.class,
-                new Object[]{userId,
-                        messageId});
+                new Object[] {
+                    userId,
+                    messageId
+                }
+        );
     }
 }
