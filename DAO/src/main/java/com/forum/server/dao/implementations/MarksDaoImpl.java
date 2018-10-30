@@ -15,7 +15,7 @@ import org.springframework.stereotype.Repository;
 public class MarksDaoImpl implements MarksDao {
 
     @Autowired
-    private JdbcTemplate jdbcTemplate;
+    private final JdbcTemplate jdbcTemplate;
 
     private static final String SQL_IS_EXISTS_MARK = "SELECT CASE WHEN EXISTS(SELECT user_id FROM message_mark WHERE user_id = ? AND message_id = ? AND mark = ?)THEN TRUE ELSE FALSE END ;";
     private static final String SQL_IS_GRADED = "SELECT CASE WHEN EXISTS(SELECT user_id FROM message_mark WHERE user_id = ? AND message_id = ?)THEN TRUE ELSE FALSE END ;";

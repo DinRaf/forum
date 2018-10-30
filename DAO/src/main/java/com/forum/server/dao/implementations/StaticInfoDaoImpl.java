@@ -21,7 +21,7 @@ import java.util.List;
 public class StaticInfoDaoImpl implements StaticInfoDao {
 
     @Autowired
-    private JdbcTemplate jdbcTemplate;
+    private final JdbcTemplate jdbcTemplate;
 
     private static final String SQL_GET_SECTIONS = "SELECT * FROM section ORDER BY section_id;";
     private static final String SQL_GET_INFO_BY_IDENTIFIER = "SELECT * FROM info WHERE identifier = ?;";
