@@ -31,13 +31,14 @@ public class MessagesDaoImpl implements MessagesDao {
     private static final String SQL_GET_MESSAGES_WITH_OFFSET = "SELECT * FROM message INNER JOIN short_user ON message.user_id = short_user.user_id WHERE theme_id = :themeId ORDER BY message_id OFFSET :offset;";
     private static final String SQL_UPDATE_MESSAGE = "UPDATE message SET update = :update, updater_id = :updater_id, updater_nick_name = :updater_nick_name WHERE message_id = :message_id RETURNING true;";
     private static final String SQL_GET_MESSAGES_WITH_LIMIT_OFFSET = "SELECT * FROM message INNER JOIN short_user ON message.user_id = short_user.user_id WHERE theme_id = :themeId ORDER BY message_id LIMIT :count OFFSET :offset;";
+    private static final String SQL_GET_MESSAGES_WITH_LIMIT_OFFSET_SET_LINKED = "SELECT CASE WHEN EXISTS(SELECT mark FROM message_mark WHERE message_id = ? AND user_id = ?)THEN (SELECT mark FROM message_mark WHERE message_id = ? AND user_id = ? LIMIT 1) ELSE NULL END ;";
     private static final String SQL_IS_EXISTS_MESSAGE = "SELECT CASE WHEN EXISTS(SELECT theme_id FROM message WHERE message_id = ?)THEN TRUE ELSE FALSE END ;";
     private static final String SQL_DELETE_MESSAGE = "DELETE FROM message WHERE message_id = :message_id;";
     private static final String SQL_GET_USER_ID_BY_MESSAGE_ID = "SELECT user_id FROM message WHERE message_id = ?;";
     private static final String SQL_GET_OFFSET_BY_ID = "SELECT count(*) FROM message WHERE theme_id = (SELECT theme_id FROM message WHERE message_id = :messageId) AND message_id < :messageId;";
     private static final String SQL_GET_MESSAGES_IDS_BY_THEME_ID = "SELECT message_id FROM message WHERE theme_id = ?;";
     private static final String SQL_IS_AUTHOR_BY_TOKEN_MESSAGEID = "SELECT CASE WHEN EXISTS(SELECT theme_id FROM message WHERE message_id = ? AND user_id = (SELECT user_id FROM auth WHERE token = ?)) THEN TRUE ELSE FALSE END;";
-
+    
     private RowMapper<Message> messageRowMapper(){
         return (rs, rowNum) -> {
             User user = new User.Builder()
@@ -135,13 +136,24 @@ public class MessagesDaoImpl implements MessagesDao {
         params.put("count", count);
         List<Message> messages = namedJdbcTemplate.query(SQL_GET_MESSAGES_WITH_LIMIT_OFFSET, params, messageRowMapper());
         for (Message m: messages) {
-            m.setLiked(jdbcTemplate.queryForObject("SELECT CASE WHEN EXISTS(SELECT mark FROM message_mark WHERE message_id = ? AND user_id = ?)THEN (SELECT mark FROM message_mark WHERE message_id = ? AND user_id = ? LIMIT 1) ELSE NULL END ;", Boolean.class, new Object[]{m.getMessageId(), userId, m.getMessageId(), userId}));
+            m.setLiked(jdbcTemplate.queryForObject(SQL_GET_MESSAGES_WITH_LIMIT_OFFSET_SET_LINKED, Boolean.class,
+                new Object[] 
+                    {
+                        m.getMessageId(),
+                        userId,
+                        m.getMessageId(),
+                        userId
+                    }
+            ));
         }
         return messages;
     }
 
     public boolean isAuthorByMessageIdAndToken(long messageId, String token) {
-        return jdbcTemplate.queryForObject(SQL_IS_AUTHOR_BY_TOKEN_MESSAGEID, boolean.class, new Object[]{messageId, token});
+        return jdbcTemplate.queryForObject(SQL_IS_AUTHOR_BY_TOKEN_MESSAGEID, boolean.class, new Object[] {
+            messageId,
+            token
+        });
     }
 
 }
