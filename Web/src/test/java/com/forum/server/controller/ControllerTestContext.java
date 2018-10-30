@@ -9,7 +9,7 @@ import org.springframework.jmx.support.RegistrationPolicy;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 /**
- * 15.08.16
+ * 15.08.2016
  *
  * @author Dinar Rafikov (First Software Engineering Platform)
  * @version 1.0
@@ -42,5 +42,4 @@ public class ControllerTestContext {
     public ThemeService themeService() {
         return Mockito.mock(ThemeService.class);
     }
-
 }
