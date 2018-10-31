@@ -21,14 +21,15 @@ public class AuthDtoToUserConverter implements Converter<AuthDto, User> {
 
     @Override
     public User convert(AuthDto authDto) {
-        return new User.Builder().Nickname(authDto.getNickname())
-                .Mail(authDto.getMail())
-                .HashPassword(encoder.encode(authDto.getPassword()))
-                .RegistrationTime(System.currentTimeMillis())
-                .MessagesCount(0l)
-                .ThemesCount(0l)
-                .Rating(0l)
-                .Rights("unverified")
+        return User.builder()
+                .nickname(authDto.getNickname())
+                .mail(authDto.getMail())
+                .hashPassword(encoder.encode(authDto.getPassword()))
+                .registrationTime(System.currentTimeMillis())
+                .messagesCount(0l)
+                .themesCount(0l)
+                .rating(0l)
+                .rights("unverified")
                 .build();
     }
 

@@ -16,7 +16,7 @@ public class StaticInfoServiceImplTest {
 
     @Test
     public void createSection() {
-        SectionCreateDto sectionCreateDto = new SectionCreateDto.Builder()
+        SectionCreateDto sectionCreateDto = new SectionCreateDto.builder()
                 .setName("new")
                 .setUrl("new")
                 .build();

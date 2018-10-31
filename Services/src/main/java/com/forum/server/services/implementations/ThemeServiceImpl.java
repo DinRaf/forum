@@ -87,24 +87,24 @@ public class ThemeServiceImpl implements ThemeService {
         message.setMessageId(messagesDao.getIdByUserIdAndDate(userId, message.getDate()));
         ShortUserDto userDto = conversionResultFactory.convert(user);
         List<MessageDto> messageDtos = new ArrayList<>();
-        messageDtos.add(new MessageDto.Builder()
-                .MessageId(message.getMessageId())
-                .Author(userDto)
-                .Date(message.getDate())
-                .Message(message.getBody())
-                .Rating(message.getRating())
-                .Updated(new FixMessageDto.Builder()
+        messageDtos.add(MessageDto.builder()
+                .messageId(message.getMessageId())
+                .author(userDto)
+                .date(message.getDate())
+                .message(message.getBody())
+                .rating(message.getRating())
+                .updated(FixMessageDto.builder()
                         .build())
                 .build());
-        return new ThemeDto.Builder()
-                .ThemeId(themeId)
-                .Date(theme.getDate())
-                .AuthorId(userId)
-                .Status(theme.isStatus())
-                .MessagesCount(1L)
-                .Title(theme.getTitle())
-                .Messages(new MessagesDto(messageDtos))
-                .Tags(conversionListResultFactory.convertTags(tagsDao.getTagsByThemeId(themeId)))
+        return ThemeDto.builder()
+                .themeId(themeId)
+                .date(theme.getDate())
+                .authorId(userId)
+                .status(theme.isStatus())
+                .messagesCount(1L)
+                .title(theme.getTitle())
+                .messages(new MessagesDto(messageDtos))
+                .tags(conversionListResultFactory.convertTags(tagsDao.getTagsByThemeId(themeId)))
                 .build();
     }
 
@@ -137,9 +137,9 @@ public class ThemeServiceImpl implements ThemeService {
         themeValidator.verifyTitleOnNotNull(theme.getTitle());
         themeValidator.verifyOnExistence(themeId);
         staticInfoValidator.verifySectionOnExistence(theme.getSectionUrl());
-        themesDao.saveUpdate(new ThemeUpdate.Builder()
-                        .Title(theme.getTitle())
-                        .SectionUrl(theme.getSectionUrl())
+        themesDao.saveUpdate(ThemeUpdate.builder()
+                        .title(theme.getTitle())
+                        .sectionUrl(theme.getSectionUrl())
                         .build(),
                 themeId);
         tagsDao.deleteTagsFromThemeByThemeId(themeId);

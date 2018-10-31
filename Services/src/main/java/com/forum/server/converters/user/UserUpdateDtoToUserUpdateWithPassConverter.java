@@ -19,13 +19,13 @@ public class UserUpdateDtoToUserUpdateWithPassConverter implements Converter<Use
 
     @Override
     public UserUpdate convert(UserUpdateDto userUpdateDto) {
-        return new UserUpdate.Builder()
-                .DateOfBirth(userUpdateDto.getDateOfBirth())
-                .Info(userUpdateDto.getInfo())
-                .Mail(userUpdateDto.getMail())
-                .Name(userUpdateDto.getName())
-                .HashPassword(encoder.encode(userUpdateDto.getPassword()))
-                .Avatar(userUpdateDto.getAvatar())
+        return UserUpdate.builder()
+                .dateOfBirth(userUpdateDto.getDateOfBirth())
+                .info(userUpdateDto.getInfo())
+                .mail(userUpdateDto.getMail())
+                .name(userUpdateDto.getName())
+                .hashPassword(encoder.encode(userUpdateDto.getPassword()))
+                .avatar(userUpdateDto.getAvatar())
                 .build();
     }
 }

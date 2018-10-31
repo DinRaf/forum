@@ -34,18 +34,18 @@ public class StaticInfoDaoImpl implements StaticInfoDao {
     private static final String SQL_GET_SECTION_NAME_BY_URL = "SELECT name FROM section WHERE url ILIKE ?;";
 
     private RowMapper<Section> sectionRowMapper() {
-        return (rs, i) -> new Section.Builder()
-                .SectionId(rs.getLong("section_id"))
-                .Name(rs.getString("name"))
-                .ThemesCount(rs.getLong("themes_count"))
-                .Url(rs.getString("url"))
+        return (rs, i) -> Section.builder()
+                .sectionId(rs.getLong("section_id"))
+                .name(rs.getString("name"))
+                .themesCount(rs.getLong("themes_count"))
+                .url(rs.getString("url"))
                 .build();
     }
 
     private RowMapper<Info> infoRowMapper() {
-        return (rs, i) -> new Info.Builder()
-                .Title(rs.getString("title"))
-                .Text(rs.getString("text"))
+        return (rs, i) -> Info.builder()
+                .title(rs.getString("title"))
+                .text(rs.getString("text"))
                 .build();
     }
 

@@ -15,10 +15,10 @@ public class MessageTextToMessageConverter implements Converter<String, Message>
 
     @Override
     public Message convert(String message) {
-        return new Message.Builder()
-                .Body(message)
-                .Date(System.currentTimeMillis())
-                .Rating(0l)
+        return Message.builder()
+                .body(message)
+                .date(System.currentTimeMillis())
+                .rating(0l)
                 .build();
     }
 }

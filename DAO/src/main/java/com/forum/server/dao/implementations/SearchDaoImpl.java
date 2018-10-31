@@ -1,10 +1,6 @@
 package com.forum.server.dao.implementations;
 
 import com.forum.server.dao.interfaces.SearchDao;
-import com.forum.server.dto.tag.TagDto;
-import com.forum.server.dto.tag.TagsDto;
-import com.forum.server.dto.theme.ThemeSearchDto;
-import com.forum.server.models.tag.Tag;
 import com.forum.server.models.theme.ThemeSearch;
 import com.forum.server.models.user.ShortUser;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,8 +9,9 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import java.sql.Array;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 12.09.16
@@ -50,25 +47,24 @@ public class SearchDaoImpl implements SearchDao {
     private static final String SQL_GET_COUNT_BY_KEYWORD_AND_SECTION_URL = "SELECT count(*) FROM theme, to_tsquery('russian', ?) q WHERE (theme_fts @@ q OR theme.theme_id = ANY(SELECT theme_id FROM message, to_tsquery('russian', ?) q WHERE message.message_fts @@ q)) AND section_id = (SELECT section_id FROM section WHERE LOWER(url) = ?);";
 
     private RowMapper<ShortUser> shortUserRowMapper() {
-        return (rs, i) -> new ShortUser.Builder()
-                .UserId(rs.getLong("user_id"))
-                .Nickname(rs.getString("nick_name"))
-                .Rating(rs.getLong("rating"))
-                .Avatar(rs.getString("avatar"))
-                .Rights(rs.getString("rights"))
+        return (rs, i) -> ShortUser.baseBuilder()
+                .userId(rs.getLong("user_id"))
+                .nickname(rs.getString("nick_name"))
+                .rating(rs.getLong("rating"))
+                .rights(rs.getString("rights"))
                 .build();
     }
 
     private RowMapper<ThemeSearch> themeSearchDtoRowMapper() {
-        return (rs, rowNum) -> new ThemeSearch.Builder()
-                .Id(rs.getLong("theme_id"))
-                .AuthorId(rs.getLong("user_id"))
-                .Nickname(rs.getString("nick_name"))
-                .Date(rs.getLong("date"))
-                .SectionUrl(rs.getString("url"))
-                .MessagesCount(rs.getLong("messages_count"))
-                .Status(rs.getBoolean("status"))
-                .Title(rs.getString("title"))
+        return (rs, rowNum) -> ThemeSearch.builder()
+                .id(rs.getLong("theme_id"))
+                .authorId(rs.getLong("user_id"))
+                .nickname(rs.getString("nick_name"))
+                .date(rs.getLong("date"))
+                .sectionUrl(rs.getString("url"))
+                .messagesCount(rs.getLong("messages_count"))
+                .status(rs.getBoolean("status"))
+                .title(rs.getString("title"))
                 .build();
     }
 

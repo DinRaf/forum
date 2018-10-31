@@ -1,7 +1,6 @@
 package com.forum.server.dao.implementations;
 
 import com.forum.server.dao.interfaces.ThemesDao;
-import com.forum.server.dto.theme.ThemeSearchDto;
 import com.forum.server.models.theme.Theme;
 import com.forum.server.models.theme.ThemeUpdate;
 import com.forum.server.models.user.ShortUser;
@@ -47,20 +46,19 @@ ThemesDaoImpl implements ThemesDao {
 
     private RowMapper<Theme> themeRowMapper() {
         return (rs, rowNum) -> {
-            ShortUser user = new ShortUser.Builder()
-                    .UserId(rs.getInt("user_id"))
-                    .Nickname(rs.getString("nick_name"))
-                    .Rating(rs.getLong("rating"))
-                    .Avatar(rs.getString("avatar"))
+            ShortUser user = ShortUser.baseBuilder()
+                    .userId(rs.getInt("user_id"))
+                    .nickname(rs.getString("nick_name"))
+                    .rating(rs.getLong("rating"))
                     .build();
 
-            return new Theme.Builder()
-                    .Date(rs.getLong("date"))
-                    .Status(rs.getBoolean("status"))
-                    .User(user)
-                    .ThemeId(rs.getLong("theme_id"))
-                    .Title(rs.getString("title"))
-                    .MessagesCount(rs.getLong("messages_count"))
+            return Theme.builder()
+                    .date(rs.getLong("date"))
+                    .status(rs.getBoolean("status"))
+                    .user(user)
+                    .themeId(rs.getLong("theme_id"))
+                    .title(rs.getString("title"))
+                    .messagesCount(rs.getLong("messages_count"))
                     .build();
         };
     }

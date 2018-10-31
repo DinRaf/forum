@@ -4,7 +4,6 @@ import com.forum.server.dao.configs.PersistenceConfig;
 import com.forum.server.dao.interfaces.MessagesDao;
 import com.forum.server.models.message.Message;
 import com.forum.server.models.user.ShortUser;
-import com.forum.server.models.user.User;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,15 +33,15 @@ public class MessageDaoImplTest {
 
     @Test
     public void save() throws Exception {
-        ShortUser user = new ShortUser.Builder()
-                .UserId(USER_ID)
+        ShortUser user = ShortUser.baseBuilder()
+                .userId(USER_ID)
                 .build();
-         Message message = new Message.Builder()
-                 .User(user)
-                 .ThemeId(THEME_ID)
-                 .Date(System.currentTimeMillis())
-                 .Body("Name can't be useless")
-                 .Rating(0)
+         Message message = Message.builder()
+                 .user(user)
+                 .themeId(THEME_ID)
+                 .date(System.currentTimeMillis())
+                 .body("Name can't be useless")
+                 .rating(0)
                  .build();
          messagesDao.save(message);
     }

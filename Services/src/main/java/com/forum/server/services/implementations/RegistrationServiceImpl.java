@@ -72,9 +72,9 @@ public class RegistrationServiceImpl implements RegistrationService {
                     throw new AuthException("Неверный email или пароль");
                 }
                 tokensDao.addToken(userId, token);
-                return new LoginDto.Builder()
-                        .Token(token)
-                        .Nickname(usersDao.getNicknameByMail(identifier))
+                return LoginDto.builder()
+                        .token(token)
+                        .nickname(usersDao.getNicknameByMail(identifier))
                         .build();
             }
             throw new AuthException("Неверный email или пароль");
@@ -90,9 +90,9 @@ public class RegistrationServiceImpl implements RegistrationService {
                     throw new AuthException("Неверный никнейм или пароль");
                 }
                 tokensDao.addToken(userId, token);
-                return new LoginDto.Builder()
-                        .Token(token)
-                        .Nickname(identifier)
+                return LoginDto.builder()
+                        .token(token)
+                        .nickname(identifier)
                         .build();
             }
             throw new AuthException("Неверный никнейм или пароль");
@@ -122,9 +122,9 @@ public class RegistrationServiceImpl implements RegistrationService {
         String token = tokenGenerator.generateToken();
         tokensDao.addToken(userId, token);
         messageSender.sendMessage(userId, mail, nickName);
-        return new LoginDto.Builder()
-                .Token(token)
-                .Nickname(authDto.getNickname())
+        return LoginDto.builder()
+                .token(token)
+                .nickname(authDto.getNickname())
                 .build();
     }
 

@@ -15,16 +15,16 @@ public class ThemeSearchToThemeSearchDtoConverter implements Converter<ThemeSear
     @Override
     public ThemeSearchDto convert(ThemeSearch themeSearch) {
         ListTagToTagsDtoConverter converter = new ListTagToTagsDtoConverter();
-        return new ThemeSearchDto.Builder()
-                .Tags(converter.convert(themeSearch.getTags()))
-                .Date(themeSearch.getDate())
-                .Nickname(themeSearch.getNickname())
-                .AuthorId(themeSearch.getAuthorId())
-                .Id(themeSearch.getId())
-                .MessagesCount(themeSearch.getMessagesCount())
-                .Status(themeSearch.isStatus())
-                .Title(themeSearch.getTitle())
-                .SectionUrl(themeSearch.getSectionUrl())
+        return ThemeSearchDto.builder()
+                .tags(converter.convert(themeSearch.getTags()))
+                .date(themeSearch.getDate())
+                .nickname(themeSearch.getNickname())
+                .authorId(themeSearch.getAuthorId())
+                .id(themeSearch.getId())
+                .messagesCount(themeSearch.getMessagesCount())
+                .status(themeSearch.isStatus())
+                .title(themeSearch.getTitle())
+                .sectionUrl(themeSearch.getSectionUrl())
                 .build();
     }
 }

@@ -57,37 +57,35 @@ public class UsersDaoImpl implements UsersDao {
     private static final String SQL_GET_MAIL_BY_TOKEN = "SELECT mail FROM user_info WHERE user_id = (SELECT user_id FROM auth WHERE token = ?);";
 
     private RowMapper<User> userRowMapper() {
-        return (rs, i) -> new User.Builder()
-                .UserId(rs.getLong("user_id"))
-                .Name(rs.getString("name"))
-                .Nickname(rs.getString("nick_name"))
-                .Rating(rs.getLong("rating"))
-                .Avatar(rs.getString("avatar"))
-                .Mail(rs.getString("mail"))
-                .DateOfBirth(rs.getLong("birth_date"))
-                .Info(rs.getString("info"))
-                .Rights(rs.getString("rights"))
-                .RegistrationTime(rs.getLong("registration_time"))
-                .MessagesCount(rs.getLong("messages_count"))
-                .ThemesCount(rs.getLong("themes_count"))
-                .HashPassword(rs.getString("pass_hash"))
+        return (rs, i) -> User.builder()
+                .userId(rs.getLong("user_id"))
+                .name(rs.getString("name"))
+                .nickname(rs.getString("nick_name"))
+                .rating(rs.getLong("rating"))
+                .mail(rs.getString("mail"))
+                .dateOfBirth(rs.getLong("birth_date"))
+                .info(rs.getString("info"))
+                .rights(rs.getString("rights"))
+                .registrationTime(rs.getLong("registration_time"))
+                .messagesCount(rs.getLong("messages_count"))
+                .themesCount(rs.getLong("themes_count"))
+                .hashPassword(rs.getString("pass_hash"))
                 .build();
     }
 
     private RowMapper<ShortUser> shortUserRowMapper() {
-        return (rs, i) -> new ShortUser.Builder()
-                .UserId(rs.getLong("user_id"))
-                .Nickname(rs.getString("nick_name"))
-                .Rating(rs.getLong("rating"))
-                .Avatar(rs.getString("avatar"))
-                .Rights(rs.getString("rights"))
+        return (rs, i) -> ShortUser.baseBuilder()
+                .userId(rs.getLong("user_id"))
+                .nickname(rs.getString("nick_name"))
+                .rating(rs.getLong("rating"))
+                .rights(rs.getString("rights"))
                 .build();
     }
 
     private RowMapper<UserVerifyResultDto> userVerifyResultDtoRowMapper() {
-        return (rs, i) -> new UserVerifyResultDto.Builder()
-                .Nickname(rs.getString("nick_name"))
-                .Rights(rs.getString("rights"))
+        return (rs, i) -> UserVerifyResultDto.builder()
+                .nickname(rs.getString("nick_name"))
+                .rights(rs.getString("rights"))
                 .build();
     }
 
@@ -131,7 +129,6 @@ public class UsersDaoImpl implements UsersDao {
         long userId = jdbcTemplate.queryForObject(SQL_ADD_SHORT_USER_RETURN_ID, long.class,
                 new Object[]{user.getNickname(),
                         user.getRating(),
-                        user.getAvatar(),
                         user.getRights()});
         jdbcTemplate.update(SQL_ADD_USER_INFO,
                 new Object[]{userId,

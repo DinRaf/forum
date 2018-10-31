@@ -11,13 +11,13 @@ public class ThemeToThemeDtoConverter implements Converter<Theme, ThemeDto> {
 
     @Override
     public ThemeDto convert(Theme theme) {
-        return new ThemeDto.Builder()
-                .Date(theme.getDate())
-                .MessagesCount(theme.getMessagesCount())
-                .Title(theme.getTitle())
-                .AuthorId(theme.getUser().getUserId())
-                .Status(theme.isStatus())
-                .ThemeId(theme.getThemeId())
+        return ThemeDto.builder()
+                .date(theme.getDate())
+                .messagesCount(theme.getMessagesCount())
+                .title(theme.getTitle())
+                .authorId(theme.getUser().getUserId())
+                .status(theme.isStatus())
+                .themeId(theme.getThemeId())
                 .build();
     }
 

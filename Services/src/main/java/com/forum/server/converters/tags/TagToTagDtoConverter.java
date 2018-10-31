@@ -13,8 +13,8 @@ import org.springframework.core.convert.converter.Converter;
 public class TagToTagDtoConverter implements Converter<Tag, TagDto> {
     @Override
     public TagDto convert(Tag tag) {
-        return new TagDto.Builder()
-                .Name(tag.getName())
+        return TagDto.builder()
+                .name(tag.getName())
                 .build();
     }
 }

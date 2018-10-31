@@ -13,7 +13,7 @@ import org.springframework.core.convert.converter.Converter;
 public class SectionToSectionDtoConverter implements Converter<Section, SectionDto> {
     @Override
     public SectionDto convert(Section section) {
-        return new SectionDto.Builder()
+        return new SectionDto.builder()
                 .Id(section.getSectionId())
                 .Name(section.getName())
                 .ThemesCount(section.getThemesCount())

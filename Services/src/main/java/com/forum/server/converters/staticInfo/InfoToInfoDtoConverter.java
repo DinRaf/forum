@@ -12,7 +12,7 @@ import org.springframework.core.convert.converter.Converter;
  */
 public class InfoToInfoDtoConverter implements Converter<Info, InfoDto>{
     public InfoDto convert(Info info) {
-        return new InfoDto.Builder()
+        return new InfoDto.builder()
                 .Title(info.getTitle())
                 .Text(info.getText())
                 .build();

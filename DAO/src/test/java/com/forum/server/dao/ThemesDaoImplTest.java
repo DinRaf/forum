@@ -35,16 +35,16 @@ public class ThemesDaoImplTest {
 
     @Test
     public void save() throws Exception {
-        ShortUser user = new ShortUser.Builder()
-                .UserId(USER_ID)
+        ShortUser user = ShortUser.baseBuilder()
+                .userId(USER_ID)
                 .build();
 
-        Theme theme = new Theme.Builder()
-                .User(user)
-                .Title(TITLE)
-                .Date(System.currentTimeMillis())
-                .MessagesCount(MESSAGES_COUNT)
-                .Status(STATUS)
+        Theme theme = Theme.builder()
+                .user(user)
+                .title(TITLE)
+                .date(System.currentTimeMillis())
+                .messagesCount(MESSAGES_COUNT)
+                .status(STATUS)
                 .build();
         themesDao.saveReturnId(theme);
     }
@@ -66,8 +66,8 @@ public class ThemesDaoImplTest {
 
 
     public void saveUpdate() {
-        ThemeUpdate themeUpdate = new ThemeUpdate.Builder()
-                .Title(TITLE)
+        ThemeUpdate themeUpdate = ThemeUpdate.builder()
+                .title(TITLE)
                 .build();
         themesDao.saveUpdate(themeUpdate, THEME_ID);
     }
