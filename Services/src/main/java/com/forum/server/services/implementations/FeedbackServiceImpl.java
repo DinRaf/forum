@@ -59,7 +59,7 @@ public class FeedbackServiceImpl implements FeedbackService {
     }
 
     private static void sendHook(String text, String nickname, String emoji) {
-        new RestTemplate().postForEntity(URL, new RequestSlack.Builder()
+        new RestTemplate().postForEntity(URL, new RequestSlack.builder()
                 .setText(text)
                 .setChannel("#feedback")
                 .setIcon_emoji(emoji)

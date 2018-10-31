@@ -97,10 +97,10 @@ public class SearchServiceImpl implements SearchService {
             }
         }
         themeSearches.forEach(themeSearch -> themeSearch.setTags(tagsDao.getTagsByThemeId(themeSearch.getId())));
-        return new ThemeSearchResultDto.Builder()
-                .Count(resultCount)
-                .Section(sectionName)
-                .ThemesSearhDto(conversionListResultFactory.convertThemes(themeSearches))
+        return ThemeSearchResultDto.builder()
+                .count(resultCount)
+                .section(sectionName)
+                .themesSearchDto(conversionListResultFactory.convertThemes(themeSearches))
                 .build();
     }
 
@@ -110,15 +110,15 @@ public class SearchServiceImpl implements SearchService {
         }
         sorting = sortingMap.get(sorting);
         if (keyword == null) {
-            return new SearchUsersDto.Builder()
-                    .Count(searchDao.getUsersCount())
-                    .ShortUsersDto(conversionListResultFactory.convertShortUsers(searchDao.getShortUsersSortedLimitOffset(offset, count, sorting)))
+            return SearchUsersDto.builder()
+                    .count(searchDao.getUsersCount())
+                    .shortUsersDto(conversionListResultFactory.convertShortUsers(searchDao.getShortUsersSortedLimitOffset(offset, count, sorting)))
                     .build();
 
         } else {
-            return new SearchUsersDto.Builder()
-                    .Count(searchDao.getUsersCountByKeyword(keyword))
-                    .ShortUsersDto(conversionListResultFactory.convertShortUsers(searchDao.getShortUsersByKeywordSortedLimitOffset(keyword, offset, count, sorting)))
+            return SearchUsersDto.builder()
+                    .count(searchDao.getUsersCountByKeyword(keyword))
+                    .shortUsersDto(conversionListResultFactory.convertShortUsers(searchDao.getShortUsersByKeywordSortedLimitOffset(keyword, offset, count, sorting)))
                     .build();
         }
 

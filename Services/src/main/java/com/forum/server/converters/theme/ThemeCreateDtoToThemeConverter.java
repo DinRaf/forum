@@ -14,12 +14,12 @@ public class ThemeCreateDtoToThemeConverter  implements Converter<ThemeCreateDto
 
     @Override
     public Theme convert(ThemeCreateDto themeCreateDto) {
-        return new Theme.Builder()
-                .SectionUrl(themeCreateDto.getSectionUrl())
-                .Title(themeCreateDto.getTitle())
-                .Date(System.currentTimeMillis())
-                .MessagesCount(0l)
-                .Status(true)
+        return Theme.builder()
+                .sectionUrl(themeCreateDto.getSectionUrl())
+                .title(themeCreateDto.getTitle())
+                .date(System.currentTimeMillis())
+                .messagesCount(0l)
+                .status(true)
                 .build();
     }
 }

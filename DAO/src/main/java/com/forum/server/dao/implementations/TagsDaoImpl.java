@@ -2,7 +2,6 @@ package com.forum.server.dao.implementations;
 
 import com.forum.server.dao.interfaces.TagsDao;
 import com.forum.server.dto.tag.TagDto;
-import com.forum.server.dto.tag.TagsDto;
 import com.forum.server.models.tag.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -29,8 +28,8 @@ public class TagsDaoImpl implements TagsDao {
     private static final String SQL_CREATE_TAG = "INSERT INTO tag (name) VALUES (?) RETURNING id";
 
     private RowMapper<Tag> tagRowMapper() {
-        return (rs, i) -> new Tag.Builder()
-                .Name(rs.getString("name"))
+        return (rs, i) -> Tag.builder()
+                .name(rs.getString("name"))
                 .build();
     }
 

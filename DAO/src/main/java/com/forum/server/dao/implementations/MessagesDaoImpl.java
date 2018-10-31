@@ -40,21 +40,20 @@ public class MessagesDaoImpl implements MessagesDao {
 
     private RowMapper<Message> messageRowMapper(){
         return (rs, rowNum) -> {
-            User user = new User.Builder()
-                    .UserId(rs.getInt("user_id"))
-                    .Nickname(rs.getString("nick_name"))
-                    .Rating(rs.getLong("rating"))
-                    .Avatar(rs.getString("avatar"))
+            User user = User.builder()
+                    .userId(rs.getInt("user_id"))
+                    .nickname(rs.getString("nick_name"))
+                    .rating(rs.getLong("rating"))
                     .build();
-            return new Message.Builder()
-                    .MessageId(rs.getLong("message_id"))
-                    .User(user)
-                    .Body(rs.getString("body"))
-                    .ThemeId(rs.getLong("theme_id"))
-                    .Date(rs.getLong("date"))
-                    .Update(rs.getLong("update"))
-                    .Rating(rs.getLong("rating"))
-                    .UpdaterNickname(rs.getString("updater_nick_name"))
+            return Message.builder()
+                    .messageId(rs.getLong("message_id"))
+                    .user(user)
+                    .body(rs.getString("body"))
+                    .themeId(rs.getLong("theme_id"))
+                    .date(rs.getLong("date"))
+                    .update(rs.getLong("update"))
+                    .rating(rs.getLong("rating"))
+                    .updaterNickname(rs.getString("updater_nick_name"))
                     .build();
         };
     }
@@ -135,7 +134,7 @@ public class MessagesDaoImpl implements MessagesDao {
         params.put("count", count);
         List<Message> messages = namedJdbcTemplate.query(SQL_GET_MESSAGES_WITH_LIMIT_OFFSET, params, messageRowMapper());
         for (Message m: messages) {
-            m.setLiked(jdbcTemplate.queryForObject("SELECT CASE WHEN EXISTS(SELECT mark FROM message_mark WHERE message_id = ? AND user_id = ?)THEN (SELECT mark FROM message_mark WHERE message_id = ? AND user_id = ? LIMIT 1) ELSE NULL END ;", Boolean.class, new Object[]{m.getMessageId(), userId, m.getMessageId(), userId}));
+            m.setIsLiked(jdbcTemplate.queryForObject("SELECT CASE WHEN EXISTS(SELECT mark FROM message_mark WHERE message_id = ? AND user_id = ?)THEN (SELECT mark FROM message_mark WHERE message_id = ? AND user_id = ? LIMIT 1) ELSE NULL END ;", Boolean.class, new Object[]{m.getMessageId(), userId, m.getMessageId(), userId}));
         }
         return messages;
     }

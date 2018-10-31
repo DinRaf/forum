@@ -12,12 +12,12 @@ import lombok.NoArgsConstructor;
  * @version 1.0
  */
 @Data
-@Builder
+@Builder(builderMethodName = "baseBuilder")
 @AllArgsConstructor
 @NoArgsConstructor
 public class ShortUser {
-    private long userId;
-    private String nickname;
-    private Long rating;
-    private String rights;
+    protected long userId;
+    protected String nickname;
+    protected Long rating;
+    protected String rights;
 }

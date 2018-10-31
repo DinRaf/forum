@@ -16,18 +16,18 @@ public class MessageToMessageDtoConverter implements Converter<Message, MessageD
     public MessageDto convert(Message message){
         ShortUserToShortUserDtoConverter converter = new ShortUserToShortUserDtoConverter();
         ShortUserDto userDto = converter.convert(message.getUser());
-        FixMessageDto fixMessageDto = new FixMessageDto.Builder()
-                .Date(message.getDate())
-                .Username(userDto.getNickname())
+        FixMessageDto fixMessageDto = FixMessageDto.builder()
+                .date(message.getDate())
+                .username(userDto.getNickname())
                 .build();
-        return new MessageDto.Builder()
-                .MessageId(message.getMessageId())
-                .Author(userDto)
-                .Message(message.getBody())
-                .Date(message.getDate())
-                .Rating(message.getRating())
-                .Updated(fixMessageDto)
-                .Liked(message.getLiked())
+        return MessageDto.builder()
+                .messageId(message.getMessageId())
+                .author(userDto)
+                .message(message.getBody())
+                .date(message.getDate())
+                .rating(message.getRating())
+                .updated(fixMessageDto)
+                .isLiked(message.getIsLiked())
                 .build();
 
 

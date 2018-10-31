@@ -108,10 +108,10 @@ public class MessageServiceImpl implements MessageService {
             rightsValidator.updateMessage(rights);
         }
         //Вносим изменения сообщения
-        messagesDao.saveUpdate(new MessageUpdate.Builder()
-                .Update(System.currentTimeMillis())
-                .UpdaterId(updaterId)
-                .UpdaterNickName(updater.getNickname())
+        messagesDao.saveUpdate(MessageUpdate.builder()
+                .update(System.currentTimeMillis())
+                .updaterId(updaterId)
+                .updaterNickName(updater.getNickname())
                 .build(), messageId);
         //Собираем ответ
         long offset = messagesDao.getOffsetById(messageId);

@@ -16,16 +16,15 @@ public class NotAuthUserToUserDtoConverter implements Converter<User, UserDto> {
 
     @Override
     public UserDto convert(User user) {
-        return new UserDto.Builder()
-                .Rating(user.getRating())
-                .Avatar(user.getAvatar())
-                .Info(user.getInfo())
-                .MessagesCount(user.getMessagesCount())
-                .Nickname(user.getNickname())
-                .RegistrationTime(user.getRegistrationTime())
-                .ThemesCount(user.getThemesCount())
-                .Rights(user.getRights())
-                .MessagesCount(user.getMessagesCount())
+        return UserDto.builder()
+                .rating(user.getRating())
+                .info(user.getInfo())
+                .messagesCount(user.getMessagesCount())
+                .nickname(user.getNickname())
+                .registrationTime(user.getRegistrationTime())
+                .themesCount(user.getThemesCount())
+                .rights(user.getRights())
+                .messagesCount(user.getMessagesCount())
                 .build();
 
     }

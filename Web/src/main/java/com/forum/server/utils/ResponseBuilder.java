@@ -50,7 +50,7 @@ public class ResponseBuilder {
         HttpHeaders headers = AdditionalUtil.createHttpHeaders();
         headers.add("Auth-Token", token.getToken());
         QueryResultInfoDto responseInfo = new QueryResultInfoDto("201", "success");
-        UserNicknameDto userIdDto = new UserNicknameDto.Builder().Nickname(token.getNickname()).build();
+        UserNicknameDto userIdDto = new UserNicknameDto.builder().Nickname(token.getNickname()).build();
         QueryResultDto queryResultDto = new QueryResultDto(responseInfo, userIdDto);
         return new ResponseEntity<>(queryResultDto, headers, CREATED);
     }
