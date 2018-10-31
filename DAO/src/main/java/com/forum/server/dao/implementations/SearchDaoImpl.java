@@ -23,10 +23,10 @@ import java.util.Map;
 public class SearchDaoImpl implements SearchDao {
 
     @Autowired
-    private NamedParameterJdbcTemplate namedJdbcTemplate;
+    private final NamedParameterJdbcTemplate namedJdbcTemplate;
 
     @Autowired
-    private JdbcTemplate jdbcTemplate;
+    private  final JdbcTemplate jdbcTemplate;
 
     private static final String SQL_GET_SHORT_USER_PART_1 = "SELECT * FROM short_user LEFT JOIN user_info ON short_user.user_id = user_info.user_id ORDER BY ";
     private static final String SQL_GET_SHORT_USER_PART_2 = " DESC LIMIT :count OFFSET :offset ;";

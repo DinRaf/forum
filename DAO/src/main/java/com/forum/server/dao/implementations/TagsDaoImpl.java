@@ -20,7 +20,7 @@ import java.util.List;
 public class TagsDaoImpl implements TagsDao {
 
     @Autowired
-    private JdbcTemplate jdbcTemplate;
+    private final JdbcTemplate jdbcTemplate;
     private static final String SQL_GET_TAGS_BY_THEME_ID = "SELECT name FROM tag LEFT JOIN theme_tag ON id = tag_id WHERE theme_id = ?;";
     private static final String SQL_DELETE_TAGS_FROM_THEME_BY_THEME_ID = "DELETE FROM theme_tag WHERE theme_id = ?;";
     private static final String SQL_IS_EXISTS_TAG = "SELECT COALESCE((SELECT id FROM tag WHERE LOWER(name) = ?), -1);";
